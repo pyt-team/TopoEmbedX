@@ -18,14 +18,14 @@ New Features of Version 1.0
 ## Getting Started : simplicia/cellular/combinatorial representation learning
 
 ```ruby
-import toponetx as tnx
+import topoembedx as tex
 
 # create a cell complex object with a few cells
-cx = tnx.CellComplex([[1, 2, 3, 4], [3,4,5,6,7,8]],ranks=2)
+cx = tex.CellComplex([[1, 2, 3, 4], [3,4,5,6,7,8]],ranks=2)
 
 # create a model
 
-model = tnx.Cell2Vec()
+model = tex.Cell2Vec()
 
 # fit the model
 
