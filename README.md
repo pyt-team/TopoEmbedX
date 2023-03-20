@@ -19,9 +19,10 @@ New Features of Version 1.0
 
 ```ruby
 import topoembedx as tex
+import toponetx as tnx
 
 # create a cell complex object with a few cells
-cx = tex.CellComplex([[1, 2, 3, 4], [3,4,5,6,7,8]],ranks=2)
+cx = tnx.CellComplex([[1, 2, 3, 4], [3,4,5,6,7,8]],ranks=2)
 
 # create a model
 
