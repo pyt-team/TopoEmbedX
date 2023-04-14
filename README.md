@@ -15,7 +15,7 @@ New Features of Version 1.0
 
 
 
-# Installing TopoNetX
+# Installing TopoEmbedX
 
 1. Clone a copy of `TopoEmbedX` from source:
 ```bash

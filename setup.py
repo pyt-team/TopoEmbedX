@@ -22,7 +22,7 @@ install_requires = [
     "numpy",
     "pre-commit",
     "scipy",
-    "karateclub"
+    "karateclub",
 ]
 
 full_requires = []
@@ -40,7 +40,6 @@ dev_requires = test_requires + [
     "black[jupyter]",
     # "flake8-docstrings",  # flake8-docstrings causes flake8 to change behaviour for tests; removed it
     "isort==5.10.1",
-    "codecov",
     "coverage",
 ]
 
@@ -75,7 +74,10 @@ setup(
         "Topological Deep Learning",
         "Combinatorial complexes",
         "CW Complex",
-        "Higher Order Representation Learning"
+        "Cell Complex Representation Learning",
+        "Simplicial Complex Representation Learning",
+        "Combinatorial Complex Representation Learning",
+        "HyperGraph Representation Learning",
     ],
     python_requires=">=3.7",
     install_requires=install_requires,
@@ -86,4 +88,3 @@ setup(
     },
     packages=find_packages(),
 )
-
