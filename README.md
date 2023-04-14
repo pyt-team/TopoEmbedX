@@ -15,6 +15,28 @@ New Features of Version 1.0
 
 
 
+# Installing TopoNetX
+
+1. Clone a copy of `TopoEmbedX` from source:
+```bash
+git clone https://github.com/pyt-team/TopoEmbedX
+cd topoembedc
+```
+2. If you have already cloned `TopoEmbedX` from source, update it:
+```bash
+git pull
+```
+3. Install `TopoEmbedX` in editable mode:
+```bash
+pip install -e ".[dev,full]"
+```
+4. Install pre-commit hooks:
+```bash
+pre-commit install
+```
+
+
+
 ## Getting Started : simplicia/cellular/combinatorial representation learning
 
 ```ruby
@@ -32,7 +54,7 @@ model = tex.Cell2Vec()
 
 model.fit(cx,neighborhood_type="adj", neighborhood_dim={"r": 1, "k": -1})
 # here neighborhood_dim={"r": 1, "k": -1} specifies the dimension for
-# which the cell embeddings are going to be computed. 
+# which the cell embeddings are going to be computed.
 # r=1 means that the embeddings will be computed for the first dimension.
 # The integer 'k' is ignored and only considered
 # when the input complex is a combinatorial complex.
@@ -40,9 +62,9 @@ model.fit(cx,neighborhood_type="adj", neighborhood_dim={"r": 1, "k": -1})
 
 # get the embeddings:
 
-embeddings = model.get_embedding() 
+embeddings = model.get_embedding()
 
 ```
 
 
-   
+

@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Mustafa Hajij
-"""
-
 import networkx as nx
 from karateclub import Diff2Vec
-
 from toponetx.classes import (
     CellComplex,
     CombinatorialComplex,
@@ -14,8 +8,6 @@ from toponetx.classes import (
 )
 
 # from node2vec import Node2Vec
-
-
 
 
 def _neighbohood_from_complex(

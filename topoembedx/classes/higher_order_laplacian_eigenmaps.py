@@ -1,14 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Dec  9 08:02:53 2022
-
-@author: musta
-"""
-
 import networkx as nx
 import numpy as np
 from karateclub import LaplacianEigenmaps
-
 from toponetx.classes import (
     CellComplex,
     CombinatorialComplex,

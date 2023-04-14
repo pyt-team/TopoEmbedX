@@ -1,14 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Dec  9 08:02:53 2022
-
-@author: musta
-"""
-
 import networkx as nx
 import numpy as np
 from karateclub import GLEE
-
 from toponetx.classes import (
     CellComplex,
     CombinatorialComplex,
@@ -20,6 +12,42 @@ from toponetx.classes import (
 def _neighbohood_from_complex(
     cmplex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}
 ):
+    """
+
+    Returns the indices and matrix for the neighborhood specified by `neighborhood_type`
+    and `neighborhood_dim` for the input complex `cmplex`.
+
+    Parameters
+    ----------
+    cmplex : SimplicialComplex or CellComplex or CombinatorialComplex or DynamicCombinatorialComplex
+        The complex to compute the neighborhood for.
+    neighborhood_type : str
+        The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
+    neighborhood_dim : dict
+        The dimensions of the neighborhood to use. If `neighborhood_type` is "adj", the dimension is
+        `neighborhood_dim['r']`. If `neighborhood_type` is "coadj", the dimension is `neighborhood_dim['k']`
+        and `neighborhood_dim['r']` specifies the dimension of the ambient space.
+
+        Note:
+            here neighborhood_dim={"r": 1, "k": -1} specifies the dimension for
+            which the cell embeddings are going to be computed.
+            r=1 means that the embeddings will be computed for the first dimension.
+            The integer 'k' is ignored and only considered
+            when the input complex is a combinatorial complex.
+
+    Returns
+    -------
+    ind : list
+        A list of the indices for the nodes in the neighborhood.
+    A : ndarray
+        The matrix representing the neighborhood.
+
+    Raises
+    ------
+    ValueError
+        If the input `cmplex` is not a SimplicialComplex, CellComplex, CombinatorialComplex, or
+        DynamicCombinatorialComplex.
+    """
 
     if isinstance(cmplex, SimplicialComplex) or isinstance(cmplex, CellComplex):
         if neighborhood_type == "adj":
@@ -47,13 +75,6 @@ def _neighbohood_from_complex(
 
 
 class HOGLEE(GLEE):
-    """
-
-    Parameters
-    ==========
-
-    """
-
     def __init__(self, dimensions: int = 3, seed: int = 42):
 
         super().__init__(dimensions=dimensions, seed=seed)

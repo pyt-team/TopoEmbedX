@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-
-@author: Mustafa Hajij
-"""
-
 import numpy as np
 import scipy
 from pyrandwalk import RandomWalk
