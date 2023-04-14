@@ -83,6 +83,12 @@ class HOGLEE(GLEE):
         self.ind = []
 
     def fit(self, cmplex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
+        """
+        Fitting a Higher Order Geometric Laplacian EigenMaps model.
+
+        Arg types:
+            * **cmplex** *(TopoNetx Complex)* - The Complex to be embedded.
+        """
         self.ind, self.A = _neighbohood_from_complex(
             cmplex, neighborhood_type, neighborhood_dim
         )
@@ -91,7 +97,7 @@ class HOGLEE(GLEE):
 
         super(HOGLEE, self).fit(g)
 
-    def get_embedding(self, get_dic=True):
+    def get_embedding(self, get_dic=False):
         emb = super(HOGLEE, self).get_embedding()
         if get_dic:
             return dict(zip(self.ind, emb))

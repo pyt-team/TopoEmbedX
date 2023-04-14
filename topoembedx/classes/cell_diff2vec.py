@@ -59,6 +59,12 @@ class CellDiff2Vec(Diff2Vec):
         min_count: int = 1,
         seed: int = 42,
     ):
+        """
+        Fitting a CellDiff2Vec model.
+
+        Arg types:
+            * **complex** *(TopoNetX complex)* - The complex to be embedded.
+        """
 
         super().__init__(
             diffusion_number=diffusion_number,

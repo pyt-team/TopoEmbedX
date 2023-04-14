@@ -71,7 +71,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
 
         super(HigherOrderLaplacianEigenmaps, self).fit(g)
 
-    def get_embedding(self, get_dic=True):
+    def get_embedding(self, get_dic=False):
         emb = super(HigherOrderLaplacianEigenmaps, self).get_embedding()
         if get_dic:
             return dict(zip(self.ind, emb))
