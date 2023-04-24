@@ -10,7 +10,7 @@ class TopoEmbedXException(Exception):
     """Base class for exceptions in TopoEmbedX."""
 
 
-class TopoEmbedXError(TopoNetXException):
+class TopoEmbedXError(TopoEmbedXException):
     """Exception for a serious error in TopoEmbedX"""
 
 
