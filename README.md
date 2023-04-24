@@ -1,4 +1,6 @@
 
+[![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml)
+
 # 🌐 TopoEmbedX (TEX) 🍩
 # Representation Learning on Topological Domains
 
@@ -14,8 +16,8 @@ How can we conveniently represent data defined on such relational systems?
 ## 🛠️ Main Features in Version 1.0
 
 Support of higher order representation learning algorithms such as:
-- DeepCell, 
-- Cell2Vec, 
+- DeepCell,
+- Cell2Vec,
 - Higher Order Laplacian Eigenmaps, and
 - Higher Order Geometric Laplacian Eigenmaps
 
@@ -81,7 +83,7 @@ To learn more about topological representation learning.
 - Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. [Topological Deep Learning: Going Beyond Graph Data](https://arxiv.org/abs/2206.00606).
 ```
 @misc{hajij2023topological,
-      title={Topological Deep Learning: Going Beyond Graph Data}, 
+      title={Topological Deep Learning: Going Beyond Graph Data},
       author={Mustafa Hajij and Ghada Zamzmi and Theodore Papamarkou and Nina Miolane and Aldo Guzmán-Sáenz and Karthikeyan Natesan Ramamurthy and Tolga Birdal and Tamal K. Dey and Soham Mukherjee and Shreyas N. Samaga and Neal Livesay and Robin Walters and Paul Rosen and Michael T. Schaub},
       year={2023},
       eprint={2206.00606},
@@ -94,7 +96,7 @@ Figure from:
 - Mathilde Papillon, Sophia Sanborn, Mustafa Hajij, Nina Miolane. [Architectures of Topological Deep Learning: A Survey on Topological Neural Networks.](https://arxiv.org/pdf/2304.10031.pdf)
 ```
 @misc{papillon2023architectures,
-      title={Architectures of Topological Deep Learning: A Survey on Topological Neural Networks}, 
+      title={Architectures of Topological Deep Learning: A Survey on Topological Neural Networks},
       author={Mathilde Papillon and Sophia Sanborn and Mustafa Hajij and Nina Miolane},
       year={2023},
       eprint={2304.10031},
