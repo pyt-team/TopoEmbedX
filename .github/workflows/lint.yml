@@ -25,7 +25,7 @@ jobs:
 
       - name: install dependencies [pip]
         run:  |
-          pip install .[dev,full]
+          pip install .[dev]
       - name : linting [black, isort, flake8]
         run: |
           black . --check --extend-exclude 'examples'
