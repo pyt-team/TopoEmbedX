@@ -29,7 +29,7 @@ for the topological domains supported in [TopoNetX](https://github.com/pyt-team/
 1. Clone a copy of `TopoEmbedX` from source:
 ```bash
 git clone https://github.com/pyt-team/TopoEmbedX
-cd topoembedx
+cd TopoEmbedX
 ```
 2. If you have already cloned `TopoEmbedX` from source, update it:
 ```bash
