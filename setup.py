@@ -39,6 +39,7 @@ dev_requires = test_requires + [
     "black[jupyter]",
     "coverage",
     "flake8",
+    "flake8-docstrings",
     "isort==5.10.1",
     "pre-commit",
     "yapf",
