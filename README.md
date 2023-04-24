@@ -1,21 +1,24 @@
 
-TopoEmbedX
-=========
+# 🌐 TopoEmbedX: Representation Learning on Topological Domains 🍩
 
 
-TopoEmbed is a package for studying higher order repreesnation learning on simplicial, cellular and combinatorial complexes
-
-
-
-
-New Features of Version 1.0
----------------------------
-
-1.Support of higher order represenation learning algorithsm such as DeepCell, Cell2Vec, Higher Order Laplacian Eigenmaps and Higher Order Geometric Laplacian Eigenmaps for various complexes supported in TopoNetX (simplicial, cellular, combinatorial).
+`TopoEmbedX` is a package for studying higher order represenation learning on simplicial, cellular and combinatorial complexes.
 
 
 
-# Installing TopoEmbedX
+## 🛠️ Main Features in Version 1.0
+
+Support of higher order representation learning algorithms such as:
+- DeepCell, 
+- Cell2Vec, 
+- Higher Order Laplacian Eigenmaps, and
+- Higher Order Geometric Laplacian Eigenmaps
+
+for the topological domains supported in [TopoNetX](https://github.com/pyt-team/TopoNetX).
+
+
+
+## 🤖 Installing TopoEmbedX
 
 1. Clone a copy of `TopoEmbedX` from source:
 ```bash
@@ -37,7 +40,7 @@ pre-commit install
 
 
 
-## Getting Started : simplicia/cellular/combinatorial representation learning
+## 🦾 Getting Started
 
 ```ruby
 import topoembedx as tex
@@ -65,6 +68,3 @@ model.fit(cx,neighborhood_type="adj", neighborhood_dim={"r": 1, "k": -1})
 embeddings = model.get_embedding()
 
 ```
-
-
-
