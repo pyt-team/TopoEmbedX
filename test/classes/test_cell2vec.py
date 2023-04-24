@@ -11,7 +11,7 @@ from topoembedx.classes.cell2vec import Cell2Vec
 class TestCell2Vec(unittest.TestCase):
     """Test Cell2Vec class."""
 
-    def test_get_embedding(self):
+    def test_fit_and_get_embedding(self):
         """Test get_embedding."""
         # Create a small complex
         cx = tnx.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)

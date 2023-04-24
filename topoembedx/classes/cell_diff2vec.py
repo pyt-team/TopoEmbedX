@@ -57,7 +57,6 @@ class CellDiff2Vec(Diff2Vec):
 
         self.A = []
         self.ind = []
-        self.allow_disjoint = True
 
     def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
         """Fit a CellDiff2Vec model.
@@ -96,6 +95,9 @@ class CellDiff2Vec(Diff2Vec):
 
         g = nx.from_numpy_matrix(self.A)
 
+        print("HELO")
+        print(g)
+        print(self.A)
         super(CellDiff2Vec, self).fit(g)
 
     def get_embedding(self, get_dict=False):

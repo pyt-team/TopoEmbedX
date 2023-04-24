@@ -13,7 +13,7 @@ from topoembedx.classes.higher_order_laplacian_eigenmaps import (
 class TestHigherOrderLaplacianEigenmaps(unittest.TestCase):
     """Test HigherOrderLaplacianEigenmaps class."""
 
-    def test_get_embedding(self):
+    def test_fit_and_get_embedding(self):
         """Test get_embedding."""
         cx = tnx.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 

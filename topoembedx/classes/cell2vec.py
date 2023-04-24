@@ -85,17 +85,22 @@ class Cell2Vec(Node2Vec):
         Parameters
         ----------
         complex : TopoNetX object
-            A complex object. The complex object can be one of the following:
+            A complex object.
+            Can be one of the following:
             - CellComplex
             - CombinatorialComplex
             - DynamicCombinatorialComplex
             - SimplicialComplex
             - DynamicSimplicialComplex
         neighborhood_type : str
-            The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
+            The type of neighborhood to compute.
+            Can be one of the following:
+             - "adj" for adjacency matrix.
+             - "coadj" for coadjacency matrix.
         neighborhood_dim : dict
-            The dimensions of the neighborhood to use. If `neighborhood_type` is "adj", the dimension is
-            `neighborhood_dim['r']`. If `neighborhood_type` is "coadj", the dimension is `neighborhood_dim['k']`
+            The dimensions of the neighborhood to use.
+            If `neighborhood_type` is "adj", dimension is `neighborhood_dim['r']`.
+            If `neighborhood_type` is "coadj", dimension is `neighborhood_dim['k']`
             and `neighborhood_dim['r']` specifies the dimension of the ambient space.
 
         Notes
