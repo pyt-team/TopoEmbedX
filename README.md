@@ -68,3 +68,19 @@ model.fit(cx,neighborhood_type="adj", neighborhood_dim={"r": 1, "k": -1})
 embeddings = model.get_embedding()
 
 ```
+
+## 🔍 References ##
+
+To learn more how topological representation learning.
+
+- Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. [Topological Deep Learning: Going Beyond Graph Data](https://arxiv.org/abs/2206.00606).
+```
+@misc{hajij2023topological,
+      title={Topological Deep Learning: Going Beyond Graph Data}, 
+      author={Mustafa Hajij and Ghada Zamzmi and Theodore Papamarkou and Nina Miolane and Aldo Guzmán-Sáenz and Karthikeyan Natesan Ramamurthy and Tolga Birdal and Tamal K. Dey and Soham Mukherjee and Shreyas N. Samaga and Neal Livesay and Robin Walters and Paul Rosen and Michael T. Schaub},
+      year={2023},
+      eprint={2206.00606},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+```
