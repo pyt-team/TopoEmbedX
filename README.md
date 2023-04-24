@@ -1,5 +1,6 @@
 
-# 🌐 TopoEmbedX: Representation Learning on Topological Domains 🍩
+# 🌐 TopoEmbedX
+# Representation Learning on Topological Domains 🍩
 
 ![topoembedx](https://user-images.githubusercontent.com/8267869/234074436-402ac931-2dc9-43da-a056-6c927f613242.png)
 
