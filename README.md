@@ -1,6 +1,6 @@
 
 [![Test](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml)
-[![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml
+[![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml)
 
 # 🌐 TopoEmbedX (TEX) 🍩
 # Representation Learning on Topological Domains

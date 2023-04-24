@@ -1,3 +1,5 @@
+"""Test the DeepCell class."""
+
 import unittest
 
 import numpy as np
@@ -7,7 +9,10 @@ from topoembedx.classes.deepcell import DeepCell
 
 
 class TestDeepCell(unittest.TestCase):
-    def test_DeepCell(self):
+    """Test the DeepCell class."""
+
+    def test_fit_and_get_embedding(self):
+        """Test fit and get_embedding."""
         # Create a small graph
         cx = tnx.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 
