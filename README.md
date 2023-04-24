@@ -1,4 +1,6 @@
 
+[![Lint](https://github.com/pyt-team/TopoNetX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoNetX/actions/workflows/lint.yml
+
 # 🌐 TopoEmbedX (TEX) 🍩
 # Representation Learning on Topological Domains
 
