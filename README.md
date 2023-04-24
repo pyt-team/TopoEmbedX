@@ -27,7 +27,7 @@ for the topological domains supported in [TopoNetX](https://github.com/pyt-team/
 1. Clone a copy of `TopoEmbedX` from source:
 ```bash
 git clone https://github.com/pyt-team/TopoEmbedX
-cd topoembedc
+cd topoembedx
 ```
 2. If you have already cloned `TopoEmbedX` from source, update it:
 ```bash
@@ -35,6 +35,8 @@ git pull
 ```
 3. Install `TopoEmbedX` in editable mode:
 ```bash
+conda create -n topoembedx python=3.9
+onda activate topoembedx
 pip install -e ".[dev,full]"
 ```
 4. Install pre-commit hooks:
