@@ -1,0 +1,33 @@
+name: "Lint"
+
+on:
+  push:
+    branches: [main,github-actions-test]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Linting
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{matrix.python-version}}
+
+      - name: install dependencies [pip]
+        run:  |
+          pip install .[dev,full]
+      - name : linting [black, isort, flake8]
+        run: |
+          black . --check --extend-exclude 'examples'
+          isort --profile black --check .
+          flake8 .
