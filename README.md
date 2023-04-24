@@ -1,5 +1,5 @@
 
-# 🌐 TopoEmbedX 🍩
+# 🌐 TopoEmbedX (TEX) 🍩
 # Representation Learning on Topological Domains
 
 ![topoembedx](https://user-images.githubusercontent.com/8267869/234074436-402ac931-2dc9-43da-a056-6c927f613242.png)
@@ -8,7 +8,7 @@ Many natural systems as diverse as social networks and proteins are characterize
 
 How can we conveniently represent data defined on such relational systems?
 
-`TopoEmbedX` is a package for representation learning on topological domains, the mathematical structures of relational systems.
+`TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
 
 
 ## 🛠️ Main Features in Version 1.0
