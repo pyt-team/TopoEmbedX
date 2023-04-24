@@ -1,15 +1,15 @@
-"""Test Cell2Vec class."""
+"""Test the HOGLEE class."""
 
 import unittest
 
 import numpy as np
 import toponetx as tnx
 
-from topoembedx.classes.cell2vec import Cell2Vec
+from topoembedx.classes.hoglee import HOGLEE
 
 
-class TestCell2Vec(unittest.TestCase):
-    """Test Cell2Vec class."""
+class TestHOGLEE(unittest.TestCase):
+    """Test the HOGLEE class."""
 
     def test_get_embedding(self):
         """Test get_embedding."""
@@ -17,13 +17,13 @@ class TestCell2Vec(unittest.TestCase):
         cx = tnx.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 
         # Create a Cell2Vec object
-        dc = Cell2Vec(dimensions=5)
+        dc = HOGLEE(dimensions=5)
 
         # Fit the Cell2Vec object to the graph and get embedding for nodes (using adjacency matrix A0)
         dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1})
 
         # Check that the shape of the embedding is correct
-        assert dc.get_embedding().shape == (len(cx.nodes), 5)
+        assert dc.get_embedding().shape == (len(cx.nodes), 5 + 1)
 
         # Check that the shape of the embedding dictionary is correct
         ind = dc.get_embedding(get_dict=True)

@@ -1,9 +1,4 @@
-# Copyright © 2022 Pyt-Team
-# All rights reserved.
-
-"""
-Base classes for TopoEmbedX exceptions
-"""
+"""Base classes for TopoEmbedX exceptions."""
 
 
 class TopoEmbedXException(Exception):
@@ -11,7 +6,7 @@ class TopoEmbedXException(Exception):
 
 
 class TopoEmbedXError(TopoEmbedXException):
-    """Exception for a serious error in TopoEmbedX"""
+    """Exception for a serious error in TopoEmbedX."""
 
 
 class TopoEmbedXNotImplementedError(TopoEmbedXError):

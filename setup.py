@@ -1,3 +1,5 @@
+"""Setup for TopoEmbedX."""
+
 from codecs import open
 from os import path
 
@@ -15,7 +17,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 install_requires = [
-    "gensim",
+    "gensim==3.8.3",
     "gudhi",
     "hypernetx",
     "karateclub",

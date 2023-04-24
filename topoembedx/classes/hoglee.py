@@ -1,66 +1,31 @@
-"""Class CellDiff2Vec."""
-
+"""Higher Order Geometric Laplacian EigenMaps (HOGLEE) class."""
 import networkx as nx
-from karateclub import Diff2Vec
+import numpy as np
+from karateclub import GLEE
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
 
-class CellDiff2Vec(Diff2Vec):
-    """Class for CellDiff2Vec.
+class HOGLEE(GLEE):
+    """Class for Higher Order Geometric Laplacian EigenMaps (HOGLEE).
 
     Parameters
     ----------
-    diffusion_number : int, optional
-        Number of diffusion. Defaults to 10.
-    diffusion_cover : int, optional
-        Number of nodes in diffusion. Defaults to 80.
     dimensions : int, optional
-        Dimensionality of embedding. Defaults to 128.
-    workers : int, optional
-        Number of cores. Defaults to 4.
-    window_size : int, optional
-        Matrix power order. Defaults to 5.
-    epochs : int, optional
-        Number of epochs. Defaults to 1.
-    learning_rate : float, optional
-        HogWild! learning rate. Defaults to 0.05.
-    min_count : int, optional
-        Minimal count of node occurrences. Defaults to 1.
+        Dimensionality of embedding. Defaults to 3.
     seed : int, optional
         Random seed value. Defaults to 42.
     """
 
-    def __init__(
-        self,
-        diffusion_number: int = 10,
-        diffusion_cover: int = 80,
-        dimensions: int = 128,
-        workers: int = 4,
-        window_size: int = 5,
-        epochs: int = 1,
-        learning_rate: float = 0.05,
-        min_count: int = 1,
-        seed: int = 42,
-    ):
-        super().__init__(
-            diffusion_number=diffusion_number,
-            diffusion_cover=diffusion_cover,
-            dimensions=dimensions,
-            workers=workers,
-            window_size=window_size,
-            epochs=epochs,
-            learning_rate=learning_rate,
-            min_count=min_count,
-            seed=seed,
-        )
+    def __init__(self, dimensions: int = 3, seed: int = 42):
+
+        super().__init__(dimensions=dimensions, seed=seed)
 
         self.A = []
         self.ind = []
-        self.allow_disjoint = True
 
     def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
-        """Fit a CellDiff2Vec model.
+        """Fit a Higher Order Geometric Laplacian EigenMaps model.
 
         Parameters
         ----------
@@ -96,7 +61,7 @@ class CellDiff2Vec(Diff2Vec):
 
         g = nx.from_numpy_matrix(self.A)
 
-        super(CellDiff2Vec, self).fit(g)
+        super(HOGLEE, self).fit(g)
 
     def get_embedding(self, get_dict=False):
         """Get embedding.
@@ -111,7 +76,7 @@ class CellDiff2Vec(Diff2Vec):
         dict or numpy.ndarray
             Embedding.
         """
-        emb = super(CellDiff2Vec, self).get_embedding()
+        emb = super(HOGLEE, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
         else:

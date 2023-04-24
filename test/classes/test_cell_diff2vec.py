@@ -1,3 +1,5 @@
+"""Test CellDiff2Vec class."""
+
 import unittest
 
 import numpy as np
@@ -7,7 +9,10 @@ from topoembedx.classes.cell_diff2vec import CellDiff2Vec
 
 
 class TestDiff2Vec(unittest.TestCase):
-    def test_Diff2Vec(self):
+    """Test Diff2Vec class."""
+
+    def test_get_embedding(self):
+        """Test get_embedding."""
         # Create a small graph
         sc = tnx.SimplicialComplex()
         sc.add_simplex([1, 2, 3, 4])
@@ -23,7 +28,7 @@ class TestDiff2Vec(unittest.TestCase):
         assert dc.get_embedding().shape == (len(sc.skeleton(2)), 5)
 
         # Check that the shape of the embedding dictionary is correct
-        ind = dc.get_embedding(get_dic=True)
+        ind = dc.get_embedding(get_dict=True)
         assert (len(ind)) == len(sc.edges)
 
         # Check that the embedding of the first node is not equal to the embedding of the second node

@@ -1,48 +1,34 @@
+"""DeepCell class for embedding complex networks using DeepWalk."""
+
 import networkx as nx
-from karateclub import DeepWalk, Node2Vec
-from toponetx.classes import (
-    CellComplex,
-    CombinatorialComplex,
-    DynamicCombinatorialComplex,
-    SimplicialComplex,
-)
+from karateclub import DeepWalk
 
-
-def _neighbohood_from_complex(
-    cmplex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}
-):
-
-    if isinstance(cmplex, SimplicialComplex) or isinstance(cmplex, CellComplex):
-        if neighborhood_type == "adj":
-            ind, A = cmplex.adjacency_matrix(neighborhood_dim["r"], index=True)
-
-        else:
-            ind, A = cmplex.coadjacency_matrix(neighborhood_dim["r"], index=True)
-    elif isinstance(cmplex, CombinatorialComplex) or isinstance(
-        cmplex, DynamicCombinatorialComplex
-    ):
-        if neighborhood_type == "adj":
-            ind, A = cmplex.adjacency_matrix(
-                neighborhood_dim["r"], neighborhood_dim["k"], index=True
-            )
-        else:
-            ind, A = cmplex.coadjacency_matrix(
-                neighborhood_dim["k"], neighborhood_dim["r"], index=True
-            )
-    else:
-        ValueError(
-            "input cmplex must be SimplicialComplex,CellComplex,CombinatorialComplex, or DynamicCombinatorialComplex "
-        )
-
-    return ind, A
+from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class DeepCell(DeepWalk):
-    """
+    """Class for DeepCell.
 
     Parameters
-    ==========
-
+    ----------
+    walk_number : int, optional
+        Number of random walks to generate for each node. Defaults to 10.
+    walk_length : int, optional
+        Length of each random walk. Defaults to 80.
+    dimensions : int, optional
+        Dimensionality of embedding. Defaults to 128.
+    workers : int, optional
+        Number of parallel workers to use for training. Defaults to 4.
+    window_size : int, optional
+        Size of the sliding window. Defaults to 5.
+    epochs : int, optional
+        Number of iterations (epochs). Defaults to 1.
+    learning_rate : float, optional
+        Learning rate for the model. Defaults to 0.05.
+    min_count : int, optional
+        Minimum count of words to consider when training the model. Defaults to 1.
+    seed : int, optional
+        Random seed to use for reproducibility. Defaults to 42.
     """
 
     def __init__(
@@ -57,22 +43,6 @@ class DeepCell(DeepWalk):
         min_count: int = 1,
         seed: int = 42,
     ):
-        """
-        Parameters
-        ==========
-        - walk_number (int): The number of random walks to generate for each node.
-        - walk_length (int): The length of each random walk.
-        - p (float): Return hyperparameter for the random walks.
-        - q (float): In-out hyperparameter for the random walks.
-        - dimensions (int): The dimensionality of the embedding vector.
-        - workers (int): The number of parallel workers to use for training.
-        - window_size (int): The size of the sliding window.
-        - epochs (int): The number of iterations (epochs) over the corpus.
-        - learning_rate (float): The learning rate for the model.
-        - min_count (int): The minimum count of words to consider when training the model.
-        - seed (int): Random seed to use for reproducibility.
-        """
-
         super().__init__(
             walk_number=walk_number,
             walk_length=walk_length,
@@ -88,18 +58,41 @@ class DeepCell(DeepWalk):
         self.A = []
         self.ind = []
 
-    def fit(self, cmplex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
-        self.ind, self.A = _neighbohood_from_complex(
-            cmplex, neighborhood_type, neighborhood_dim
+    def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
+        """Fit the model.
+
+        Parameters
+        ----------
+        complex : SimplicialComplex, CellComplex, CombinatorialComplex, or DynamicCombinatorialComplex
+            The complex to be embedded.
+        neighborhood_type : str, optional
+            The type of neighborhood to use, by default "adj".
+        neighborhood_dim : dict, optional
+            The dimension of the neighborhood to use, by default {"r": 0, "k": -1}.
+        """
+        self.ind, self.A = neighborhood_from_complex(
+            complex, neighborhood_type, neighborhood_dim
         )
 
         g = nx.from_numpy_matrix(self.A)
 
         super(DeepCell, self).fit(g)
 
-    def get_embedding(self, get_dic=False):
+    def get_embedding(self, get_dict=False):
+        """Get embeddings.
+
+        Parameters
+        ----------
+        get_dict : bool, optional
+            Return a dictionary of the embedding, by default False
+
+        Returns
+        -------
+        dict or np.ndarray
+            The embedding of the complex.
+        """
         emb = super(DeepCell, self).get_embedding()
-        if get_dic:
+        if get_dict:
             return dict(zip(self.ind, emb))
         else:
             return emb

@@ -21,7 +21,7 @@ class TestDeepCell(unittest.TestCase):
         assert dc.get_embedding().shape == (len(cx.edges), 2)
 
         # Check that the shape of the embedding dictionary is correct
-        ind = dc.get_embedding(get_dic=True)
+        ind = dc.get_embedding(get_dict=True)
         assert (len(ind)) == len(cx.edges)
 
         # Check that the embedding of the first node is not equal to the embedding of the second node
