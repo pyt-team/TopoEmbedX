@@ -15,14 +15,14 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 install_requires = [
+    "gensim",
     "gudhi",
-    "toponetx",
-    "networkx",
     "hypernetx",
-    "numpy",
-    "pre-commit",
-    "scipy",
     "karateclub",
+    "networkx",
+    "numpy",
+    "scipy",
+    "toponetx @ git+https://github.com/pyt-team/TopoNetX.git",
 ]
 
 full_requires = []
@@ -33,14 +33,13 @@ test_requires = [
 ]
 
 dev_requires = test_requires + [
-    "pre-commit",
-    "flake8",
-    "yapf",
     "black==22.6.0",
     "black[jupyter]",
-    # "flake8-docstrings",  # flake8-docstrings causes flake8 to change behaviour for tests; removed it
-    "isort==5.10.1",
     "coverage",
+    "flake8",
+    "isort==5.10.1",
+    "pre-commit",
+    "yapf",
 ]
 
 setup(
