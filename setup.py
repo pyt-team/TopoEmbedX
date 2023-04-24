@@ -17,12 +17,12 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 install_requires = [
+    "numpy",
     "gensim==3.8.3",
     "gudhi",
     "hypernetx",
     "karateclub",
     "networkx",
-    "numpy",
     "scipy",
     "toponetx @ git+https://github.com/pyt-team/TopoNetX.git",
 ]
