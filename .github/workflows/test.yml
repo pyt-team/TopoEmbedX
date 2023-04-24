@@ -24,10 +24,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-18.04]
         python-version: [3.9]
+      fail-fast: false
 
     steps:
       - uses: actions/checkout@v3
