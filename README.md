@@ -2,7 +2,7 @@
 # 🌐 TopoEmbedX: Representation Learning on Topological Domains 🍩
 
 
-`TopoEmbedX` is a package for studying higher order represenation learning on simplicial, cellular and combinatorial complexes.
+`TopoEmbedX` is a package for studying higher order representation learning on simplicial, cellular and combinatorial complexes.
 
 
 
@@ -15,7 +15,6 @@ Support of higher order representation learning algorithms such as:
 - Higher Order Geometric Laplacian Eigenmaps
 
 for the topological domains supported in [TopoNetX](https://github.com/pyt-team/TopoNetX).
-
 
 
 ## 🤖 Installing TopoEmbedX
@@ -71,7 +70,7 @@ embeddings = model.get_embedding()
 
 ## 🔍 References ##
 
-To learn more how topological representation learning.
+To learn more about topological representation learning.
 
 - Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. [Topological Deep Learning: Going Beyond Graph Data](https://arxiv.org/abs/2206.00606).
 ```
