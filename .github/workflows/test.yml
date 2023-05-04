@@ -39,6 +39,7 @@ jobs:
 
       - name: Install main package [pip]
         run: |
+          pip install --upgrade pip setuptools wheel
           pip install -e .[all]
       - name: Run tests [pytest]
         run: |
