@@ -26,7 +26,8 @@ Support of higher order representation learning algorithms such as:
 
 for the topological domains supported in [TopoNetX](https://github.com/pyt-team/TopoNetX).
 
-## 🔍 References ##
+🔍 References
+-------------
 
 To learn more about topological representation learning.
 
