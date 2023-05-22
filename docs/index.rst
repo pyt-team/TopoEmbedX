@@ -8,30 +8,27 @@
    :class: with-shadow
    :width: 1000px
 
-Many natural systems as diverse as social networks and proteins are characterized by _relational structure_. This is the structure of interactions between components in the system, such as social interactions between individuals or electrostatic interactions between atoms.
-
-How can we conveniently represent data defined on such relational systems?
-
-`TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
+Many natural systems as diverse as social networks and proteins are characterized by _relational structure_. This is the structure of interactions between components in the system, such as social interactions between individuals or electrostatic interactions between atoms. How can we conveniently represent data defined on such relational systems? `TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
 
 
 🛠️ Main Features
 ----------------
 
 Support of higher order representation learning algorithms such as:
+
 - DeepCell,
 - Cell2Vec,
 - Higher Order Laplacian Eigenmaps, and
-- Higher Order Geometric Laplacian Eigenmaps
+- Higher Order Geometric Laplacian Eigenmaps,
 
-for the topological domains supported in [TopoNetX](https://github.com/pyt-team/TopoNetX).
+for the topological domains supported in `TopoNetX <https://github.com/pyt-team/TopoNetX>`__.
 
 🔍 References
 -------------
 
 To learn more about topological representation learning.
 
-- Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. [Topological Deep Learning: Going Beyond Graph Data](https://arxiv.org/abs/2206.00606).
+- `Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. Topological Deep Learning: Going Beyond Graph Data <https://arxiv.org/abs/2206.00606>`__.
 
 .. code-block:: language
 
@@ -45,7 +42,8 @@ To learn more about topological representation learning.
    }
 
 Figure from:
-- Mathilde Papillon, Sophia Sanborn, Mustafa Hajij, Nina Miolane. [Architectures of Topological Deep Learning: A Survey on Topological Neural Networks.](https://arxiv.org/pdf/2304.10031.pdf)
+
+- Mathilde Papillon, Sophia Sanborn, Mustafa Hajij, Nina Miolane. `Architectures of Topological Deep Learning: A Survey on Topological Neural Networks. <https://arxiv.org/pdf/2304.10031.pdf>`__
 
 .. code-block:: language
 
