@@ -87,46 +87,9 @@ skip = [".gitignore", "__init__.py"]
 application_import_names = "topoembedx"
 docstring-convention = "numpy"
 exclude = ["examples/*.ipynb"]
-ignore = [
-    "E203",
-    "F811",
-    "W503",
-    "W504",
-    "W605",
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D104",
-    "D105",
-    "D106",
-    "D200",
-    "D201",
-    "D202",
-    "D205",
-    "D208",
-    "D209",
-    "D210",
-    "D211",
-    "D214",
-    "D215",
-    "D400",
-    "D401",
-    "D403",
-    "D404",
-    "D405",
-    "D406",
-    "D407",
-    "D409",
-    "D410",
-    "D411",
-    "D412",
-    "D414",
-    "D419",
-]
 import_order_style = "smarkets"
 max-line-length = 88
-extend-ignore = ["E501", "F401"]
+extend-ignore = ["E501", "F401", "E203"]
 per-file-ignores = [
-    "*/__init__.py: F401,F403"
+    "*/__init__.py: D104,F401,F403"
 ]
