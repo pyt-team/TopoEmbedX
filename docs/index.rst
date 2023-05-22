@@ -1,9 +1,7 @@
 TopoEmbedX
 ==========
 
-Deep Learning on Topological Domains.
-
-Welcome! Check out our tutorials to get started.
+Representation Learning on Topological Domains. Welcome!
 
 .. toctree::
    :maxdepth: 1
