@@ -1,7 +1,7 @@
 🌐 TopoEmbedX (TEX) 🍩
 =====================
 
-`TopoEmbedX` is a Python package for representation Learning on Topological Domains. Topological domains are the natural mathematical structures representing relations between the components of a dataset.
+`TopoEmbedX` (TEX) is a Python package for representation Learning on Topological Domains. Topological domains are the natural mathematical structures representing relations between the components of a dataset.
 
 .. figure:: https://user-images.githubusercontent.com/8267869/234074436-402ac931-2dc9-43da-a056-6c927f613242.png
    :alt: topoembedx
@@ -26,9 +26,9 @@ for the topological domains supported in `TopoNetX <https://github.com/pyt-team/
 🔍 References
 -------------
 
-To learn more about topological representation learning.
+To learn more about topological representation learning:
 
-- `Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. Topological Deep Learning: Going Beyond Graph Data <https://arxiv.org/abs/2206.00606>`__.
+- Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. `Topological Deep Learning: Going Beyond Graph Data <https://arxiv.org/abs/2206.00606>`__.
 
 .. code-block:: language
 
@@ -41,7 +41,7 @@ To learn more about topological representation learning.
          primaryClass={cs.LG}
    }
 
-Figure from:
+For a literature review of topological deep learning:
 
 - Mathilde Papillon, Sophia Sanborn, Mustafa Hajij, Nina Miolane. `Architectures of Topological Deep Learning: A Survey on Topological Neural Networks. <https://arxiv.org/pdf/2304.10031.pdf>`__
 
