@@ -97,6 +97,7 @@ Write Documentation
 Building the documentation requires installing specific requirements.
 
     .. code-block:: bash
+    
       $ pip install -e .[doc]
 
 Intro to Docstrings
