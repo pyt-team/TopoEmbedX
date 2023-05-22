@@ -63,7 +63,7 @@ class DeepCell(DeepWalk):
 
         Parameters
         ----------
-        complex : SimplicialComplex, CellComplex, CombinatorialComplex, or DynamicCombinatorialComplex
+        complex : SimplicialComplex, CellComplex, or CombinatorialComplex
             The complex to be embedded.
         neighborhood_type : str, optional
             The type of neighborhood to use, by default "adj".

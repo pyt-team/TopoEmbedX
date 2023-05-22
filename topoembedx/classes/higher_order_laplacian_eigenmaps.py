@@ -41,7 +41,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
 
         Parameters
         ----------
-        complex : SimplicialComplex, CellComplex, CombinatorialComplex, or DynamicCombinatorialComplex
+        complex : SimplicialComplex, CellComplex, CombinatorialComplex, or CombinatorialComplex
             The complex to be embedded.
         neighborhood_type : str, optional
             The type of neighborhood to use, by default "adj".
