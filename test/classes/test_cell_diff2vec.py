@@ -2,7 +2,6 @@
 
 import unittest
 
-import numpy as np
 import toponetx as tnx
 
 from topoembedx.classes.cell_diff2vec import CellDiff2Vec

@@ -67,7 +67,7 @@ class CellDiff2Vec(Diff2Vec):
             A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex
-            - DynamicCombinatorialComplex
+            - CombinatorialComplex
             - SimplicialComplex
             - DynamicSimplicialComplex
         neighborhood_type : str

@@ -1,11 +1,6 @@
 """Functions for computing neighborhoods of a complex."""
 
-from toponetx.classes import (
-    CellComplex,
-    CombinatorialComplex,
-    DynamicCombinatorialComplex,
-    SimplicialComplex,
-)
+from toponetx.classes import CellComplex, CombinatorialComplex, SimplicialComplex
 
 
 def neighborhood_from_complex(
@@ -18,7 +13,7 @@ def neighborhood_from_complex(
 
     Parameters
     ----------
-    complex : SimplicialComplex or CellComplex or CombinatorialComplex or DynamicCombinatorialComplex
+    complex : SimplicialComplex or CellComplex or CombinatorialComplex or CombinatorialComplex
         The complex to compute the neighborhood for.
     neighborhood_type : str
         The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
@@ -45,7 +40,7 @@ def neighborhood_from_complex(
     ------
     ValueError
         If the input `complex` is not a SimplicialComplex, CellComplex, CombinatorialComplex, or
-        DynamicCombinatorialComplex.
+        CombinatorialComplex.
     """
     if isinstance(complex, SimplicialComplex) or isinstance(complex, CellComplex):
         if neighborhood_type == "adj":
@@ -54,7 +49,7 @@ def neighborhood_from_complex(
         else:
             ind, A = complex.coadjacency_matrix(neighborhood_dim["r"], index=True)
     elif isinstance(complex, CombinatorialComplex) or isinstance(
-        complex, DynamicCombinatorialComplex
+        complex, CombinatorialComplex
     ):
         if neighborhood_type == "adj":
             ind, A = complex.adjacency_matrix(
@@ -66,7 +61,7 @@ def neighborhood_from_complex(
             )
     else:
         ValueError(
-            "input complex must be SimplicialComplex,CellComplex,CombinatorialComplex, or DynamicCombinatorialComplex "
+            "input complex must be SimplicialComplex,CellComplex,CombinatorialComplex, or CombinatorialComplex "
         )
 
     return ind, A

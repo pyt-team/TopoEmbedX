@@ -89,7 +89,7 @@ class Cell2Vec(Node2Vec):
             Can be one of the following:
             - CellComplex
             - CombinatorialComplex
-            - DynamicCombinatorialComplex
+            - CombinatorialComplex
             - SimplicialComplex
             - DynamicSimplicialComplex
         neighborhood_type : str
