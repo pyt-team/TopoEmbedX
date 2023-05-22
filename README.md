@@ -39,9 +39,9 @@ git pull
 ```
 3. Install `TopoEmbedX` in editable mode:
 ```bash
-conda create -n topoembedx python=3.9
+conda create -n topoembedx python=3.10.11
 conda activate topoembedx
-pip install -e ".[dev,full]"
+pip install -e .[all]
 ```
 4. Install pre-commit hooks:
 ```bash
