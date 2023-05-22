@@ -10,48 +10,6 @@ process for both novice and experienced contributors.
 `TopoEmbedX <https://github.com/pyt-team/TopoEmbedX>`_ is a
 community effort, and everyone is welcome to contribute.
 
-
-Run tests
----------
-
-TopoEmbedX tests can be run using `pytest <https://docs.pytest.org/>`_:
-
-    .. code-block:: bash
-
-      $ pip install -e .[dev]
-      $ pytest test
-
-
-You can run a particular test file using:
-
-    .. code-block:: bash
-
-      $ pytest test/algorithms/<test_filename.py>
-
-
-Write tests
------------
-
-The tests consist of classes appropriately named, located in the `test` folder, that check the validity of the code.
-
-Test functions should be located in files whose filenames start with `test_`. For example:
-
-    .. code-block:: bash
-
-      # test_add.py
-
-      def add(x, y):
-         return x + y
-
-      def test_capital_case():
-         assert add(4, 5) == 9
-
-Use an `assert` statement to check that the function under test returns the correct output. Then run the test using:
-
-    .. code-block:: bash
-
-      $ pytest test_add.py
-
 Making changes
 --------------
 
@@ -73,7 +31,7 @@ Follow these steps before submitting a PR:
 
         $ git checkout -b <branch-name>
 
-#. Make changes.
+#. Make changes. Make sure that you provide appropriate unit-tests and documentation to your code. See next sections of this contributing guide for details.
 
 #. When you're done editing, add changed files using ``git add`` and then ``git commit``:
 
@@ -93,12 +51,53 @@ Follow these steps before submitting a PR:
 
 #. Repeat 3. and 4. following the reviewers requests.
 
+Write tests
+-----------
+
+The tests consist of classes appropriately named, located in the `test` folder, that check the validity of the code.
+
+Test functions should be located in files whose filenames start with `test_`. For example:
+
+    .. code-block:: bash
+
+      # test_add.py
+
+      def add(x, y):
+         return x + y
+
+      def test_capital_case():
+         assert add(4, 5) == 9
+
+Use an `assert` statement to check that the function under test returns the correct output. 
+
+Run tests
+~~~~~~~~~
+
+Install `pytest` which is the software tools used to run tests:
+
+    .. code-block:: bash
+    
+      $ pip install -e .[dev]
+
+Then run the test using:
+
+    .. code-block:: bash
+
+      $ pytest test_add.py
+      
+Verify that the code you have added does not break `TopoEmbedX` by running all the tests.
+
+    .. code-block:: bash
+    
+      $ pytest test/
+
 Write Documentation
 -------------------
 
-Building the documentation requires installing specific requirements::
+Building the documentation requires installing specific requirements.
 
-   pip install -e .[doc]
+    .. code-block:: bash
+      $ pip install -e .[doc]
 
 Intro to Docstrings
 ~~~~~~~~~~~~~~~~~~~
@@ -116,8 +115,8 @@ it is also required for automated parsing for inclusion into our generated API R
 You can look at these for any object by printing out the ``__doc__`` attribute.
 Try this out with the np.array class and the np.mean function to see good examples::
 
-    >>> import numpy as np
-    >>> print(np.mean.__doc__)
+>>> import numpy as np
+>>> print(np.mean.__doc__)
 
 The Anatomy of a Docstring
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -155,10 +154,10 @@ If documenting a class, you would also want to include an Attributes section.
 There are many other optional sections you can include which are very helpful.
 For example: Raises, See Also, Notes, Examples, References, etc.
 
-N.B. Within Notes, you can
-	- include LaTex code
-	- cite references in text using ids placed in References
+N.B. Within Notes, you can:
 
+- include LaTex code
+- cite references in text using ids placed in References
 
 Docstring Examples
 ~~~~~~~~~~~~~~~~~~
@@ -166,7 +165,7 @@ Docstring Examples
 Here's a generic docstring template::
 
    def my_method(self, my_param_1, my_param_2="vector"):
-      """Write a one-line summary for the method.
+      r"""Write a one-line summary for the method.
 
       Write a description of the method, including "big O"
       (:math:`O\left(g\left(n\right)\right)`) complexities.
@@ -203,27 +202,26 @@ Here's a generic docstring template::
 And here's a filled-in example from the Scikit-Learn project, modified to our syntax::
 
    def fit_predict(self, X, y=None, sample_weight=None):
-      """Compute cluster centers and predict cluster index for each sample.
+       """Compute cluster centers and predict cluster index for each sample.
 
-      Convenience method; equivalent to calling fit(X) followed by
-      predict(X).
+       Convenience method; equivalent to calling fit(X) followed by predict(X).
 
-      Parameters
-      ----------
-      X : {array-like, sparse_matrix} of shape=[..., n_features]
-         New data to transform.
-      y : Ignored
-         Not used, present here for API consistency by convention.
-      sample_weight : array-like, shape [...,], optional
-         The weights for each observation in X. If None, all observations
-         are assigned equal weight (default: None).
+       Parameters
+       ----------
+       X : {array-like, sparse_matrix} of shape=[..., n_features]
+          New data to transform.
+       y : Ignored
+          Not used, present here for API consistency by convention.
+       sample_weight : array-like, shape [...,], optional
+          The weights for each observation in X. If None, all observations
+          are assigned equal weight (default: None).
 
-      Returns
-      -------
-      labels : array, shape=[...,]
-         Index of the cluster each sample belongs to.
-      """
-      return self.fit(X, sample_weight=sample_weight).labels_
+       Returns
+       -------
+       labels : array, shape=[...,]
+          Index of the cluster each sample belongs to.
+       """
+       return self.fit(X, sample_weight=sample_weight).labels_
 
 In general, have the following in mind:
 
