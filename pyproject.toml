@@ -28,7 +28,7 @@ dependencies=[
     "gensim==4.3.1",
     "gudhi",
     "hypernetx",
-    "karateclub",
+    "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@d35e05526455599688f1c4dd92e397cf92316ae4",
     "networkx",
     "scipy",
     "toponetx @ git+https://github.com/pyt-team/TopoNetX.git",
