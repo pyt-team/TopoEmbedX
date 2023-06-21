@@ -5,6 +5,9 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue?logo=python)](https://www.python.org/)
 [![DOI](https://zenodo.org/badge/609414708.svg)](https://zenodo.org/badge/latestdoi/609414708)
 
+
+![toponetx](https://user-images.githubusercontent.com/8267869/234068354-af9480f1-1d18-4914-92f1-916d9093e44d.png)
+
 # 🌐 TopoEmbedX (TEX) 🍩
 # Representation Learning on Topological Domains
 
