@@ -14,13 +14,13 @@ class TestHOGLEE(unittest.TestCase):
     def test_fit_and_get_embedding(self):
         """Test get_embedding."""
         # Create a small complex
-        cx = tnx.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
+        cx = tnx.classes.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 
         # Create a Cell2Vec object
         dc = HOGLEE(dimensions=5)
 
         # Fit the Cell2Vec object to the graph and get embedding for nodes (using adjacency matrix A0)
-        dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1})
+        dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1})
 
         # Check that the shape of the embedding is correct
         assert dc.get_embedding().shape == (len(cx.nodes), 5 + 1)

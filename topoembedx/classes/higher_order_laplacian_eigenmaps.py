@@ -36,7 +36,9 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         self.ind = []
         self.maximum_number_of_iterations = maximum_number_of_iterations
 
-    def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
+    def fit(
+        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+    ):
         """Fit a Higher Order Laplacian Eigenmaps model.
 
         Parameters
@@ -46,7 +48,8 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         neighborhood_type : str, optional
             The type of neighborhood to use, by default "adj".
         neighborhood_dim : dict, optional
-            The dimension of the neighborhood to use, by default {"r": 0, "k": -1}.
+            The dimension of the neighborhood to use.
+            Default: {"adj": 0, "coadj": -1}
         """
         self.ind, self.A = neighborhood_from_complex(
             complex, neighborhood_type, neighborhood_dim

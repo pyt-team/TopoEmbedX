@@ -61,4 +61,6 @@ For a literature review of topological deep learning:
    :hidden:
 
    api/index
+   tutorials/index
    contributing/index
+

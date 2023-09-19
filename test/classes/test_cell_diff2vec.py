@@ -13,7 +13,7 @@ class TestDiff2Vec(unittest.TestCase):
     def test_init(self):
         """Test get_embedding."""
         # Create a small graph
-        sc = tnx.SimplicialComplex()
+        sc = tnx.classes.SimplicialComplex()
         sc.add_simplex([0, 1])
 
         # Create a CellDiff2Vec object

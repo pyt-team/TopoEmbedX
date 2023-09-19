@@ -51,7 +51,8 @@ lint = [
     "flake8-docstrings",
     "Flake8-pyproject",
     "isort",
-    "pre-commit"
+    "pre-commit",
+    "tomli"
 ]
 test = [
     "pytest",

@@ -58,7 +58,9 @@ class DeepCell(DeepWalk):
         self.A = []
         self.ind = []
 
-    def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
+    def fit(
+        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+    ):
         """Fit the model.
 
         Parameters
@@ -68,7 +70,8 @@ class DeepCell(DeepWalk):
         neighborhood_type : str, optional
             The type of neighborhood to use, by default "adj".
         neighborhood_dim : dict, optional
-            The dimension of the neighborhood to use, by default {"r": 0, "k": -1}.
+            The dimension of the neighborhood to use.
+            Default: {"adj": 0, "coadj": -1}.
         """
         self.ind, self.A = neighborhood_from_complex(
             complex, neighborhood_type, neighborhood_dim
@@ -84,7 +87,8 @@ class DeepCell(DeepWalk):
         Parameters
         ----------
         get_dict : bool, optional
-            Return a dictionary of the embedding, by default False
+            Return a dictionary of the embedding.
+            Default: False.
 
         Returns
         -------
@@ -94,5 +98,4 @@ class DeepCell(DeepWalk):
         emb = super(DeepCell, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb

@@ -1,6 +1,5 @@
 """Higher Order Geometric Laplacian EigenMaps (HOGLEE) class."""
 import networkx as nx
-import numpy as np
 from karateclub import GLEE
 
 from topoembedx.neighborhood import neighborhood_from_complex
@@ -24,7 +23,9 @@ class HOGLEE(GLEE):
         self.A = []
         self.ind = []
 
-    def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
+    def fit(
+        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+    ):
         """Fit a Higher Order Geometric Laplacian EigenMaps model.
 
         Parameters
@@ -40,15 +41,15 @@ class HOGLEE(GLEE):
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The dimensions of the neighborhood to use. If `neighborhood_type` is "adj", the dimension is
-            `neighborhood_dim['r']`. If `neighborhood_type` is "coadj", the dimension is `neighborhood_dim['k']`
-            and `neighborhood_dim['r']` specifies the dimension of the ambient space.
+            `neighborhood_dim["adj"]`. If `neighborhood_type` is "coadj", the dimension is `neighborhood_dim["coadj"]`
+            and `neighborhood_dim["adj"]` specifies the dimension of the ambient space.
 
         Notes
         -----
-        Here, neighborhood_dim={"r": 1, "k": -1} specifies the dimension for
+        Here, neighborhood_dim={"adj": 1, "coadj": -1} specifies the dimension for
         which the cell embeddings are going to be computed.
-        r=1 means that the embeddings will be computed for the first dimension.
-        The integer 'k' is ignored and only considered
+        The integer "adj": 1 means that the embeddings will be computed for the first dimension.
+        The integer "coadj": -1  is ignored and only considered
         when the input complex is a combinatorial complex.
 
         Returns
@@ -79,5 +80,4 @@ class HOGLEE(GLEE):
         emb = super(HOGLEE, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb

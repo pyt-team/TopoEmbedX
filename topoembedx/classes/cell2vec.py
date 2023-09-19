@@ -9,14 +9,14 @@ from topoembedx.neighborhood import neighborhood_from_complex
 class Cell2Vec(Node2Vec):
     """Class Cell2Vec.
 
-    Cell2Vec is a class that extends the Node2Vec class
-    and provides additional functionality for generating node embeddings for simplicial, cell, combinatorial,
+    Cell2Vec is a class that extends the Node2Vec class.
+    It provides additional functionality for generating node embeddings for simplicial, cell, combinatorial,
     or dynamic combinatorial complexes. The Cell2Vec class takes as input a simplicial, cell, combinatorial,
     or dynamic combinatorial complex, and uses the adjacency matrix or coadjacency matrix of the complex to
     create a graph object using the networkx library. The Cell2Vec class then uses this graph object to generate
     node embeddings using the Node2Vec algorithm. The Cell2Vec class allows users to specify the type of adjacency
     or coadjacency matrix to use for the graph (e.g. "adj" for adjacency matrix or "coadj" for coadjacency matrix),
-    as well as the dimensions of the neighborhood to use for the matrix (e.g. the "r" and "k" values for the matrix).
+    as well as the dimensions of the neighborhood to use for the matrix (e.g. the "adj" and "coadj" values for the matrix).
     Additionally, users can specify the dimensions of the node embeddings to generate, the length and number of
     random walks to use for the node2vec algorithm, and the number of workers to use for parallelization.
 
@@ -79,7 +79,9 @@ class Cell2Vec(Node2Vec):
         self.A = []
         self.ind = []
 
-    def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
+    def fit(
+        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+    ):
         """Fit a Cell2Vec model.
 
         Parameters
@@ -95,20 +97,20 @@ class Cell2Vec(Node2Vec):
         neighborhood_type : str
             The type of neighborhood to compute.
             Can be one of the following:
-             - "adj" for adjacency matrix.
-             - "coadj" for coadjacency matrix.
+            - "adj" for adjacency matrix.
+            - "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The dimensions of the neighborhood to use.
-            If `neighborhood_type` is "adj", dimension is `neighborhood_dim['r']`.
-            If `neighborhood_type` is "coadj", dimension is `neighborhood_dim['k']`
-            and `neighborhood_dim['r']` specifies the dimension of the ambient space.
+            If `neighborhood_type` is "adj", dimension is `neighborhood_dim["adj"]`.
+            If `neighborhood_type` is "coadj", dimension is `neighborhood_dim["coadj"]`
+            and `neighborhood_dim["adj"]` specifies the dimension of the ambient space.
 
         Notes
         -----
-        Here, neighborhood_dim={"r": 1, "k": -1} specifies the dimension for
+        Here, neighborhood_dim={"adj": 1, "coadj": -1} specifies the dimension for
         which the cell embeddings are going to be computed.
-        r=1 means that the embeddings will be computed for the first dimension.
-        The integer 'k' is ignored and only considered
+        The integer "adj": 1 means that the embeddings will be computed for the first dim.
+        The integer "coadj": -1  is ignored and only considered,
         when the input complex is a combinatorial complex.
 
         Returns
@@ -139,5 +141,4 @@ class Cell2Vec(Node2Vec):
         emb = super(Cell2Vec, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb
