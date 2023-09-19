@@ -14,7 +14,7 @@ class TestDeepCell(unittest.TestCase):
     def test_fit_and_get_embedding(self):
         """Test fit and get_embedding."""
         # Create a small graph
-        cx = tnx.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
+        cx = tnx.classes.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 
         # Create a DeepCell object
         dc = DeepCell(walk_number=5, walk_length=10, dimensions=2)
