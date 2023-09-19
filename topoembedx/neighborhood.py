@@ -8,7 +8,8 @@ def neighborhood_from_complex(
 ):
     """Compute the neighborhood of a complex.
 
-    This function returns the indices and matrix for the neighborhood specified by `neighborhood_type`
+    This function returns the indices and matrix for the neighborhood specified
+    by `neighborhood_type`
     and `neighborhood_dim` for the input complex `complex`.
 
     Parameters
