@@ -35,6 +35,17 @@ for the topological domains supported in [TopoNetX](https://github.com/pyt-team/
 
 ## 🤖 Installing TopoEmbedX
 
+
+We recommend using Python 3.11, which is a python version used to run the unit-tests.
+
+For example, create a conda environment:
+   ```bash
+   conda create -n tex python=3.11.3
+   conda activate tex
+   ```
+
+Then:
+
 1. Clone a copy of `TopoEmbedX` from source:
 ```bash
 git clone https://github.com/pyt-team/TopoEmbedX
