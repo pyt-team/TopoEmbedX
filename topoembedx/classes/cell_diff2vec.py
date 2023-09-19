@@ -58,7 +58,9 @@ class CellDiff2Vec(Diff2Vec):
         self.A = []
         self.ind = []
 
-    def fit(self, complex, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1}):
+    def fit(
+        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+    ):
         """Fit a CellDiff2Vec model.
 
         Parameters
@@ -74,15 +76,15 @@ class CellDiff2Vec(Diff2Vec):
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The dimensions of the neighborhood to use. If `neighborhood_type` is "adj", the dimension is
-            `neighborhood_dim['r']`. If `neighborhood_type` is "coadj", the dimension is `neighborhood_dim['k']`
-            and `neighborhood_dim['r']` specifies the dimension of the ambient space.
+            `neighborhood_dim["adj"]`. If `neighborhood_type` is "coadj", the dimension is `neighborhood_dim["coadj"]`
+            and `neighborhood_dim["adj"]` specifies the dimension of the ambient space.
 
         Notes
         -----
-        Here, neighborhood_dim={"r": 1, "k": -1} specifies the dimension for
+        Here, neighborhood_dim={"adj": 1, "coadj": -1} specifies the dimension for
         which the cell embeddings are going to be computed.
-        r=1 means that the embeddings will be computed for the first dimension.
-        The integer 'k' is ignored and only considered
+        The integer "adj": 1 means that the embeddings will be computed for the first dimension.
+        The integer "coadj": -1  is ignored and only considered
         when the input complex is a combinatorial complex.
 
         Returns
@@ -95,9 +97,6 @@ class CellDiff2Vec(Diff2Vec):
 
         g = nx.from_numpy_matrix(self.A)
 
-        print("HELO")
-        print(g)
-        print(self.A)
         super(CellDiff2Vec, self).fit(g)
 
     def get_embedding(self, get_dict=False):
@@ -116,5 +115,4 @@ class CellDiff2Vec(Diff2Vec):
         emb = super(CellDiff2Vec, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb

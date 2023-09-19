@@ -20,7 +20,7 @@ class TestDeepCell(unittest.TestCase):
         dc = DeepCell(walk_number=5, walk_length=10, dimensions=2)
 
         # Fit the DeepCell object to the graph and get embedding for edges (using adjacency matrix A1)
-        dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"r": 1, "k": -1})
+        dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"adj": 1, "coadj": -1})
 
         # Check that the shape of the embedding is correct
         assert dc.get_embedding().shape == (len(cx.edges), 2)
