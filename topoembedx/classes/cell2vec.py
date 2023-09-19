@@ -9,8 +9,8 @@ from topoembedx.neighborhood import neighborhood_from_complex
 class Cell2Vec(Node2Vec):
     """Class Cell2Vec.
 
-    Cell2Vec is a class that extends the Node2Vec class
-    and provides additional functionality for generating node embeddings for simplicial, cell, combinatorial,
+    Cell2Vec is a class that extends the Node2Vec class.
+    It provides additional functionality for generating node embeddings for simplicial, cell, combinatorial,
     or dynamic combinatorial complexes. The Cell2Vec class takes as input a simplicial, cell, combinatorial,
     or dynamic combinatorial complex, and uses the adjacency matrix or coadjacency matrix of the complex to
     create a graph object using the networkx library. The Cell2Vec class then uses this graph object to generate
@@ -139,5 +139,4 @@ class Cell2Vec(Node2Vec):
         emb = super(Cell2Vec, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb

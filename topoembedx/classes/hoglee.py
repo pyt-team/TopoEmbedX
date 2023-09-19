@@ -1,6 +1,5 @@
 """Higher Order Geometric Laplacian EigenMaps (HOGLEE) class."""
 import networkx as nx
-import numpy as np
 from karateclub import GLEE
 
 from topoembedx.neighborhood import neighborhood_from_complex
@@ -79,5 +78,4 @@ class HOGLEE(GLEE):
         emb = super(HOGLEE, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb

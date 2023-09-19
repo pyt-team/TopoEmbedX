@@ -36,10 +36,12 @@ from sklearn.preprocessing import normalize
 def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
     """Generate transition matrix from an adjacency matrix.
 
-    This function generates a transition matrix from an adjacency matrix using the following steps:
+    This function generates a transition matrix from an adjacency matrix
+    using the following steps:
         1. Add self-loop to the adjacency matrix if self_loop is set to True
         2. Compute the degree matrix
-        3. Compute the transition matrix by taking the dot product of the inverse of the degree matrix and the adjacency matrix
+        3. Compute the transition matrix by taking the dot product of the inverse of
+        the degree matrix and the adjacency matrix
 
     Parameters
     ----------
@@ -48,7 +50,8 @@ def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
     sub_sampling : float, optional
         The rate of subsampling, by default 0.1
     self_loop : bool, optional
-        A flag indicating whether to add self-loop to the adjacency matrix. Defaults to True.
+        A flag indicating whether to add self-loop to the adjacency matrix.
+        Defaults to True.
 
     Returns
     -------

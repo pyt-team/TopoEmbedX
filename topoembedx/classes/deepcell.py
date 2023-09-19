@@ -94,5 +94,4 @@ class DeepCell(DeepWalk):
         emb = super(DeepCell, self).get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb
