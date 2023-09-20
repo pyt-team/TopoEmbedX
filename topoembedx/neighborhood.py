@@ -14,7 +14,7 @@ def neighborhood_from_complex(
 
     Parameters
     ----------
-    complex : SimplicialComplex or CellComplex or CombinatorialComplex or CombinatorialComplex
+    complex : SimplicialComplex or CellComplex or CombinatorialComplex
         The complex to compute the neighborhood for.
     neighborhood_type : str
         The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
@@ -41,8 +41,7 @@ def neighborhood_from_complex(
     Raises
     ------
     ValueError
-        If the input `complex` is not a SimplicialComplex, CellComplex, CombinatorialComplex, or
-        CombinatorialComplex.
+        If the input `complex` is not a SimplicialComplex, CellComplex or CombinatorialComplex
     """
     if isinstance(complex, SimplicialComplex) or isinstance(complex, CellComplex):
         if neighborhood_type == "adj":
@@ -50,9 +49,7 @@ def neighborhood_from_complex(
 
         else:
             ind, A = complex.coadjacency_matrix(neighborhood_dim["adj"], index=True)
-    elif isinstance(complex, CombinatorialComplex) or isinstance(
-        complex, CombinatorialComplex
-    ):
+    elif isinstance(complex, CombinatorialComplex):
         if neighborhood_type == "adj":
             ind, A = complex.adjacency_matrix(
                 neighborhood_dim["adj"], neighborhood_dim["coadj"], index=True
@@ -62,8 +59,8 @@ def neighborhood_from_complex(
                 neighborhood_dim["coadj"], neighborhood_dim["adj"], index=True
             )
     else:
-        ValueError(
-            "input complex must be SimplicialComplex,CellComplex,CombinatorialComplex, or CombinatorialComplex "
+        raise TypeError(
+            """Input Complex can only be a Simplicial, Cell or Combinatorial Complex."""
         )
 
     return ind, A
