@@ -9,7 +9,7 @@ import topoembedx as tex
 class TestNeighborhood:
     """Test the neighborhood module of TopoEmbedX."""
 
-    def test_value_error(self):
+    def test_neighborhood_from_complex_raise_error(self):
         """Testing if right assertion is raised for incorrect type."""
         with pytest.raises(TypeError) as e:
             tex.neighborhood.neighborhood_from_complex(1)
@@ -19,7 +19,7 @@ class TestNeighborhood:
             == """Input Complex can only be a Simplicial, Cell or Combinatorial Complex."""
         )
 
-    def test_matrix_dimensions_cellcomplex(self):
+    def test_neighborhood_from_complex_matrix_dimension_cell_complex(self):
         """Testing the matrix dimensions for the adjacency and coadjacency matrices."""
         # Testing for the case of Cell Complex
         cc1 = tnx.classes.CellComplex(
