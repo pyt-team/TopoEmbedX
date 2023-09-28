@@ -24,7 +24,7 @@ class HOGLEE(GLEE):
         self.ind = []
 
     def fit(
-        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+        self, complex, neighborhood_type="adj", neighborhood_dim={"dim": 0, "codim": -1}
     ):
         """Fit a Higher Order Geometric Laplacian EigenMaps model.
 
@@ -34,23 +34,27 @@ class HOGLEE(GLEE):
             A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex
-            - CombinatorialComplex
+            - PathComplex
             - SimplicialComplex
-            - DynamicSimplicialComplex
+            - ColoredHyperGraph
         neighborhood_type : str
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
-            The dimensions of the neighborhood to use. If `neighborhood_type` is "adj", the dimension is
-            `neighborhood_dim["adj"]`. If `neighborhood_type` is "coadj", the dimension is `neighborhood_dim["coadj"]`
-            and `neighborhood_dim["adj"]` specifies the dimension of the ambient space.
+            The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
+            In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
+            - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
+            neighborhood_dim["dim"]
+            - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by a single parameter, this is precisely
+            neighborhood_dim["dim"] and neighborhood_dim["codim"]
 
         Notes
         -----
-        Here, neighborhood_dim={"adj": 1, "coadj": -1} specifies the dimension for
-        which the cell embeddings are going to be computed.
-        The integer "adj": 1 means that the embeddings will be computed for the first dimension.
-        The integer "coadj": -1  is ignored and only considered
-        when the input complex is a combinatorial complex.
+            Here neighborhood_dim={"dim": 1, "codim": -1} specifies the dimension for
+            which the cell embeddings are going to be computed.
+            "dim": 1 means that the embeddings will be computed for the first dimension.
+            The integer "codim": -1 is ignored when the input is cell/simplicial complex
+            and  must be specified when the input complex is a combinatorial complex or
+            colored hypergraph.
 
         Returns
         -------

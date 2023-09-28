@@ -16,7 +16,7 @@ class TestNeighborhood:
 
         assert (
             str(e.value)
-            == """Input Complex can only be a Simplicial, Cell or Combinatorial Complex."""
+            == """Input Complex can only be a SimplicialComplex, CellComplex, PathComplex ColoredHyperGraph or CombinatorialComplex."""
         )
 
     def test_neighborhood_from_complex_matrix_dimension_cell_complex(self):
