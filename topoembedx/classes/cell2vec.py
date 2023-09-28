@@ -91,9 +91,9 @@ class Cell2Vec(Node2Vec):
             Can be one of the following:
             - CellComplex
             - CombinatorialComplex
-            - CombinatorialComplex
+            - PathComplex
             - SimplicialComplex
-            - DynamicSimplicialComplex
+            - ColoredHyperGraph
         neighborhood_type : str
             The type of neighborhood to compute.
             Can be one of the following:

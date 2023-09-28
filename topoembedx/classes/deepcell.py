@@ -65,13 +65,35 @@ class DeepCell(DeepWalk):
 
         Parameters
         ----------
-        complex : SimplicialComplex, CellComplex, or CombinatorialComplex
-            The complex to be embedded.
-        neighborhood_type : str, optional
-            The type of neighborhood to use, by default "adj".
-        neighborhood_dim : dict, optional
-            The dimension of the neighborhood to use.
-            Default: {"adj": 0, "coadj": -1}.
+        complex : TopoNetX object
+            A complex object. The complex object can be one of the following:
+            - CellComplex
+            - CombinatorialComplex
+            - PathComplex
+            - SimplicialComplex
+            - ColoredHyperGraph
+        neighborhood_type : str
+            The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
+        neighborhood_dim : dict
+            The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
+            In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
+            - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
+            neighborhood_dim["dim"]
+            - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by a single parameter, this is precisely
+            neighborhood_dim["dim"] and neighborhood_dim["codim"]
+
+        Notes
+        -----
+            Here neighborhood_dim={"dim": 1, "codim": -1} specifies the dimension for
+            which the cell embeddings are going to be computed.
+            "dim": 1 means that the embeddings will be computed for the first dimension.
+            The integer "codim": -1 is ignored when the input is cell/simplicial complex
+            and  must be specified when the input complex is a combinatorial complex or
+            colored hypergraph.
+
+        Returns
+        -------
+        None
         """
         self.ind, self.A = neighborhood_from_complex(
             complex, neighborhood_type, neighborhood_dim

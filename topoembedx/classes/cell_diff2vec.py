@@ -69,9 +69,9 @@ class CellDiff2Vec(Diff2Vec):
             A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex
-            - CombinatorialComplex
+            - PathComplex
             - SimplicialComplex
-            - DynamicSimplicialComplex
+            - ColoredHyperGraph
         neighborhood_type : str
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
