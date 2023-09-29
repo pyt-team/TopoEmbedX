@@ -15,7 +15,7 @@ class TestHOPE:
         cx = tnx.classes.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 
         # Create a Cell2Vec object
-        dc = HOPE(dimensions=2)
+        dc = HOPE(dimensions=20)
 
         # Fit the Cell2Vec object to the graph and get embedding for nodes (using adjacency matrix A0)
         dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"rank": 0, "to_rank": -1})
