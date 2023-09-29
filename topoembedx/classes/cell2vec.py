@@ -80,39 +80,38 @@ class Cell2Vec(Node2Vec):
         self.ind = []
 
     def fit(
-        self, complex, neighborhood_type="adj", neighborhood_dim={"dim": 0, "codim": -1}
+        self,
+        complex,
+        neighborhood_type="adj",
+        neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit a Cell2Vec model.
 
         Parameters
         ----------
         complex : TopoNetX object
-            A complex object.
-            Can be one of the following:
+            A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex
             - PathComplex
             - SimplicialComplex
             - ColoredHyperGraph
         neighborhood_type : str
-            The type of neighborhood to compute.
-            Can be one of the following:
-            - "adj" for adjacency matrix.
-            - "coadj" for coadjacency matrix.
+            The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
             In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
             - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
-            neighborhood_dim["dim"]
+            neighborhood_dim["rank"]
             - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by a single parameter, this is precisely
-            neighborhood_dim["dim"] and neighborhood_dim["codim"]
+            neighborhood_dim["rank"] and neighborhood_dim["via_rank"]
 
         Notes
         -----
-            Here neighborhood_dim={"dim": 1, "codim": -1} specifies the dimension for
+            Here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
             which the cell embeddings are going to be computed.
-            "dim": 1 means that the embeddings will be computed for the first dimension.
-            The integer "codim": -1 is ignored when the input is cell/simplicial complex
+            "rank": 1 means that the embeddings will be computed for the first dimension.
+            The integer "via_rank": -1 is ignored when the input is cell/simplicial complex
             and  must be specified when the input complex is a combinatorial complex or
             colored hypergraph.
 

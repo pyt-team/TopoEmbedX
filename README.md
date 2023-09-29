@@ -80,12 +80,12 @@ model = tex.Cell2Vec()
 
 # fit the model
 
-model.fit(cc, neighborhood_type="adj", neighborhood_dim={"adj": 1, "coadj": -1})
-# here neighborhood_dim={"adj": 1, "coadj": -1} specifies the dimension for
+model.fit(cc, neighborhood_type="adj", neighborhood_dim={"rank": 1, "via_rank": -1})
+# here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
 # which the cell embeddings are going to be computed.
-# r=1 means that the embeddings will be computed for the first dimension.
-# The integer 'k' is ignored and only considered
-# when the input complex is a combinatorial complex.
+# rank=1 means that the embeddings will be computed for the first dimension.
+# The integer 'via_rank' is ignored and only considered
+# when the input complex is a combinatorial complex or colored hypergraph.
 
 
 # get the embeddings:
