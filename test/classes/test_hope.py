@@ -21,7 +21,7 @@ class TestHOPE:
         dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"rank": 0, "to_rank": -1})
 
         # Check that the shape of the embedding is correct
-        assert dc.get_embedding().shape == (len(cx.nodes), 2)
+        assert dc.get_embedding().shape == (len(cx.nodes), 20)
 
         # Check that the shape of the embedding dictionary is correct
         ind = dc.get_embedding(get_dict=True)
