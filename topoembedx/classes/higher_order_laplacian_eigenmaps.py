@@ -37,7 +37,10 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         self.maximum_number_of_iterations = maximum_number_of_iterations
 
     def fit(
-        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+        self,
+        complex,
+        neighborhood_type="adj",
+        neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit a Higher Order Laplacian Eigenmaps model.
 

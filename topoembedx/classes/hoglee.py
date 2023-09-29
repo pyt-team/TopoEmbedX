@@ -24,7 +24,10 @@ class HOGLEE(GLEE):
         self.ind = []
 
     def fit(
-        self, complex, neighborhood_type="adj", neighborhood_dim={"dim": 0, "codim": -1}
+        self,
+        complex,
+        neighborhood_type="adj",
+        neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit a Higher Order Geometric Laplacian EigenMaps model.
 

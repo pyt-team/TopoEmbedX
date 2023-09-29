@@ -59,7 +59,10 @@ class DeepCell(DeepWalk):
         self.ind = []
 
     def fit(
-        self, complex, neighborhood_type="adj", neighborhood_dim={"adj": 0, "coadj": -1}
+        self,
+        complex,
+        neighborhood_type="adj",
+        neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit the model.
 

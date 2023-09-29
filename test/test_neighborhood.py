@@ -37,13 +37,13 @@ class TestNeighborhood:
         assert len(ind) == 4
 
         ind, A = tex.neighborhood.neighborhood_from_complex(
-            cc1, neighborhood_type="!adj"
+            cc1, neighborhood_type="coadj"
         )
         assert A.todense().shape == tuple([9, 9])
         assert len(ind) == 9
 
         ind, A = tex.neighborhood.neighborhood_from_complex(
-            cc2, neighborhood_type="!adj"
+            cc2, neighborhood_type="coadj"
         )
         assert A.todense().shape == tuple([4, 4])
         assert len(ind) == 4

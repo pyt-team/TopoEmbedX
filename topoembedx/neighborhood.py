@@ -10,7 +10,7 @@ from toponetx.classes import (
 
 
 def neighborhood_from_complex(
-    complex, neighborhood_type="adj", neighborhood_dim={"dim": 0, "codim": -1}
+    complex, neighborhood_type="adj", neighborhood_dim={"rank": 0, "via_rank": -1}
 ):
     """Compute the neighborhood of a complex.
 
