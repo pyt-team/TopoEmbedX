@@ -21,6 +21,8 @@ class HOPE:
         self.ind = []
         self.dimensions = dimensions
 
+        self._embedding = []
+
     @staticmethod
     def _laplacian_pe(A, k: int, return_eigenval: bool = False):
         """
@@ -138,7 +140,7 @@ class HOPE:
         ccc.add_cell([6,7,8],rank=3)
 
         model = HOPE()
-        model.fit(ccc, neighborhood_type="adj", neighborhood_dim={"r": 0, "k" :3})
+        model.fit(ccc, neighborhood_type="adj", neighborhood_dim={"rank": 0, "via_rank" :3})
         em=model.get_embedding(get_dict=True)
 
 
@@ -149,6 +151,8 @@ class HOPE:
         self.ind, self.A = neighborhood_from_complex(
             complex, neighborhood_type, neighborhood_dim
         )
+
+        self._embedding = HOPE._laplacian_pe(self.A, self.dimensions)
 
     def get_embedding(self, get_dict=False):
         """Get embedding.
@@ -163,7 +167,7 @@ class HOPE:
         dict or numpy.ndarray
             Embedding.
         """
-        emb = HOPE._laplacian_pe(self.A, self.dimensions)
+        emb = self._embedding
         if get_dict:
             return dict(zip(self.ind, emb))
         else:
