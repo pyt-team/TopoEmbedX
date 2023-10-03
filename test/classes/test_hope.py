@@ -19,7 +19,7 @@ class TestHOPE():
         dc = HOPE(dimensions=2)
 
         # Fit the HOPE object to the graph and get embedding for nodes (using adjacency matrix A0)
-        dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"r": 0, "k": -1})
+        dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"rank": 0, "to_rank": -1})
 
         # Check that the shape of the embedding is correct
         assert dc.get_embedding().shape == (len(cx.nodes), 2)
