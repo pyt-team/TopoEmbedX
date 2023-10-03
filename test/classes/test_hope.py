@@ -1,14 +1,13 @@
 """Test HOPE class."""
 
-import pytest
-
 import numpy as np
+import pytest
 import toponetx as tnx
+
 from topoembedx.classes.hope import HOPE
 
 
-
-class TestHOPE():
+class TestHOPE:
     """Test HigherOrderLaplacianEigenmaps class."""
 
     def test_fit_and_get_embedding(self):
@@ -27,9 +26,9 @@ class TestHOPE():
         # Check that the shape of the embedding dictionary is correct
         ind = dc.get_embedding(get_dict=True)
         assert (len(ind)) == len(cx.nodes)
-        
+
         A = cx.adjacency_matrix(0)
-        
-        eigvec,eigval = HOPE._laplacian_pe(A, n_eigvecs = 4,return_eigenval=True)
-        
+
+        eigvec, eigval = HOPE._laplacian_pe(A, n_eigvecs=4, return_eigenval=True)
+
         assert len(eigval) != 0

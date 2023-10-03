@@ -1,4 +1,6 @@
 """Higher Order Laplacian Positional Encoder (HOPE) class."""
+from typing import Tuple, Union
+
 import networkx as nx
 import numpy as np
 from scipy import sparse
@@ -15,15 +17,16 @@ class HOPE:
         Dimensionality of embedding. Defaults to 3.
     """
 
-    def __init__(self, dimensions: int = 3):
-
-        self.A = []
-        self.ind = []
-        self.dimensions = dimensions
-        self._embedding = []
+    def __init__(self, dimensions: int = 3) -> None:
+        self.A: np.ndarray = []
+        self.ind: list = []
+        self.dimensions: int = dimensions
+        self._embedding: np.ndarray = []
 
     @staticmethod
-    def _laplacian_pe(A, n_eigvecs: int, return_eigenval: bool = False):
+    def _laplacian_pe(
+        A: np.ndarray, n_eigvecs: int, return_eigenval: bool = False
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         """Compute Laplacian Positional Encodings (PE) for a given adjacency matrix.
 
         Parameters
@@ -96,9 +99,9 @@ class HOPE:
     def fit(
         self,
         complex,
-        neighborhood_type="adj",
-        neighborhood_dim={"rank": 0, "to_rank": -1},
-    ):
+        neighborhood_type: str = "adj",
+        neighborhood_dim: dict = {"rank": 0, "to_rank": -1},
+    ) -> None:
         """Fit a Higher Order Geometric Laplacian EigenMaps model.
 
         Parameters
@@ -152,7 +155,7 @@ class HOPE:
 
         self._embedding = self._laplacian_pe(self.A, self.dimensions)
 
-    def get_embedding(self, get_dict=False):
+    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
         """Get embedding.
 
         Parameters
