@@ -12,7 +12,7 @@ class HOPE:
     Parameters
     ----------
     dimensions : int, optional
-        Dimensionality of embedding. Defaults to 3.
+        Dimensionality of embedding. Defaults to 2.
     """
 
     def __init__(self, dimensions: int = 2):
@@ -20,13 +20,11 @@ class HOPE:
         self.A = []
         self.ind = []
         self.dimensions = dimensions
-
         self._embedding = []
 
     @staticmethod
     def _laplacian_pe(A, k: int, return_eigenval: bool = False):
-        """
-        Compute Laplacian Positional Encodings (PE) for a given adjacency matrix.
+        """Compute Laplacian Positional Encodings (PE) for a given adjacency matrix.
 
         Parameters
         ----------
@@ -43,8 +41,8 @@ class HOPE:
             Laplacian Positional Encodings computed from the Laplacian eigenvectors.
             If return_eigenval is True, returns a tuple (PE, eigenvalues).
 
-        Explanation
-        -----------
+        Notes
+        -----
         This function computes Laplacian Positional Encodings (PE) based on the input
         adjacency matrix and the desired number of eigenvectors. The Laplacian PE is a
         representation of the graph structure obtained from the Laplacian eigenvectors.
@@ -68,32 +66,32 @@ class HOPE:
         L = np.eye(A.shape[0]) - D @ A @ D
 
         # Compute the eigenvectors of L
-        EigVal, EigVec = np.linalg.eig(L)
+        eigval, eigvec = np.linalg.eig(L)
 
         # Select the k smallest non-trivial eigenvectors
         max_freqs = min(n - 1, k)
-        kpartition_indices = np.argpartition(EigVal, max_freqs)[: max_freqs + 1]
-        topk_eigvals = EigVal[kpartition_indices]
+        kpartition_indices = np.argpartition(eigval, max_freqs)[: max_freqs + 1]
+        topk_eigvals = eigval[kpartition_indices]
         topk_indices = kpartition_indices[topk_eigvals.argsort()][1:]
-        topk_EigVec = EigVec[:, topk_indices]
+        topk_eigvec = eigvec[:, topk_indices]
 
         # Randomly flip signs of the eigenvectors
         rand_sign = 2 * (np.random.rand(max_freqs) > 0.5) - 1.0
-        PE = np.multiply(rand_sign, topk_EigVec.astype(np.float32))
+        pos_enc = np.multiply(rand_sign, topk_eigvec.astype(np.float32))
 
         if n <= k:
             temp_EigVec = np.zeros((n, k - n + 1), dtype=np.float32)
-            PE = np.concatenate((PE, temp_EigVec), axis=1)
+            pos_enc = np.concatenate((pos_enc, temp_EigVec), axis=1)
             temp_EigVal = np.full(k - n + 1, np.nan, dtype=np.float32)
             eigvals = np.concatenate((topk_eigvals, temp_EigVal), axis=0)
         else:
             eigvals = topk_eigvals
 
         if return_eigenval:
-            return np.array(PE), eigvals
+            return np.array(pos_enc), eigvals
 
         # Return the Laplacian positional encodings
-        return np.array(PE)
+        return np.array(pos_enc)
 
     def fit(
         self,
@@ -129,19 +127,19 @@ class HOPE:
 
         Examples
         --------
-        import toponetx as tnx
-        from topoembedx import HOPE
-        ccc = tnx.classes.CombinatorialComplex()
-        ccc.add_cell([2,5],rank=1)
-        ccc.add_cell([2,4],rank=1)
-        ccc.add_cell([7,8],rank=1)
-        ccc.add_cell([6,8],rank=1)
-        ccc.add_cell([2,4,5],rank=3)
-        ccc.add_cell([6,7,8],rank=3)
+        >>> import toponetx as tnx
+        >>> from topoembedx import HOPE
+        >>> ccc = tnx.classes.CombinatorialComplex()
+        >>> ccc.add_cell([2,5],rank=1)
+        >>> ccc.add_cell([2,4],rank=1)
+        >>> ccc.add_cell([7,8],rank=1)
+        >>> ccc.add_cell([6,8],rank=1)
+        >>> ccc.add_cell([2,4,5],rank=3)
+        >>> ccc.add_cell([6,7,8],rank=3)
 
-        model = HOPE()
-        model.fit(ccc, neighborhood_type="adj", neighborhood_dim={"rank": 0, "via_rank" :3})
-        em=model.get_embedding(get_dict=True)
+        >>> model = HOPE()
+        >>> model.fit(ccc, neighborhood_type="adj", neighborhood_dim={"rank": 0, "via_rank" :3})
+        >>> em = model.get_embedding(get_dict=True)
 
 
         Returns
@@ -152,7 +150,7 @@ class HOPE:
             complex, neighborhood_type, neighborhood_dim
         )
 
-        self._embedding = HOPE._laplacian_pe(self.A, self.dimensions)
+        self._embedding = self._laplacian_pe(self.A, self.dimensions)
 
     def get_embedding(self, get_dict=False):
         """Get embedding.
