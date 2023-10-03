@@ -8,7 +8,7 @@ from topoembedx.classes.hope import HOPE
 
 
 class TestHOPE:
-    """Test HigherOrderLaplacianEigenmaps class."""
+    """Test HOPE class."""
 
     def test_fit_and_get_embedding(self):
         """Test get_embedding."""
