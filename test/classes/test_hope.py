@@ -15,13 +15,13 @@ class TestHOPE:
         cx = tnx.classes.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 
         # Create a HOPE object
-        dc = HOPE(dimensions=2)
+        dc = HOPE(dimensions=20)
 
         # Fit the HOPE object to the graph and get embedding for nodes (using adjacency matrix A0)
         dc.fit(cx, neighborhood_type="adj", neighborhood_dim={"rank": 0, "to_rank": -1})
 
         # Check that the shape of the embedding is correct
-        assert dc.get_embedding().shape == (len(cx.nodes), 2)
+        assert dc.get_embedding().shape == (len(cx.nodes), 20)
 
         # Check that the shape of the embedding dictionary is correct
         ind = dc.get_embedding(get_dict=True)
