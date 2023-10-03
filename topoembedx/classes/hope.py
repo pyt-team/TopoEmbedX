@@ -23,15 +23,15 @@ class HOPE:
         self._embedding = []
 
     @staticmethod
-    def _laplacian_pe(A, k: int, return_eigenval: bool = False):
+    def _laplacian_pe(A, n_eigvecs: int, return_eigenval: bool = False):
         """Compute Laplacian Positional Encodings (PE) for a given adjacency matrix.
 
         Parameters
         ----------
         A : numpy.ndarray, shape (n, n)
             Adjacency matrix representing the graph structure.
-        k : int
-            Number of eigenvectors to consider for Laplacian PE.
+        n_eigvecs : int
+            Number of eigenvectors to consider for Laplacian positional encoder.
         return_eigenval : bool, optional (default=False)
             Whether to return the eigenvalues along with PE.
 
@@ -58,7 +58,7 @@ class HOPE:
         Finally, the Laplacian positional encodings are returned for further usage. If
         return_eigenval is True, eigenvalues are also returned alongside the positional encodings.
         """
-        n = A.shape[0]
+        n_nodes = A.shape[0]
         # Compute the degree matrix D^-0.5
         D = sparse.diags(np.squeeze(np.asarray(np.power(np.sum(A, axis=1), -0.5))))
 
@@ -69,7 +69,7 @@ class HOPE:
         eigval, eigvec = np.linalg.eig(L)
 
         # Select the k smallest non-trivial eigenvectors
-        max_freqs = min(n - 1, k)
+        max_freqs = min(n_nodes - 1, n_eigvecs)
         kpartition_indices = np.argpartition(eigval, max_freqs)[: max_freqs + 1]
         topk_eigvals = eigval[kpartition_indices]
         topk_indices = kpartition_indices[topk_eigvals.argsort()][1:]
@@ -79,11 +79,11 @@ class HOPE:
         rand_sign = 2 * (np.random.rand(max_freqs) > 0.5) - 1.0
         pos_enc = np.multiply(rand_sign, topk_eigvec.astype(np.float32))
 
-        if n <= k:
-            temp_EigVec = np.zeros((n, k - n + 1), dtype=np.float32)
-            pos_enc = np.concatenate((pos_enc, temp_EigVec), axis=1)
-            temp_EigVal = np.full(k - n + 1, np.nan, dtype=np.float32)
-            eigvals = np.concatenate((topk_eigvals, temp_EigVal), axis=0)
+        if n_nodes <= n_eigvecs:
+            temp_eigvec = np.zeros((n_nodes, n_eigvecs - n_nodes + 1), dtype=np.float32)
+            pos_enc = np.concatenate((pos_enc, temp_eigvec), axis=1)
+            temp_eigval = np.full(n_eigvecs - n_nodes + 1, np.nan, dtype=np.float32)
+            eigvals = np.concatenate((topk_eigvals, temp_eigval), axis=0)
         else:
             eigvals = topk_eigvals
 
@@ -168,5 +168,4 @@ class HOPE:
         emb = self._embedding
         if get_dict:
             return dict(zip(self.ind, emb))
-        else:
-            return emb
+        return emb
