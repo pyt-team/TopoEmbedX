@@ -12,10 +12,10 @@ class HOPE:
     Parameters
     ----------
     dimensions : int, optional
-        Dimensionality of embedding. Defaults to 2.
+        Dimensionality of embedding. Defaults to 3.
     """
 
-    def __init__(self, dimensions: int = 2):
+    def __init__(self, dimensions: int = 3):
 
         self.A = []
         self.ind = []
