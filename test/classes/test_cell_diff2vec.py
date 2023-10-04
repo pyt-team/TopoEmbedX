@@ -1,13 +1,12 @@
 """Test CellDiff2Vec class."""
 
-import unittest
-
+import pytest
 import toponetx as tnx
 
 from topoembedx.classes.cell_diff2vec import CellDiff2Vec
 
 
-class TestDiff2Vec(unittest.TestCase):
+class TestDiff2Vec:
     """Test Diff2Vec class."""
 
     def test_init(self):
@@ -18,7 +17,3 @@ class TestDiff2Vec(unittest.TestCase):
 
         # Create a CellDiff2Vec object
         _ = CellDiff2Vec(dimensions=2)
-
-
-if __name__ == "__main__":
-    unittest.main()

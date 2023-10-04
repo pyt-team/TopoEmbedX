@@ -62,7 +62,7 @@ test = [
 ]
 
 dev = ["TopoEmbedX[test, lint]"]
-all = ["TopoEmbedX[dev]"]
+all = ["TopoEmbedX[dev, doc]"]
 
 [project.urls]
 homepage="https://github.com/pyt-team/TopoEmbedX"

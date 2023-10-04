@@ -1,14 +1,13 @@
 """Test Cell2Vec class."""
 
-import unittest
-
 import numpy as np
+import pytest
 import toponetx as tnx
 
 from topoembedx.classes.cell2vec import Cell2Vec
 
 
-class TestCell2Vec(unittest.TestCase):
+class TestCell2Vec:
     """Test Cell2Vec class."""
 
     def test_fit_and_get_embedding(self):
@@ -33,7 +32,3 @@ class TestCell2Vec(unittest.TestCase):
 
         # Check that the embedding of the first node is not equal to the embedding of the second node
         assert not np.allclose(dc.get_embedding()[0], dc.get_embedding()[1])
-
-
-if __name__ == "__main__":
-    unittest.main()

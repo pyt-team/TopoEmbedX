@@ -1,14 +1,13 @@
 """Test the DeepCell class."""
 
-import unittest
-
 import numpy as np
+import pytest
 import toponetx as tnx
 
 from topoembedx.classes.deepcell import DeepCell
 
 
-class TestDeepCell(unittest.TestCase):
+class TestDeepCell:
     """Test the DeepCell class."""
 
     def test_fit_and_get_embedding(self):
@@ -33,7 +32,3 @@ class TestDeepCell(unittest.TestCase):
 
         # Check that the embedding of the first node is not equal to the embedding of the second node
         assert not np.allclose(dc.get_embedding()[0], dc.get_embedding()[1])
-
-
-if __name__ == "__main__":
-    unittest.main()
