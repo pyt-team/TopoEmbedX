@@ -61,7 +61,6 @@ class Cell2Vec(Node2Vec):
         min_count: int = 1,
         seed: int = 42,
     ):
-
         super().__init__(
             walk_number=walk_number,
             walk_length=walk_length,

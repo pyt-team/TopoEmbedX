@@ -17,7 +17,6 @@ class HOGLEE(GLEE):
     """
 
     def __init__(self, dimensions: int = 3, seed: int = 42):
-
         super().__init__(dimensions=dimensions, seed=seed)
 
         self.A = []

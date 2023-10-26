@@ -26,7 +26,6 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         maximum_number_of_iterations: int = 100,
         seed: int = 42,
     ):
-
         super().__init__(
             dimensions=dimensions,
             seed=seed,
