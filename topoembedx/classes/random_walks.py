@@ -55,7 +55,7 @@ def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
 
     Returns
     -------
-    _ : numpy.ndarray
+    numpy.ndarray
         The transition matrix.
 
     Example
@@ -70,7 +70,6 @@ def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
     """
 
     def _transition_from_adjacency(A):
-
         if scipy.sparse.issparse(A):
             A = A.todense()
 
@@ -134,7 +133,7 @@ def random_walk(length, num_walks, states, transition_matrix):
 
     Returns
     -------
-    _ : list of list of str
+    list of list of str
         The generated random walks.
 
     Example
