@@ -1,7 +1,10 @@
 """Cell2Vec: a class that extends the Node2Vec class."""
+from typing import Literal, Union
 
 import networkx as nx
+import numpy as np
 from karateclub import Node2Vec
+from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -23,65 +26,37 @@ class Cell2Vec(Node2Vec):
 
     Parameters
     ----------
-    walk_number : int, optional
-        Number of random walks to start at each node. Defaults to 10.
-    walk_length : int, optional
-        Length of random walks. Defaults to 80.
-    p : float, optional
-        Return parameter (1/p transition probability) to move towards from previous node. Defaults to 1.0.
-    q : float, optional
-        In-out parameter (1/q transition probability) to move away from previous node. Defaults to 1.0.
-    dimensions : int, optional
-        Dimensionality of embedding. Defaults to 128.
-    workers : int, optional
-        Number of cores. Defaults to 4.
-    window_size : int, optional
-        Matrix power order. Defaults to 5.
-    epochs : int, optional
-        Number of epochs. Defaults to 1.
-    learning_rate : float, optional
-        HogWild! learning rate. Defaults to 0.05.
+    walk_number : int, default=10
+        Number of random walks to start at each node.
+    walk_length : int, default=80
+        Length of random walks.
+    p : float, default=1.0
+        Return parameter (1/p transition probability) to move towards from previous node.
+    q : float, default=1.0
+        In-out parameter (1/q transition probability) to move away from previous node.
+    dimensions : int, default=128
+        Dimensionality of embedding.
+    workers : int, default=4
+        Number of cores.
+    window_size : int, default=5
+        Matrix power order.
+    epochs : int, default=1
+        Number of epochs.
+    learning_rate : float, default=0.05
+        HogWild! learning rate.
     min_count : int, optional
-        Minimal count of node occurrences. Defaults to 1.
-    seed : int, optional
-        Random seed value. Defaults to 42.
+        Minimal count of node occurrences.
+    seed : int, default=42
+        Random seed value.
     """
 
-    def __init__(
-        self,
-        walk_number: int = 10,
-        walk_length: int = 80,
-        p: float = 1.0,
-        q: float = 1.0,
-        dimensions: int = 128,
-        workers: int = 4,
-        window_size: int = 5,
-        epochs: int = 1,
-        learning_rate: float = 0.05,
-        min_count: int = 1,
-        seed: int = 42,
-    ):
-        super().__init__(
-            walk_number=walk_number,
-            walk_length=walk_length,
-            p=p,
-            q=q,
-            dimensions=dimensions,
-            workers=workers,
-            window_size=window_size,
-            epochs=epochs,
-            learning_rate=learning_rate,
-            min_count=min_count,
-            seed=seed,
-        )
-
-        self.A = []
-        self.ind = []
+    A: np.ndarray
+    ind: list
 
     def fit(
         self,
-        complex,
-        neighborhood_type="adj",
+        complex: Complex,
+        neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit a Cell2Vec model.
@@ -95,7 +70,7 @@ class Cell2Vec(Node2Vec):
             - PathComplex
             - SimplicialComplex
             - ColoredHyperGraph
-        neighborhood_type : str
+        neighborhood_type : {"adj", "coadj"}, default="adj"
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
@@ -126,7 +101,7 @@ class Cell2Vec(Node2Vec):
 
         super(Cell2Vec, self).fit(g)
 
-    def get_embedding(self, get_dict=False):
+    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
         """Get embedding.
 
         Parameters

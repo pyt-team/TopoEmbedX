@@ -1,6 +1,10 @@
 """Higher Order Geometric Laplacian EigenMaps (HOGLEE) class."""
+from typing import Literal, Union
+
 import networkx as nx
+import numpy as np
 from karateclub import GLEE
+from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -16,16 +20,13 @@ class HOGLEE(GLEE):
         Random seed value. Defaults to 42.
     """
 
-    def __init__(self, dimensions: int = 3, seed: int = 42):
-        super().__init__(dimensions=dimensions, seed=seed)
-
-        self.A = []
-        self.ind = []
+    A: np.ndarray
+    ind: list
 
     def fit(
         self,
-        complex,
-        neighborhood_type="adj",
+        complex: Complex,
+        neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit a Higher Order Geometric Laplacian EigenMaps model.
@@ -39,7 +40,7 @@ class HOGLEE(GLEE):
             - PathComplex
             - SimplicialComplex
             - ColoredHyperGraph
-        neighborhood_type : str
+        neighborhood_type : {"adj", "coadj"}, default="adj"
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
@@ -70,7 +71,7 @@ class HOGLEE(GLEE):
 
         super(HOGLEE, self).fit(g)
 
-    def get_embedding(self, get_dict=False):
+    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
         """Get embedding.
 
         Parameters

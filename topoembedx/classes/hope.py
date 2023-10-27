@@ -1,9 +1,9 @@
 """Higher Order Laplacian Positional Encoder (HOPE) class."""
-from typing import Tuple, Union
+from typing import Literal, Union, overload
 
-import networkx as nx
 import numpy as np
 from scipy import sparse
+from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -13,20 +13,35 @@ class HOPE:
 
     Parameters
     ----------
-    dimensions : int, optional
-        Dimensionality of embedding. Defaults to 3.
+    dimensions : int, default=3
+        Dimensionality of embedding.
     """
 
+    A: np.ndarray
+    ind: list
+    _embedding: np.ndarray
+
     def __init__(self, dimensions: int = 3) -> None:
-        self.A: np.ndarray = []
-        self.ind: list = []
-        self.dimensions: int = dimensions
-        self._embedding: np.ndarray = []
+        self.dimensions = dimensions
+
+    @overload
+    @staticmethod
+    def _laplacian_pe(
+        A: np.ndarray, n_eigvecs: int, return_eigenval: Literal[False] = ...
+    ) -> np.ndarray:
+        pass
+
+    @overload
+    @staticmethod
+    def _laplacian_pe(
+        A: np.ndarray, n_eigvecs: int, return_eigenval: Literal[True]
+    ) -> tuple[np.ndarray, np.ndarray]:
+        pass
 
     @staticmethod
     def _laplacian_pe(
         A: np.ndarray, n_eigvecs: int, return_eigenval: bool = False
-    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+    ) -> Union[np.ndarray, tuple[np.ndarray, np.ndarray]]:
         """Compute Laplacian Positional Encodings (PE) for a given adjacency matrix.
 
         Parameters
@@ -35,7 +50,7 @@ class HOPE:
             Adjacency matrix representing the graph structure.
         n_eigvecs : int
             Number of eigenvectors to consider for Laplacian positional encoder.
-        return_eigenval : bool, optional (default=False)
+        return_eigenval : bool, default=False
             Whether to return the eigenvalues along with PE.
 
         Returns
@@ -98,8 +113,8 @@ class HOPE:
 
     def fit(
         self,
-        complex,
-        neighborhood_type: str = "adj",
+        complex: Complex,
+        neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim: dict = {"rank": 0, "to_rank": -1},
     ) -> None:
         """Fit a Higher Order Geometric Laplacian EigenMaps model.
@@ -113,7 +128,7 @@ class HOPE:
             - ColoredHyperGraph
             - SimplicialComplex
             - PathComplex
-        neighborhood_type : str
+        neighborhood_type : {"adj", "coadj"}, default="adj"
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The dimensions of the neighborhood to use. If `neighborhood_type` is "adj", the dimension is
@@ -168,7 +183,6 @@ class HOPE:
         dict or numpy.ndarray
             Embedding.
         """
-        emb = self._embedding
         if get_dict:
-            return dict(zip(self.ind, emb))
-        return emb
+            return dict(zip(self.ind, self._embedding))
+        return self._embedding

@@ -58,7 +58,8 @@ test = [
     "pytest",
     "pytest-cov",
     "coverage",
-    "jupyter"
+    "jupyter",
+    "mypy"
 ]
 
 dev = ["TopoEmbedX[test, lint]"]
@@ -76,6 +77,23 @@ include = [
     "topoembedx",
     "topoembedx.*"
 ]
+
+[tool.mypy]
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+plugins = "numpy.typing.mypy_plugin"
+
+[[tool.mypy.overrides]]
+module = [
+    "karateclub.*",
+    "networkx.*",
+    "pyrandwalk.*",
+    "scipy.*",
+    "sklearn.*",
+    "toponetx.*",
+]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 addopts = "--capture=no"

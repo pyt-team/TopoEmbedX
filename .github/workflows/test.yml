@@ -41,6 +41,9 @@ jobs:
         run: |
           pip install --upgrade pip setuptools wheel
           pip install -e .[all]
+      - name: Typecheck [mypy]
+        run: |
+          mypy -p topoembedx
       - name: Run tests [pytest]
         run: |
           pytest --cov --cov-report=xml:coverage.xml
