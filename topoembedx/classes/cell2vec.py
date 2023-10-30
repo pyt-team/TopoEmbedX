@@ -23,7 +23,6 @@ class Cell2Vec(Node2Vec):
     Additionally, users can specify the dimensions of the node embeddings to generate, the length and number of
     random walks to use for the node2vec algorithm, and the number of workers to use for parallelization.
 
-
     Parameters
     ----------
     walk_number : int, default=10
@@ -58,12 +57,12 @@ class Cell2Vec(Node2Vec):
         complex: Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
-    ):
+    ) -> None:
         """Fit a Cell2Vec model.
 
         Parameters
         ----------
-        complex : TopoNetX object
+        complex : toponetx.classes.Complex
             A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex
@@ -76,22 +75,18 @@ class Cell2Vec(Node2Vec):
             The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
             In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
             - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
-            neighborhood_dim["rank"]
+            neighborhood_dim["rank"].
             - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by a single parameter, this is precisely
-            neighborhood_dim["rank"] and neighborhood_dim["via_rank"]
+            neighborhood_dim["rank"] and neighborhood_dim["via_rank"].
 
         Notes
         -----
-            Here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
-            which the cell embeddings are going to be computed.
-            "rank": 1 means that the embeddings will be computed for the first dimension.
-            The integer "via_rank": -1 is ignored when the input is cell/simplicial complex
-            and  must be specified when the input complex is a combinatorial complex or
-            colored hypergraph.
-
-        Returns
-        -------
-        None
+        Here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
+        which the cell embeddings are going to be computed.
+        "rank": 1 means that the embeddings will be computed for the first dimension.
+        The integer "via_rank": -1 is ignored when the input is cell/simplicial complex
+        and  must be specified when the input complex is a combinatorial complex or
+        colored hypergraph.
         """
         self.ind, self.A = neighborhood_from_complex(
             complex, neighborhood_type, neighborhood_dim

@@ -121,7 +121,7 @@ class HOPE:
 
         Parameters
         ----------
-        complex : TopoNetX object
+        complex : toponetx.classes.Complex
             A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex

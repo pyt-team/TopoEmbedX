@@ -5,26 +5,23 @@ random_walk function to generate random walks on your complex.
 Then, you can use the generated random walks as input to the Word2Vec
 algorithm to learn node embeddings.
 
+Examples
+--------
 Here is an example of how you could use the random_walk function
 and Word2Vec to generate cell embeddings:
 
+>>> # Import the necessary modules
+>>> from gensim.models import Word2Vec
+>>> # Generate random walks on your graph using the random_walk function
+>>> random_walks = random_walk(length=10, num_walks=100, states=nodes, transition_matrix=transition_matrix)
+>>> # Train a Word2Vec model on the generated random walks
+>>> model = Word2Vec(random_walks, size=128, window=5, min_count=0, sg=1)
+>>> # Use the trained model to generate node embeddings
+>>> cell_embeddings = model.wv
 
-# Import the necessary modules
-from gensim.models import Word2Vec
-
-# Generate random walks on your graph using the random_walk function
-random_walks = random_walk(length=10, num_walks=100, states=nodes,
-                           transition_matrix=transition_matrix)
-
-# Train a Word2Vec model on the generated random walks
-model = Word2Vec(random_walks, size=128, window=5, min_count=0, sg=1)
-
-# Use the trained model to generate node embeddings
-cell_embeddings = model.wv
-In the example above, nodes is a list of the nodes in your complex,
-transition_matrix is the transition matrix of your complex, and
-cell_embeddings is a dictionary that maps each node in your complex
-to its corresponding embedding.
+In the example above, `nodes` is a list of the nodes in your complex,
+`transition_matrix` is the transition matrix of your complex, and `cell_embeddings`
+is a dictionary that maps each node in your complex to its corresponding embedding.
 """
 from typing import TypeVar
 
@@ -42,35 +39,35 @@ def transition_from_adjacency(
 
     This function generates a transition matrix from an adjacency matrix
     using the following steps:
-        1. Add self-loop to the adjacency matrix if self_loop is set to True
-        2. Compute the degree matrix
-        3. Compute the transition matrix by taking the dot product of the inverse of
-        the degree matrix and the adjacency matrix
+
+    1. Add self-loop to the adjaency matrix if self_loop is set to True
+    2. Compute the degree matrix
+    3. Compute the transition matrix by taking the dot product of the inverse of
+       the degree matrix and the adjacency matrix
 
     Parameters
     ----------
     A : numpy.ndarray
         The adjacency matrix.
-    sub_sampling : float, optional
-        The rate of subsampling, by default 0.1
-    self_loop : bool, optional
+    sub_sampling : float, default=0.1
+        The rate of subsampling.
+    self_loop : bool, default=True
         A flag indicating whether to add self-loop to the adjacency matrix.
-        Defaults to True.
 
     Returns
     -------
     numpy.ndarray
         The transition matrix.
 
-    Example
-    -------
+    Examples
+    --------
     >>> import numpy as np
     >>> A = np.array([[0, 1, 1, 0], [1, 0, 1, 0], [1, 1, 0, 1], [0, 0, 1, 0]])
     >>> transition_from_adjacency(A)
-        array([[0.33333333, 0.33333333, 0.33333333, 0.        ],
-                [0.33333333, 0.33333333, 0.33333333, 0.        ],
-                [0.25      , 0.25      , 0.25      , 0.25      ],
-                [0.        , 0.        , 0.5       , 0.5       ]])
+    array([[0.33333333, 0.33333333, 0.33333333, 0.        ],
+           [0.33333333, 0.33333333, 0.33333333, 0.        ],
+           [0.25      , 0.25      , 0.25      , 0.25      ],
+           [0.        , 0.        , 0.5       , 0.5       ]])
     """
 
     def _transition_from_adjacency(A: np.ndarray):

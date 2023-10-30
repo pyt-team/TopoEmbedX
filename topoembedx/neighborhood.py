@@ -25,7 +25,7 @@ def neighborhood_from_complex(
 
     Parameters
     ----------
-    complex : CellComplex, CombinatorialComplex, SimplicialComplex, ColoredHyperGraph, PathComplex
+    complex : toponetx.classes.Complex
         The complex to compute the neighborhood for.
     neighborhood_type : {"adj", "coadj"}, default="adj"
         The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
