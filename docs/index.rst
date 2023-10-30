@@ -1,5 +1,5 @@
 🌐 TopoEmbedX (TEX) 🍩
-=====================
+=======================
 
 `TopoEmbedX` (TEX) is a Python package for representation Learning on Topological Domains. Topological domains are the natural mathematical structures representing relations between the components of a dataset.
 
@@ -8,7 +8,7 @@
    :class: with-shadow
    :width: 1000px
 
-Many natural systems as diverse as social networks and proteins are characterized by _relational structure_. This is the structure of interactions between components in the system, such as social interactions between individuals or electrostatic interactions between atoms. How can we conveniently represent data defined on such relational systems? `TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
+Many natural systems as diverse as social networks and proteins are characterized by *relational structure*. This is the structure of interactions between components in the system, such as social interactions between individuals or electrostatic interactions between atoms. How can we conveniently represent data defined on such relational systems? `TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
 
 
 🛠️ Main Features
@@ -30,7 +30,7 @@ To learn more about topological representation learning:
 
 - Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. `Topological Deep Learning: Going Beyond Graph Data <https://arxiv.org/abs/2206.00606>`__.
 
-.. code-block:: language
+.. code-block:: BibTeX
 
    @misc{hajij2023topological,
          title={Topological Deep Learning: Going Beyond Graph Data},
@@ -45,7 +45,7 @@ For a literature review of topological deep learning:
 
 - Mathilde Papillon, Sophia Sanborn, Mustafa Hajij, Nina Miolane. `Architectures of Topological Deep Learning: A Survey on Topological Neural Networks. <https://arxiv.org/pdf/2304.10031.pdf>`__
 
-.. code-block:: language
+.. code-block:: BibTeX
 
    @misc{papillon2023architectures,
          title={Architectures of Topological Deep Learning: A Survey on Topological Neural Networks},
