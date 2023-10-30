@@ -105,7 +105,8 @@ class CellDiff2Vec(Diff2Vec):
         g = nx.from_numpy_matrix(self.A)
         if self.diffusion_cover > g.number_of_nodes():
             raise ValueError(
-                "The diffusion_cover is too large for the size of the graph.")
+                "The diffusion_cover is too large for the size of the graph."
+            )
         super(CellDiff2Vec, self).fit(g)
 
     def get_embedding(self, get_dict=False):
