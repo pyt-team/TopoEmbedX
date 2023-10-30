@@ -1,6 +1,8 @@
 """Class CellDiff2Vec."""
+from typing import Literal, Union
 
 import networkx as nx
+import numpy as np
 from karateclub import Diff2Vec
 
 from topoembedx.neighborhood import neighborhood_from_complex
@@ -11,57 +13,33 @@ class CellDiff2Vec(Diff2Vec):
 
     Parameters
     ----------
-    diffusion_number : int, optional
-        Number of diffusion. Defaults to 10.
-    diffusion_cover : int, optional
-        Number of nodes in diffusion. Defaults to 80.
-    dimensions : int, optional
-        Dimensionality of embedding. Defaults to 128.
-    workers : int, optional
-        Number of cores. Defaults to 4.
-    window_size : int, optional
-        Matrix power order. Defaults to 5.
-    epochs : int, optional
-        Number of epochs. Defaults to 1.
-    learning_rate : float, optional
-        HogWild! learning rate. Defaults to 0.05.
+    diffusion_number : int, default=10
+        Number of diffusions.
+    diffusion_cover : int, default=80
+        Number of nodes in diffusion.
+    dimensions : int, default=128
+        Dimensionality of embedding.
+    workers : int, default=4
+        Number of cores.
+    window_size : int, default=5
+        Matrix power order.
+    epochs : int, default=1
+        Number of epochs.
+    learning_rate : float, default=0.05
+        HogWild! learning rate.
     min_count : int, optional
-        Minimal count of node occurrences. Defaults to 1.
-    seed : int, optional
-        Random seed value. Defaults to 42.
+        Minimal count of node occurrences.
+    seed : int, default=42
+        Random seed value.
     """
 
-    def __init__(
-        self,
-        diffusion_number: int = 10,
-        diffusion_cover: int = 80,
-        dimensions: int = 128,
-        workers: int = 4,
-        window_size: int = 5,
-        epochs: int = 1,
-        learning_rate: float = 0.05,
-        min_count: int = 1,
-        seed: int = 42,
-    ):
-        super().__init__(
-            diffusion_number=diffusion_number,
-            diffusion_cover=diffusion_cover,
-            dimensions=dimensions,
-            workers=workers,
-            window_size=window_size,
-            epochs=epochs,
-            learning_rate=learning_rate,
-            min_count=min_count,
-            seed=seed,
-        )
-
-        self.A = []
-        self.ind = []
+    A: np.ndarray
+    ind: list
 
     def fit(
         self,
         complex,
-        neighborhood_type="adj",
+        neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit a CellDiff2Vec model.
@@ -75,7 +53,7 @@ class CellDiff2Vec(Diff2Vec):
             - PathComplex
             - SimplicialComplex
             - ColoredHyperGraph
-        neighborhood_type : str
+        neighborhood_type : {"adj", "coadj"}, default="adj"
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
@@ -106,7 +84,7 @@ class CellDiff2Vec(Diff2Vec):
 
         super(CellDiff2Vec, self).fit(g)
 
-    def get_embedding(self, get_dict=False):
+    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
         """Get embedding.
 
         Parameters

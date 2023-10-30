@@ -1,17 +1,22 @@
 """Functions for computing neighborhoods of a complex."""
+from typing import Literal
 
+import numpy as np
 from toponetx.classes import (
     CellComplex,
     ColoredHyperGraph,
     CombinatorialComplex,
+    Complex,
     PathComplex,
     SimplicialComplex,
 )
 
 
 def neighborhood_from_complex(
-    complex, neighborhood_type="adj", neighborhood_dim={"rank": 0, "via_rank": -1}
-):
+    complex: Complex,
+    neighborhood_type: Literal["adj", "coadj"] = "adj",
+    neighborhood_dim={"rank": 0, "via_rank": -1},
+) -> tuple[list, np.ndarray]:
     """Compute the neighborhood of a complex.
 
     This function returns the indices and matrix for the neighborhood specified
@@ -22,7 +27,7 @@ def neighborhood_from_complex(
     ----------
     complex : CellComplex, CombinatorialComplex, SimplicialComplex, ColoredHyperGraph, PathComplex
         The complex to compute the neighborhood for.
-    neighborhood_type : str
+    neighborhood_type : {"adj", "coadj"}, default="adj"
         The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
     neighborhood_dim : dict
         The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
@@ -50,13 +55,19 @@ def neighborhood_from_complex(
 
     Raises
     ------
-    ValueError
-        If the input `complex` is not a SimplicialComplex, CellComplex, PathComplex ColoredHyperGraph or CombinatorialComplex.
+    TypeError
+        If `complex` is not a SimplicialComplex, CellComplex, PathComplex ColoredHyperGraph or CombinatorialComplex.
+    TypeError
+        If `neighborhood_type` is invalid.
     """
+    if neighborhood_type not in ["adj", "coadj"]:
+        raise TypeError(
+            f"Input neighborhood_type must be `adj` or `coadj`, got {neighborhood_type}."
+        )
+
     if isinstance(complex, (SimplicialComplex, CellComplex, PathComplex)):
         if neighborhood_type == "adj":
             ind, A = complex.adjacency_matrix(neighborhood_dim["rank"], index=True)
-
         else:
             ind, A = complex.coadjacency_matrix(neighborhood_dim["rank"], index=True)
     elif isinstance(complex, (CombinatorialComplex, ColoredHyperGraph)):
@@ -64,15 +75,13 @@ def neighborhood_from_complex(
             ind, A = complex.adjacency_matrix(
                 neighborhood_dim["rank"], neighborhood_dim["via_rank"], index=True
             )
-        elif neighborhood_type == "coadj":
+        else:
             ind, A = complex.coadjacency_matrix(
                 neighborhood_dim["rank"], neighborhood_dim["via_rank"], index=True
             )
-        else:
-            raise TypeError("""Input neighborhood_type  must be 'adj' or 'coadj' .""")
     else:
         raise TypeError(
-            """Input Complex can only be a SimplicialComplex, CellComplex, PathComplex ColoredHyperGraph or CombinatorialComplex."""
+            "Input Complex can only be a SimplicialComplex, CellComplex, PathComplex ColoredHyperGraph or CombinatorialComplex."
         )
 
     return ind, A

@@ -1,8 +1,10 @@
 """Higher Order Laplacian Eigenmaps."""
+from typing import Literal, Union
 
 import networkx as nx
 import numpy as np
 from karateclub import LaplacianEigenmaps
+from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -12,13 +14,16 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
 
     Parameters
     ----------
-    dimensions : int, optional
-        Dimensionality of embedding. Defaults to 3.
-    maximum_number_of_iterations : int, optional
-        Maximum number of iterations. Defaults to 100.
-    seed : int, optional
-        Random seed value. Defaults to 42.
+    dimensions : int, default=3
+        Dimensionality of embedding.
+    maximum_number_of_iterations : int, default=100
+        Maximum number of iterations.
+    seed : int, default=42
+        Random seed value.
     """
+
+    A: np.ndarray
+    ind: list
 
     def __init__(
         self,
@@ -26,19 +31,13 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         maximum_number_of_iterations: int = 100,
         seed: int = 42,
     ):
-        super().__init__(
-            dimensions=dimensions,
-            seed=seed,
-        )
-
-        self.A = []
-        self.ind = []
+        super().__init__(dimensions=dimensions, seed=seed)
         self.maximum_number_of_iterations = maximum_number_of_iterations
 
     def fit(
         self,
-        complex,
-        neighborhood_type="adj",
+        complex: Complex,
+        neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit a Higher Order Laplacian Eigenmaps model.
@@ -52,7 +51,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
             - PathComplex
             - SimplicialComplex
             - ColoredHyperGraph
-        neighborhood_type : str
+        neighborhood_type : {"adj", "coadj"}, default="adj"
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
@@ -83,7 +82,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
 
         super(HigherOrderLaplacianEigenmaps, self).fit(g)
 
-    def get_embedding(self, get_dict=False):
+    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
         """Get embeddings.
 
         Parameters

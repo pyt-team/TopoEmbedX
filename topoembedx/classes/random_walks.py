@@ -26,14 +26,18 @@ transition_matrix is the transition matrix of your complex, and
 cell_embeddings is a dictionary that maps each node in your complex
 to its corresponding embedding.
 """
+from typing import TypeVar
 
 import numpy as np
-import scipy
 from pyrandwalk import RandomWalk
 from sklearn.preprocessing import normalize
 
+T = TypeVar("T")
 
-def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
+
+def transition_from_adjacency(
+    A: np.ndarray, sub_sampling: float = 0.1, self_loop: bool = True
+) -> np.ndarray:
     """Generate transition matrix from an adjacency matrix.
 
     This function generates a transition matrix from an adjacency matrix
@@ -69,10 +73,7 @@ def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
                 [0.        , 0.        , 0.5       , 0.5       ]])
     """
 
-    def _transition_from_adjacency(A):
-        if scipy.sparse.issparse(A):
-            A = A.todense()
-
+    def _transition_from_adjacency(A: np.ndarray):
         A = A + np.eye(A.shape[0])
         # let's evaluate the degree matrix D
         D = np.diag(np.sum(A, axis=0))
@@ -80,12 +81,12 @@ def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
         T = np.dot(np.linalg.inv(D), A)
         return T
 
-    def _weight_node(A, sub_sampling=sub_sampling):
+    def _weight_node(A: np.ndarray, sub_sampling: float = sub_sampling):
         z = np.array(np.abs(A).sum(1)) + 1
         weight = 1 / (z**sub_sampling)
         return weight.T
 
-    def get_normalized_adjacency(A, sub_sampling=sub_sampling):
+    def get_normalized_adjacency(A: np.ndarray, sub_sampling: float = sub_sampling):
         """Get normalized adjacency matrix.
 
         Parameters
@@ -113,7 +114,9 @@ def transition_from_adjacency(A, sub_sampling=0.1, self_loop=True):
         return get_normalized_adjacency(A, sub_sampling)
 
 
-def random_walk(length, num_walks, states, transition_matrix):
+def random_walk(
+    length: int, num_walks: int, states: list[T], transition_matrix: np.ndarray
+) -> list[list[T]]:
     """Generate random walks on a graph or network.
 
     This function generates random walks of a given length on a given complex.
@@ -126,19 +129,18 @@ def random_walk(length, num_walks, states, transition_matrix):
         The length of each random walk.
     num_walks : int
         The number of random walks to generate.
-    states : list of str
+    states : list
         The nodes in the complex.
     transition_matrix : numpy.ndarray
         The transition matrix of the graph or network.
 
     Returns
     -------
-    list of list of str
+    list of list
         The generated random walks.
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> import numpy as np
     >>> transition_matrix = np.array([[0.0, 1.0, 0.0, 0.0],
     ...                               [0.5, 0.0, 0.5, 0.0],

@@ -1,7 +1,10 @@
 """DeepCell class for embedding complex networks using DeepWalk."""
+from typing import Literal, Union
 
 import networkx as nx
+import numpy as np
 from karateclub import DeepWalk
+from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -11,57 +14,33 @@ class DeepCell(DeepWalk):
 
     Parameters
     ----------
-    walk_number : int, optional
-        Number of random walks to generate for each node. Defaults to 10.
-    walk_length : int, optional
-        Length of each random walk. Defaults to 80.
-    dimensions : int, optional
-        Dimensionality of embedding. Defaults to 128.
-    workers : int, optional
-        Number of parallel workers to use for training. Defaults to 4.
-    window_size : int, optional
-        Size of the sliding window. Defaults to 5.
-    epochs : int, optional
-        Number of iterations (epochs). Defaults to 1.
-    learning_rate : float, optional
-        Learning rate for the model. Defaults to 0.05.
+    walk_number : int, default=10
+        Number of random walks to generate for each node.
+    walk_length : int, default=80
+        Length of each random walk.
+    dimensions : int, default=128
+        Dimensionality of embedding.
+    workers : int, default=4
+        Number of parallel workers to use for training.
+    window_size : int, default=5
+        Size of the sliding window.
+    epochs : int, default=1
+        Number of iterations (epochs).
+    learning_rate : float, default=0.05
+        Learning rate for the model.
     min_count : int, optional
-        Minimum count of words to consider when training the model. Defaults to 1.
-    seed : int, optional
-        Random seed to use for reproducibility. Defaults to 42.
+        Minimum count of words to consider when training the model.
+    seed : int, default=42
+        Random seed to use for reproducibility.
     """
 
-    def __init__(
-        self,
-        walk_number: int = 10,
-        walk_length: int = 80,
-        dimensions: int = 128,
-        workers: int = 4,
-        window_size: int = 5,
-        epochs: int = 1,
-        learning_rate: float = 0.05,
-        min_count: int = 1,
-        seed: int = 42,
-    ):
-        super().__init__(
-            walk_number=walk_number,
-            walk_length=walk_length,
-            dimensions=dimensions,
-            workers=workers,
-            window_size=window_size,
-            epochs=epochs,
-            learning_rate=learning_rate,
-            min_count=min_count,
-            seed=seed,
-        )
-
-        self.A = []
-        self.ind = []
+    A: np.ndarray
+    ind: list
 
     def fit(
         self,
-        complex,
-        neighborhood_type="adj",
+        complex: Complex,
+        neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ):
         """Fit the model.
@@ -75,7 +54,7 @@ class DeepCell(DeepWalk):
             - PathComplex
             - SimplicialComplex
             - ColoredHyperGraph
-        neighborhood_type : str
+        neighborhood_type : {"adj", "coadj"}, default="adj"
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
             The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
@@ -106,14 +85,13 @@ class DeepCell(DeepWalk):
 
         super(DeepCell, self).fit(g)
 
-    def get_embedding(self, get_dict=False):
+    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
         """Get embeddings.
 
         Parameters
         ----------
-        get_dict : bool, optional
+        get_dict : bool, default=False
             Return a dictionary of the embedding.
-            Default: False.
 
         Returns
         -------
