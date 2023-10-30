@@ -17,3 +17,16 @@ class TestDiff2Vec:
 
         # Create a CellDiff2Vec object
         _ = CellDiff2Vec(dimensions=2)
+
+    def test_fit(self):
+        """Test the fit method."""
+        # Create a larger graph
+        cx_large = tnx.classes.CellComplex(
+            [[i, i + 1, i + 2, i + 3] for i in range(0, 100, 3)], ranks=2
+        )
+
+        # Create a CellDiff2Vec object
+        model = CellDiff2Vec(dimensions=2)
+
+        # Fit the CellDiff2Vec object to the graph and get embedding for nodes
+        model.fit(cx_large)
