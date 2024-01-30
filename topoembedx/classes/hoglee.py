@@ -1,5 +1,5 @@
 """Higher Order Geometric Laplacian EigenMaps (HOGLEE) class."""
-from typing import Literal, Union
+from typing import Literal
 
 import networkx as nx
 import numpy as np
@@ -65,9 +65,9 @@ class HOGLEE(GLEE):
 
         g = nx.from_numpy_matrix(self.A)
 
-        super(HOGLEE, self).fit(g)
+        super().fit(g)
 
-    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
+    def get_embedding(self, get_dict: bool = False) -> dict | np.ndarray:
         """Get embedding.
 
         Parameters
@@ -80,7 +80,7 @@ class HOGLEE(GLEE):
         dict or numpy.ndarray
             Embedding.
         """
-        emb = super(HOGLEE, self).get_embedding()
+        emb = super().get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
         return emb

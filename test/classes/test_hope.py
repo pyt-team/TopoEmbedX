@@ -1,7 +1,5 @@
 """Test HOPE class."""
 
-import numpy as np
-import pytest
 import toponetx as tnx
 
 from topoembedx.classes.hope import HOPE

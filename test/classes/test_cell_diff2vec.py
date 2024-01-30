@@ -1,6 +1,5 @@
 """Test CellDiff2Vec class."""
 
-import pytest
 import toponetx as tnx
 
 from topoembedx.classes.cell_diff2vec import CellDiff2Vec

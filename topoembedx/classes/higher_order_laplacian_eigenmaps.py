@@ -1,5 +1,5 @@
 """Higher Order Laplacian Eigenmaps."""
-from typing import Literal, Union
+from typing import Literal
 
 import networkx as nx
 import numpy as np
@@ -76,9 +76,9 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
 
         g = nx.from_numpy_matrix(self.A)
 
-        super(HigherOrderLaplacianEigenmaps, self).fit(g)
+        super().fit(g)
 
-    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
+    def get_embedding(self, get_dict: bool = False) -> dict | np.ndarray:
         """Get embeddings.
 
         Parameters
@@ -91,7 +91,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         dict or np.ndarray
             The embedding of the complex.
         """
-        emb = super(HigherOrderLaplacianEigenmaps, self).get_embedding()
+        emb = super().get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
         return emb

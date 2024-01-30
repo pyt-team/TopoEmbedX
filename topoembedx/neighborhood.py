@@ -65,12 +65,12 @@ def neighborhood_from_complex(
             f"Input neighborhood_type must be `adj` or `coadj`, got {neighborhood_type}."
         )
 
-    if isinstance(complex, (SimplicialComplex, CellComplex, PathComplex)):
+    if isinstance(complex, SimplicialComplex | CellComplex | PathComplex):
         if neighborhood_type == "adj":
             ind, A = complex.adjacency_matrix(neighborhood_dim["rank"], index=True)
         else:
             ind, A = complex.coadjacency_matrix(neighborhood_dim["rank"], index=True)
-    elif isinstance(complex, (CombinatorialComplex, ColoredHyperGraph)):
+    elif isinstance(complex, CombinatorialComplex | ColoredHyperGraph):
         if neighborhood_type == "adj":
             ind, A = complex.adjacency_matrix(
                 neighborhood_dim["rank"], neighborhood_dim["via_rank"], index=True

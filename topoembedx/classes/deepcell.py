@@ -1,5 +1,5 @@
 """DeepCell class for embedding complex networks using DeepWalk."""
-from typing import Literal, Union
+from typing import Literal
 
 import networkx as nx
 import numpy as np
@@ -79,9 +79,9 @@ class DeepCell(DeepWalk):
 
         g = nx.from_numpy_matrix(self.A)
 
-        super(DeepCell, self).fit(g)
+        super().fit(g)
 
-    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
+    def get_embedding(self, get_dict: bool = False) -> dict | np.ndarray:
         """Get embeddings.
 
         Parameters
@@ -94,7 +94,7 @@ class DeepCell(DeepWalk):
         dict or np.ndarray
             The embedding of the complex.
         """
-        emb = super(DeepCell, self).get_embedding()
+        emb = super().get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
         return emb
