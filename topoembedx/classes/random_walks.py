@@ -83,7 +83,9 @@ def transition_from_adjacency(
         weight = 1 / (z**sub_sampling)
         return weight.T
 
-    def get_normalized_adjacency(A: np.ndarray, sub_sampling: float = sub_sampling):
+    def get_normalized_adjacency(
+        A: np.ndarray, sub_sampling: float = sub_sampling
+    ) -> np.ndarray:
         """Get normalized adjacency matrix.
 
         Parameters
@@ -91,11 +93,11 @@ def transition_from_adjacency(
         A : numpy.ndarray
             The adjacency matrix.
         sub_sampling : float, optional
-            The rate of subsampling, by default 0.1
+            The rate of subsampling, by default 0.1.
 
         Returns
         -------
-        A : numpy.ndarray
+        numpy.ndarray
             The normalized adjacency matrix.
         """
         if sub_sampling != 0:
@@ -139,12 +141,18 @@ def random_walk(
     Examples
     --------
     >>> import numpy as np
-    >>> transition_matrix = np.array([[0.0, 1.0, 0.0, 0.0],
-    ...                               [0.5, 0.0, 0.5, 0.0],
-    ...                               [0.0, 0.5, 0.0, 0.5],
-    ...                               [0.0, 0.0, 1.0, 0.0]])
+    >>> transition_matrix = np.array(
+    ...     [
+    ...         [0.0, 1.0, 0.0, 0.0],
+    ...         [0.5, 0.0, 0.5, 0.0],
+    ...         [0.0, 0.5, 0.0, 0.5],
+    ...         [0.0, 0.0, 1.0, 0.0],
+    ...     ]
+    ... )
     >>> states = ["A", "B", "C", "D"]
-    >>> walks = random_walk(length=3, num_walks=2, states=states, transition_matrix=transition_matrix)
+    >>> walks = random_walk(
+    ...     length=3, num_walks=2, states=states, transition_matrix=transition_matrix
+    ... )
     >>> print(walks)
     [['B', 'C', 'D'], ['B', 'C', 'B']]
     """

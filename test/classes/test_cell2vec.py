@@ -1,7 +1,6 @@
 """Test Cell2Vec class."""
 
 import numpy as np
-import pytest
 import toponetx as tnx
 
 from topoembedx.classes.cell2vec import Cell2Vec

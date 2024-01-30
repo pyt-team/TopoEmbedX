@@ -44,14 +44,8 @@ doc = [
     "pydata-sphinx-theme"
 ]
 lint = [
-    "black < 24.0",
-    "black[jupyter]",
-    "flake8",
-    "flake8-docstrings",
-    "Flake8-pyproject",
-    "isort",
     "pre-commit",
-    "tomli"
+    "ruff"
 ]
 test = [
     "pytest",
@@ -67,6 +61,30 @@ all = ["TopoEmbedX[dev, doc]"]
 [project.urls]
 homepage="https://github.com/pyt-team/TopoEmbedX"
 repository="https://github.com/pyt-team/TopoEmbedX"
+
+[tool.ruff]
+target-version = "py310"
+extend-include = ["*.ipynb"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "F", # pyflakes errors
+    "E", # code style
+    "W", # warnings
+    "I", # import order
+    "UP", # pyupgrade rules
+    "SIM", # code simplifications
+]
+ignore = ["E501"] # line too long
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
 
 [tool.setuptools.dynamic]
 version = {attr = "topoembedx.__version__"}
@@ -96,19 +114,3 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 addopts = "--capture=no"
-
-[tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-skip = [".gitignore", "__init__.py"]
-
-[tool.flake8]
-application_import_names = "topoembedx"
-docstring-convention = "numpy"
-exclude = ["examples/*.ipynb"]
-import_order_style = "smarkets"
-max-line-length = 88
-extend-ignore = ["E501", "F401", "E203"]
-per-file-ignores = [
-    "*/__init__.py: D104,F401,F403"
-]

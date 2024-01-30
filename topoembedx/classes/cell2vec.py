@@ -1,5 +1,5 @@
 """Cell2Vec: a class that extends the Node2Vec class."""
-from typing import Literal, Union
+from typing import Literal
 
 import networkx as nx
 import numpy as np
@@ -94,9 +94,9 @@ class Cell2Vec(Node2Vec):
 
         g = nx.from_numpy_matrix(self.A)
 
-        super(Cell2Vec, self).fit(g)
+        super().fit(g)
 
-    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
+    def get_embedding(self, get_dict: bool = False) -> dict | np.ndarray:
         """Get embedding.
 
         Parameters
@@ -109,7 +109,7 @@ class Cell2Vec(Node2Vec):
         dict or numpy.ndarray
             Embedding.
         """
-        emb = super(Cell2Vec, self).get_embedding()
+        emb = super().get_embedding()
         if get_dict:
             return dict(zip(self.ind, emb))
         return emb

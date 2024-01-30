@@ -1,7 +1,6 @@
 """Test HigherOrderLaplacianEigenmaps class."""
 
 import numpy as np
-import pytest
 import toponetx as tnx
 
 from topoembedx.classes.higher_order_laplacian_eigenmaps import (

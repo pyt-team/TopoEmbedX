@@ -1,7 +1,6 @@
 """Test the DeepCell class."""
 
 import numpy as np
-import pytest
 import toponetx as tnx
 
 from topoembedx.classes.deepcell import DeepCell

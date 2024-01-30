@@ -1,5 +1,5 @@
 """Higher Order Laplacian Positional Encoder (HOPE) class."""
-from typing import Literal, Union, overload
+from typing import Literal, overload
 
 import numpy as np
 from scipy import sparse
@@ -41,7 +41,7 @@ class HOPE:
     @staticmethod
     def _laplacian_pe(
         A: np.ndarray, n_eigvecs: int, return_eigenval: bool = False
-    ) -> Union[np.ndarray, tuple[np.ndarray, np.ndarray]]:
+    ) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
         """Compute Laplacian Positional Encodings (PE) for a given adjacency matrix.
 
         Parameters
@@ -148,21 +148,20 @@ class HOPE:
         >>> import toponetx as tnx
         >>> from topoembedx import HOPE
         >>> ccc = tnx.classes.CombinatorialComplex()
-        >>> ccc.add_cell([2,5],rank=1)
-        >>> ccc.add_cell([2,4],rank=1)
-        >>> ccc.add_cell([7,8],rank=1)
-        >>> ccc.add_cell([6,8],rank=1)
-        >>> ccc.add_cell([2,4,5],rank=3)
-        >>> ccc.add_cell([6,7,8],rank=3)
+        >>> ccc.add_cell([2, 5], rank=1)
+        >>> ccc.add_cell([2, 4], rank=1)
+        >>> ccc.add_cell([7, 8], rank=1)
+        >>> ccc.add_cell([6, 8], rank=1)
+        >>> ccc.add_cell([2, 4, 5], rank=3)
+        >>> ccc.add_cell([6, 7, 8], rank=3)
 
         >>> model = HOPE()
-        >>> model.fit(ccc, neighborhood_type="adj", neighborhood_dim={"rank": 0, "via_rank" :3})
+        >>> model.fit(
+        ...     ccc,
+        ...     neighborhood_type="adj",
+        ...     neighborhood_dim={"rank": 0, "via_rank": 3},
+        ... )
         >>> em = model.get_embedding(get_dict=True)
-
-
-        Returns
-        -------
-        None
         """
         self.ind, self.A = neighborhood_from_complex(
             complex, neighborhood_type, neighborhood_dim
@@ -170,7 +169,7 @@ class HOPE:
 
         self._embedding = self._laplacian_pe(self.A, self.dimensions)
 
-    def get_embedding(self, get_dict: bool = False) -> Union[dict, np.ndarray]:
+    def get_embedding(self, get_dict: bool = False) -> dict | np.ndarray:
         """Get embedding.
 
         Parameters
