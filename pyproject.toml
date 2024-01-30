@@ -26,18 +26,16 @@ classifiers = [
 requires-python = ">= 3.10"
 dependencies=[
     "numpy",
-    "gensim==4.3.1",
-    "gudhi",
-    "hypernetx",
     "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@d35e05526455599688f1c4dd92e397cf92316ae4",
     "networkx",
-    "scipy",
+    "scipy < 1.12", # scipy 1.12 removed scipy.errstate, which networkx < 3.0 depends on
     "toponetx @ git+https://github.com/pyt-team/TopoNetX.git",
 ]
 
 [project.optional-dependencies]
 doc = [
     "jupyter",
+    "matplotlib",
     "nbsphinx",
     "nbsphinx_link",
     "numpydoc",
