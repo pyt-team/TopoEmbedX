@@ -99,18 +99,8 @@ include = [
 warn_redundant_casts = true
 warn_unused_ignores = true
 show_error_codes = true
+disable_error_code = ["import-untyped"]
 plugins = "numpy.typing.mypy_plugin"
-
-[[tool.mypy.overrides]]
-module = [
-    "karateclub.*",
-    "networkx.*",
-    "pyrandwalk.*",
-    "scipy.*",
-    "sklearn.*",
-    "toponetx.*",
-]
-ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 addopts = "--capture=no"
