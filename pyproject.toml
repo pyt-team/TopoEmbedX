@@ -28,6 +28,7 @@ dependencies=[
     "numpy",
     "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@d35e05526455599688f1c4dd92e397cf92316ae4",
     "networkx",
+    "pyrandwalk",
     "scipy < 1.12", # scipy 1.12 removed scipy.errstate, which networkx < 3.0 depends on
     "toponetx @ git+https://github.com/pyt-team/TopoNetX.git",
 ]
@@ -99,18 +100,8 @@ include = [
 warn_redundant_casts = true
 warn_unused_ignores = true
 show_error_codes = true
+disable_error_code = ["import-untyped"]
 plugins = "numpy.typing.mypy_plugin"
-
-[[tool.mypy.overrides]]
-module = [
-    "karateclub.*",
-    "networkx.*",
-    "pyrandwalk.*",
-    "scipy.*",
-    "sklearn.*",
-    "toponetx.*",
-]
-ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 addopts = "--capture=no"
