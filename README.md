@@ -6,6 +6,14 @@
     Representation Learning on Topological Domains
 </h3>
 
+<p align="center">
+  <a href="#%EF%B8%8F-main-features">Main Features</a> •
+  <a href="#-installing-topoembedx">Installing TopoEmbedX</a> •
+  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-references">References</a>
+</p>
+
+
 <div align="center">
    
 [![Test](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml)
@@ -20,12 +28,6 @@
 
 </div>
 
-<p align="center">
-  <a href="#%EF%B8%8F-main-features">Main Features</a> •
-  <a href="#-installing-topoembedx">Installing TopoEmbedX</a> •
-  <a href="#-getting-started">Getting Started</a> •
-  <a href="#-references">References</a>
-</p>
 
 
 ![topoembedx](https://user-images.githubusercontent.com/8267869/234074436-402ac931-2dc9-43da-a056-6c927f613242.png)
