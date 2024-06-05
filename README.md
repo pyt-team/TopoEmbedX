@@ -1,17 +1,32 @@
+<h2 align="center">
+  <img src="https://github.com/pyt-team/TopoEmbedX/blob/ninamiolane-logo/resources/logo.png" height="250">
+</h2>
 
-[![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml)
+<h3 align="center">
+    Representation Learning on Topological Domains
+</h3>
+
+<div align="center">
+   
+[![Test](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml)
 [![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml)
 [![Codecov](https://codecov.io/gh/pyt-team/TopoEmbedX/branch/main/graph/badge.svg)](https://app.codecov.io/gh/pyt-team/TopoEmbedX)
+[![Docs](https://img.shields.io/badge/docs-website-brightgreen)](https://pyt-team.github.io/topoembedx/index.html)
 [![Python](https://img.shields.io/badge/python-3.10+-blue?logo=python)](https://www.python.org/)
+[![license](https://badgen.net/github/license/pyt-team/TopoNetX?color=green)](https://github.com/pyt-team/TopoNetX/blob/main/LICENSE)
+[![slack](https://img.shields.io/badge/chat-on%20slack-purple?logo=slack)](https://join.slack.com/t/pyt-teamworkspace/shared_invite/zt-2k63sv99s-jbFMLtwzUCc8nt3sIRWjEw)
+
 [![DOI](https://zenodo.org/badge/609414708.svg)](https://zenodo.org/badge/latestdoi/609414708)
 
+</div>
 
-![pyt](https://github.com/mhajij/shrec_16/blob/main/logo.png)
+<p align="center">
+  <a href="#%EF%B8%8F-main-features">Main Features</a> •
+  <a href="#-installing-topoembedx">Installing TopoEmbedX</a> •
+  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-references">References</a>
+</p>
 
-![toponetx](https://user-images.githubusercontent.com/8267869/234068354-af9480f1-1d18-4914-92f1-916d9093e44d.png)
-
-# 🌐 TopoEmbedX (TEX) 🍩
-# Representation Learning on Topological Domains
 
 ![topoembedx](https://user-images.githubusercontent.com/8267869/234074436-402ac931-2dc9-43da-a056-6c927f613242.png)
 
@@ -22,7 +37,7 @@ How can we conveniently represent data defined on such relational systems?
 `TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
 
 
-## 🛠️ Main Features in Version 1.0
+## 🛠️ Main Features
 
 Support of higher order representation learning algorithms such as:
 - DeepCell,
