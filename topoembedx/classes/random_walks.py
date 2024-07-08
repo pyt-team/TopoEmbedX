@@ -75,8 +75,7 @@ def transition_from_adjacency(
         # let's evaluate the degree matrix D
         D = np.diag(np.sum(A, axis=0))
         # ...and the transition matrix T
-        T = np.dot(np.linalg.inv(D), A)
-        return T
+        return np.dot(np.linalg.inv(D), A)
 
     def _weight_node(A: np.ndarray, sub_sampling: float = sub_sampling):
         z = np.array(np.abs(A).sum(1)) + 1
@@ -109,8 +108,7 @@ def transition_from_adjacency(
 
     if self_loop:
         return _transition_from_adjacency(A)
-    else:
-        return get_normalized_adjacency(A, sub_sampling)
+    return get_normalized_adjacency(A, sub_sampling)
 
 
 def random_walk(

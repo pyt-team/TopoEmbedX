@@ -39,7 +39,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         self,
         complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim={"rank": 0, "via_rank": -1},
+        neighborhood_dim=None,
     ) -> None:
         """Fit a Higher Order Laplacian Eigenmaps model.
 
@@ -94,5 +94,5 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         """
         emb = super().get_embedding()
         if get_dict:
-            return dict(zip(self.ind, emb))
+            return dict(zip(self.ind, emb, strict=True))
         return emb

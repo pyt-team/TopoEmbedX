@@ -9,7 +9,7 @@ import toponetx as tnx
 def neighborhood_from_complex(
     complex: tnx.Complex,
     neighborhood_type: Literal["adj", "coadj"] = "adj",
-    neighborhood_dim={"rank": 0, "via_rank": -1},
+    neighborhood_dim=None,
 ) -> tuple[list, np.ndarray]:
     """Compute the neighborhood of a complex.
 
@@ -54,6 +54,9 @@ def neighborhood_from_complex(
     TypeError
         If `neighborhood_type` is invalid.
     """
+    if neighborhood_dim is None:
+        neighborhood_dim = {"rank": 0, "via_rank": -1}
+
     if neighborhood_type not in ["adj", "coadj"]:
         raise TypeError(
             f"Input neighborhood_type must be `adj` or `coadj`, got {neighborhood_type}."

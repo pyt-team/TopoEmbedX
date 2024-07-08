@@ -95,7 +95,7 @@ class HOPE:
         topk_eigvec = eigvec[:, topk_indices]
 
         # Randomly flip signs of the eigenvectors
-        rand_sign = 2 * (np.random.rand(max_freqs) > 0.5) - 1.0
+        rand_sign = 2 * (np.random.default_rng().random(max_freqs) > 0.5) - 1.0
         pos_enc = np.multiply(rand_sign, topk_eigvec.astype(np.float32))
 
         if n_nodes <= n_eigvecs:
@@ -116,7 +116,7 @@ class HOPE:
         self,
         complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim: dict = {"rank": 0, "to_rank": -1},
+        neighborhood_dim: dict | None = None,
     ) -> None:
         """Fit a Higher Order Geometric Laplacian EigenMaps model.
 
@@ -184,5 +184,5 @@ class HOPE:
             Embedding.
         """
         if get_dict:
-            return dict(zip(self.ind, self._embedding))
+            return dict(zip(self.ind, self._embedding, strict=True))
         return self._embedding

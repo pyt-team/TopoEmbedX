@@ -57,7 +57,7 @@ class Cell2Vec(Node2Vec):
         self,
         complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim={"rank": 0, "via_rank": -1},
+        neighborhood_dim=None,
     ) -> None:
         """Fit a Cell2Vec model.
 
@@ -112,5 +112,5 @@ class Cell2Vec(Node2Vec):
         """
         emb = super().get_embedding()
         if get_dict:
-            return dict(zip(self.ind, emb))
+            return dict(zip(self.ind, emb, strict=True))
         return emb
