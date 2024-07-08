@@ -75,7 +75,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
             complex, neighborhood_type, neighborhood_dim
         )
 
-        g = nx.from_numpy_matrix(self.A)
+        g = nx.from_numpy_array(self.A)
 
         super().fit(g)
 

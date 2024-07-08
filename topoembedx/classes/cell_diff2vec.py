@@ -78,7 +78,7 @@ class CellDiff2Vec(Diff2Vec):
             complex, neighborhood_type, neighborhood_dim
         )
 
-        g = nx.from_numpy_matrix(self.A)
+        g = nx.from_numpy_array(self.A)
         if self.diffusion_cover > g.number_of_nodes():
             raise ValueError(
                 "The diffusion_cover is too large for the size of the graph."
