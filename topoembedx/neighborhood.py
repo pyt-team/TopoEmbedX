@@ -2,15 +2,15 @@
 
 from typing import Literal
 
-import numpy as np
 import toponetx as tnx
+from scipy.sparse import csr_matrix
 
 
 def neighborhood_from_complex(
     complex: tnx.Complex,
     neighborhood_type: Literal["adj", "coadj"] = "adj",
     neighborhood_dim=None,
-) -> tuple[list, np.ndarray]:
+) -> tuple[list, csr_matrix]:
     """Compute the neighborhood of a complex.
 
     This function returns the indices and matrix for the neighborhood specified
@@ -44,7 +44,7 @@ def neighborhood_from_complex(
     -------
     ind : list
         A list of the indices for the nodes in the neighborhood.
-    A : ndarray
+    A : scipy.sparse.csr_matrix
         The matrix representing the neighborhood.
 
     Raises

@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import toponetx as tnx
 from karateclub import LaplacianEigenmaps
+from scipy.sparse import csr_matrix
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -23,7 +24,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         Random seed value.
     """
 
-    A: np.ndarray
+    A: csr_matrix
     ind: list
 
     def __init__(
@@ -75,6 +76,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
             complex, neighborhood_type, neighborhood_dim
         )
 
+        self.A.setdiag(1)
         g = nx.from_numpy_array(self.A)
 
         super().fit(g)

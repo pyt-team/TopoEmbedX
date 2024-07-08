@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import toponetx as tnx
 from karateclub import GLEE
+from scipy.sparse import csr_matrix
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -21,7 +22,7 @@ class HOGLEE(GLEE):
         Random seed value. Defaults to 42.
     """
 
-    A: np.ndarray
+    A: csr_matrix
     ind: list
 
     def fit(
@@ -64,6 +65,7 @@ class HOGLEE(GLEE):
             complex, neighborhood_type, neighborhood_dim
         )
 
+        self.A.setdiag(1)
         g = nx.from_numpy_array(self.A)
 
         super().fit(g)

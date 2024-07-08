@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import toponetx as tnx
 from karateclub import Node2Vec
+from scipy.sparse import csr_matrix
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -50,7 +51,7 @@ class Cell2Vec(Node2Vec):
         Random seed value.
     """
 
-    A: np.ndarray
+    A: csr_matrix
     ind: list
 
     def fit(
@@ -94,6 +95,7 @@ class Cell2Vec(Node2Vec):
         )
 
         g = nx.from_numpy_array(self.A)
+        g.add_edges_from((index, index) for index in range(g.number_of_nodes()))
 
         super().fit(g)
 
