@@ -1,10 +1,11 @@
 """Cell2Vec: a class that extends the Node2Vec class."""
+
 from typing import Literal
 
 import networkx as nx
 import numpy as np
+import toponetx as tnx
 from karateclub import Node2Vec
-from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -54,7 +55,7 @@ class Cell2Vec(Node2Vec):
 
     def fit(
         self,
-        complex: Complex,
+        complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ) -> None:

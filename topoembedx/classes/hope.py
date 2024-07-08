@@ -1,9 +1,10 @@
 """Higher Order Laplacian Positional Encoder (HOPE) class."""
+
 from typing import Literal, overload
 
 import numpy as np
+import toponetx as tnx
 from scipy import sparse
-from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -113,7 +114,7 @@ class HOPE:
 
     def fit(
         self,
-        complex: Complex,
+        complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim: dict = {"rank": 0, "to_rank": -1},
     ) -> None:

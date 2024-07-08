@@ -1,10 +1,11 @@
 """Class CellDiff2Vec."""
+
 from typing import Literal
 
 import networkx as nx
 import numpy as np
+import toponetx as tnx
 from karateclub import Diff2Vec
-from toponetx.classes.complex import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -39,7 +40,7 @@ class CellDiff2Vec(Diff2Vec):
 
     def fit(
         self,
-        complex: Complex,
+        complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ) -> None:
