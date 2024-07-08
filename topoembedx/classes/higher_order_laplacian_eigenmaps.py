@@ -1,10 +1,11 @@
 """Higher Order Laplacian Eigenmaps."""
+
 from typing import Literal
 
 import networkx as nx
 import numpy as np
+import toponetx as tnx
 from karateclub import LaplacianEigenmaps
-from toponetx.classes import Complex
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -36,7 +37,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
 
     def fit(
         self,
-        complex: Complex,
+        complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim={"rank": 0, "via_rank": -1},
     ) -> None:
