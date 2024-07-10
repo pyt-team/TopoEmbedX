@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import toponetx as tnx
 from karateclub import Node2Vec
+from scipy.sparse import csr_matrix
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -50,14 +51,14 @@ class Cell2Vec(Node2Vec):
         Random seed value.
     """
 
-    A: np.ndarray
+    A: csr_matrix
     ind: list
 
     def fit(
         self,
         complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim={"rank": 0, "via_rank": -1},
+        neighborhood_dim=None,
     ) -> None:
         """Fit a Cell2Vec model.
 
@@ -93,7 +94,8 @@ class Cell2Vec(Node2Vec):
             complex, neighborhood_type, neighborhood_dim
         )
 
-        g = nx.from_numpy_matrix(self.A)
+        g = nx.from_numpy_array(self.A)
+        g.add_edges_from((index, index) for index in range(g.number_of_nodes()))
 
         super().fit(g)
 
@@ -112,5 +114,5 @@ class Cell2Vec(Node2Vec):
         """
         emb = super().get_embedding()
         if get_dict:
-            return dict(zip(self.ind, emb))
+            return dict(zip(self.ind, emb, strict=True))
         return emb

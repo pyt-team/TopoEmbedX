@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import toponetx as tnx
 from karateclub import LaplacianEigenmaps
+from scipy.sparse import csr_matrix
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -23,7 +24,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         Random seed value.
     """
 
-    A: np.ndarray
+    A: csr_matrix
     ind: list
 
     def __init__(
@@ -39,7 +40,7 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         self,
         complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim={"rank": 0, "via_rank": -1},
+        neighborhood_dim=None,
     ) -> None:
         """Fit a Higher Order Laplacian Eigenmaps model.
 
@@ -75,7 +76,8 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
             complex, neighborhood_type, neighborhood_dim
         )
 
-        g = nx.from_numpy_matrix(self.A)
+        self.A.setdiag(1)
+        g = nx.from_numpy_array(self.A)
 
         super().fit(g)
 
@@ -94,5 +96,5 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         """
         emb = super().get_embedding()
         if get_dict:
-            return dict(zip(self.ind, emb))
+            return dict(zip(self.ind, emb, strict=True))
         return emb

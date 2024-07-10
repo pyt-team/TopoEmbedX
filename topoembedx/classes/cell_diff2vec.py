@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import toponetx as tnx
 from karateclub import Diff2Vec
+from scipy.sparse import csr_matrix
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
@@ -35,14 +36,14 @@ class CellDiff2Vec(Diff2Vec):
         Random seed value.
     """
 
-    A: np.ndarray
+    A: csr_matrix
     ind: list
 
     def fit(
         self,
         complex: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim={"rank": 0, "via_rank": -1},
+        neighborhood_dim=None,
     ) -> None:
         """Fit a CellDiff2Vec model.
 
@@ -78,11 +79,14 @@ class CellDiff2Vec(Diff2Vec):
             complex, neighborhood_type, neighborhood_dim
         )
 
-        g = nx.from_numpy_matrix(self.A)
+        self.A.setdiag(1)
+        g = nx.from_numpy_array(self.A)
+
         if self.diffusion_cover > g.number_of_nodes():
             raise ValueError(
                 "The diffusion_cover is too large for the size of the graph."
             )
+
         super().fit(g)
 
     def get_embedding(self, get_dict: bool = False) -> dict | np.ndarray:
@@ -100,5 +104,5 @@ class CellDiff2Vec(Diff2Vec):
         """
         emb = super().get_embedding()
         if get_dict:
-            return dict(zip(self.ind, emb))
+            return dict(zip(self.ind, emb, strict=True))
         return emb

@@ -2,15 +2,15 @@
 
 from typing import Literal
 
-import numpy as np
 import toponetx as tnx
+from scipy.sparse import csr_matrix
 
 
 def neighborhood_from_complex(
     complex: tnx.Complex,
     neighborhood_type: Literal["adj", "coadj"] = "adj",
-    neighborhood_dim={"rank": 0, "via_rank": -1},
-) -> tuple[list, np.ndarray]:
+    neighborhood_dim=None,
+) -> tuple[list, csr_matrix]:
     """Compute the neighborhood of a complex.
 
     This function returns the indices and matrix for the neighborhood specified
@@ -44,7 +44,7 @@ def neighborhood_from_complex(
     -------
     ind : list
         A list of the indices for the nodes in the neighborhood.
-    A : ndarray
+    A : scipy.sparse.csr_matrix
         The matrix representing the neighborhood.
 
     Raises
@@ -54,6 +54,9 @@ def neighborhood_from_complex(
     TypeError
         If `neighborhood_type` is invalid.
     """
+    if neighborhood_dim is None:
+        neighborhood_dim = {"rank": 0, "via_rank": -1}
+
     if neighborhood_type not in ["adj", "coadj"]:
         raise TypeError(
             f"Input neighborhood_type must be `adj` or `coadj`, got {neighborhood_type}."
