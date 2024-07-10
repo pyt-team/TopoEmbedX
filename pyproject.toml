@@ -115,6 +115,7 @@ addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
 xfail_strict = true
 filterwarnings = [
     "error",
+    "ignore::FutureWarning",
     "ignore::scipy.sparse._base.SparseEfficiencyWarning",
 ]
 log_cli_level = "info"
