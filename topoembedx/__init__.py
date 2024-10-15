@@ -1,5 +1,4 @@
 """Initialize the library with modules and other content."""
-__version__ = "0.0.1"
 
 from .classes.cell2vec import Cell2Vec
 from .classes.cell_diff2vec import CellDiff2Vec
