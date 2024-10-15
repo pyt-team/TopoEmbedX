@@ -26,11 +26,16 @@ classifiers = [
 requires-python = ">= 3.10"
 dependencies=[
     "numpy",
-    "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@d35e05526455599688f1c4dd92e397cf92316ae4",
+    "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de",
     "networkx",
     "pyrandwalk",
-    "scipy < 1.12", # scipy 1.12 removed scipy.errstate, which networkx < 3.0 depends on
-    "toponetx @ git+https://github.com/pyt-team/TopoNetX.git",
+    "scipy",
+    "toponetx",
+
+    # We don't have a direct dependency on pygsp, but it is required by karateclub.
+    # The version on PyPI is severely outdated and does not work on Python 3.12.
+    # At least using the latest version from GitHub works for now.
+    "pygsp @ git+https://github.com/epfl-lts2/pygsp@a3412ce7696c02c8a55439e89d0c9ab8ae863269"
 ]
 
 [project.optional-dependencies]
