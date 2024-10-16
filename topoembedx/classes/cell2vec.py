@@ -15,15 +15,16 @@ class Cell2Vec(Node2Vec):
     """Class Cell2Vec.
 
     Cell2Vec is a class that extends the Node2Vec class.
-    It provides additional functionality for generating node embeddings for simplicial, cell, combinatorial,
-    or dynamic combinatorial complexes. The Cell2Vec class takes as input a simplicial, cell, combinatorial,
-    or dynamic combinatorial complex, and uses the adjacency matrix or coadjacency matrix of the complex to
-    create a graph object using the networkx library. The Cell2Vec class then uses this graph object to generate
-    node embeddings using the Node2Vec algorithm. The Cell2Vec class allows users to specify the type of adjacency
-    or coadjacency matrix to use for the graph (e.g. "adj" for adjacency matrix or "coadj" for coadjacency matrix),
-    as well as the dimensions of the neighborhood to use for the matrix (e.g. the "adj" and "coadj" values for the matrix).
-    Additionally, users can specify the dimensions of the node embeddings to generate, the length and number of
-    random walks to use for the node2vec algorithm, and the number of workers to use for parallelization.
+    It provides additional functionality for generating node embeddings for simplicial,
+    cell, combinatorial, or dynamic combinatorial complexes. The Cell2Vec class takes
+    as input a simplicial, cell, combinatorial, or dynamic combinatorial complex, and
+    uses the adjacency matrix or coadjacency matrix of the complex to create a graph
+    object using the networkx library. The Cell2Vec class then uses this graph object
+    to generate node embeddings using the Node2Vec algorithm. The Cell2Vec class allows
+    users to specify the type of adjacency or coadjacency matrix to use for the graph
+    (e.g. "adj" for adjacency matrix or "coadj" for coadjacency matrix), as well as the
+    dimensions of the neighborhood to use for the matrix (e.g. the "adj" and "coadj"
+    values for the matrix).
 
     Parameters
     ----------
@@ -43,6 +44,10 @@ class Cell2Vec(Node2Vec):
         Matrix power order.
     epochs : int, default=1
         Number of epochs.
+    use_hierarchical_softmax : bool, default=True
+        Whether to use hierarchical softmax or negative sampling to train the model.
+    number_of_negative_samples : int, default=5
+        Number of negative nodes to sample (usually between 5-20). If set to 0, no negative sampling is used.
     learning_rate : float, default=0.05
         HogWild! learning rate.
     min_count : int, optional
@@ -53,6 +58,38 @@ class Cell2Vec(Node2Vec):
 
     A: csr_matrix
     ind: list
+
+    def __init__(
+        self,
+        walk_number: int = 10,
+        walk_length: int = 80,
+        p: float = 1.0,
+        q: float = 1.0,
+        dimensions: int = 128,
+        workers: int = 4,
+        window_size: int = 5,
+        epochs: int = 1,
+        use_hierarchical_softmax: bool = True,
+        number_of_negative_samples: int = 5,
+        learning_rate: float = 0.05,
+        min_count: int = 1,
+        seed: int = 42,
+    ) -> None:
+        super().__init__(
+            walk_number,
+            walk_length,
+            p,
+            q,
+            dimensions,
+            workers,
+            window_size,
+            epochs,
+            use_hierarchical_softmax,
+            number_of_negative_samples,
+            learning_rate,
+            min_count,
+            seed,
+        )
 
     def fit(
         self,

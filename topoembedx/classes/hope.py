@@ -29,14 +29,14 @@ class HOPE:
     @staticmethod
     def _laplacian_pe(
         A: np.ndarray, n_eigvecs: int, return_eigenval: Literal[False] = ...
-    ) -> np.ndarray:
+    ) -> np.ndarray:  # numpydoc ignore=GL08
         pass
 
     @overload
     @staticmethod
     def _laplacian_pe(
         A: np.ndarray, n_eigvecs: int, return_eigenval: Literal[True]
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray]:  # numpydoc ignore=GL08
         pass
 
     @staticmethod

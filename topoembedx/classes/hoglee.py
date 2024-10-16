@@ -16,14 +16,17 @@ class HOGLEE(GLEE):
 
     Parameters
     ----------
-    dimensions : int, optional
-        Dimensionality of embedding. Defaults to 3.
-    seed : int, optional
-        Random seed value. Defaults to 42.
+    dimensions : int, default=128
+        Dimensionality of embedding.
+    seed : int, default=42
+        Random seed value.
     """
 
     A: csr_matrix
     ind: list
+
+    def __init__(self, dimensions: int = 128, seed: int = 42):
+        super().__init__(dimensions, seed)
 
     def fit(
         self,
