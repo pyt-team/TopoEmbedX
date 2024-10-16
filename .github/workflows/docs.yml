@@ -49,3 +49,25 @@ jobs:
           repository-name: pyt-team/pyt-team.github.io
           target-folder: topoembedx
           clean: true
+
+  numpydoc-validation:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.12]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build using Python ${{matrix.python-version}}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{matrix.python-version}}
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+      - name: Install dependencies [pip]
+        run: |
+          pip install -e .[doc]
+      - name: Checking NumpyDoc Validation for files
+        run: |
+          numpydoc lint test/**/*.py topoembedx/**/*.py

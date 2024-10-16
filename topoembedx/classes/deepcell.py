@@ -28,6 +28,10 @@ class DeepCell(DeepWalk):
         Size of the sliding window.
     epochs : int, default=1
         Number of iterations (epochs).
+    use_hierarchical_softmax : bool, default=True
+        Whether to use hierarchical softmax or negative sampling for training.
+    number_of_negative_samples : int, default=5
+        Number of negative samples to use for negative sampling.
     learning_rate : float, default=0.05
         Learning rate for the model.
     min_count : int, optional
@@ -38,6 +42,34 @@ class DeepCell(DeepWalk):
 
     A: csr_matrix
     ind: list
+
+    def __init__(
+        self,
+        walk_number: int = 10,
+        walk_length: int = 80,
+        dimensions: int = 128,
+        workers: int = 4,
+        window_size: int = 5,
+        epochs: int = 1,
+        use_hierarchical_softmax: bool = True,
+        number_of_negative_samples: int = 5,
+        learning_rate: float = 0.05,
+        min_count: int = 1,
+        seed: int = 42,
+    ):
+        super().__init__(
+            walk_number,
+            walk_length,
+            dimensions,
+            workers,
+            window_size,
+            epochs,
+            use_hierarchical_softmax,
+            number_of_negative_samples,
+            learning_rate,
+            min_count,
+            seed,
+        )
 
     def fit(
         self,

@@ -28,6 +28,10 @@ class CellDiff2Vec(Diff2Vec):
         Matrix power order.
     epochs : int, default=1
         Number of epochs.
+    use_hierarchical_softmax : bool, default=True
+        Whether to use hierarchical softmax or negative sampling to train the model.
+    number_of_negative_samples : int, default=5
+        Number of negative nodes to sample (usually between 5-20). If set to 0, no negative sampling is used.
     learning_rate : float, default=0.05
         HogWild! learning rate.
     min_count : int, optional
@@ -38,6 +42,34 @@ class CellDiff2Vec(Diff2Vec):
 
     A: csr_matrix
     ind: list
+
+    def __init__(
+        self,
+        diffusion_number: int = 10,
+        diffusion_cover: int = 80,
+        dimensions: int = 128,
+        workers: int = 4,
+        window_size: int = 5,
+        epochs: int = 1,
+        use_hierarchical_softmax: bool = True,
+        number_of_negative_samples: int = 5,
+        learning_rate: float = 0.05,
+        min_count: int = 1,
+        seed: int = 42,
+    ):
+        super().__init__(
+            diffusion_number,
+            diffusion_cover,
+            dimensions,
+            workers,
+            window_size,
+            epochs,
+            use_hierarchical_softmax,
+            number_of_negative_samples,
+            learning_rate,
+            min_count,
+            seed,
+        )
 
     def fit(
         self,

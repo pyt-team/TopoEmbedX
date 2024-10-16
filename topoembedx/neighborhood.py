@@ -27,9 +27,9 @@ def neighborhood_from_complex(
         The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
         In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
         - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
-        neighborhood_dim["rank"]
+        neighborhood_dim["rank"].
         - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by a single parameter, this is precisely
-        neighborhood_dim["rank"] and neighborhood_dim["via_rank"]
+        neighborhood_dim["rank"] and neighborhood_dim["via_rank"].
 
     Notes
     -----

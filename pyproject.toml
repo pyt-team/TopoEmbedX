@@ -39,7 +39,7 @@ doc = [
     "matplotlib",
     "nbsphinx",
     "nbsphinx_link",
-    "numpydoc",
+    "numpydoc >= 1.8.0",
     "sphinx",
     "sphinx_gallery",
     "pydata-sphinx-theme"
@@ -123,3 +123,15 @@ testpaths = ["test"]
 
 [tool.coverage.report]
 exclude_lines = ["pragma: not covered", "@overload"]
+
+[tool.numpydoc_validation]
+checks = [
+    "all",
+    "GL01",
+    "ES01",
+    "EX01",
+    "SA01"
+]
+exclude = [
+    '\.__init__$',
+]

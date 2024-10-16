@@ -13,7 +13,9 @@ and Word2Vec to generate cell embeddings:
 >>> # Import the necessary modules
 >>> from gensim.models import Word2Vec
 >>> # Generate random walks on your graph using the random_walk function
->>> random_walks = random_walk(length=10, num_walks=100, states=nodes, transition_matrix=transition_matrix)
+>>> random_walks = random_walk(
+...     length=10, num_walks=100, states=nodes, transition_matrix=transition_matrix
+... )
 >>> # Train a Word2Vec model on the generated random walks
 >>> model = Word2Vec(random_walks, size=128, window=5, min_count=0, sg=1)
 >>> # Use the trained model to generate node embeddings
@@ -23,6 +25,7 @@ In the example above, `nodes` is a list of the nodes in your complex,
 `transition_matrix` is the transition matrix of your complex, and `cell_embeddings`
 is a dictionary that maps each node in your complex to its corresponding embedding.
 """
+
 from typing import TypeVar
 
 import numpy as np
@@ -71,13 +74,37 @@ def transition_from_adjacency(
     """
 
     def _transition_from_adjacency(A: np.ndarray):
+        """Generate transition matrix from an adjacency matrix.
+
+        Parameters
+        ----------
+        A : numpy.ndarray
+            The adjacency matrix.
+
+        Returns
+        -------
+        numpy.ndarray
+            The transition matrix.
+        """
         A = A + np.eye(A.shape[0])
-        # let's evaluate the degree matrix D
         D = np.diag(np.sum(A, axis=0))
-        # ...and the transition matrix T
         return np.dot(np.linalg.inv(D), A)
 
-    def _weight_node(A: np.ndarray, sub_sampling: float = sub_sampling):
+    def _weight_node(A: np.ndarray, sub_sampling: float = sub_sampling) -> np.ndarray:
+        """Weight nodes based on their degree.
+
+        Parameters
+        ----------
+        A : numpy.ndarray
+            The adjacency matrix.
+        sub_sampling : float, optional
+            The rate of subsampling.
+
+        Returns
+        -------
+        numpy.ndarray
+            The weight of each node.
+        """
         z = np.array(np.abs(A).sum(1)) + 1
         weight = 1 / (z**sub_sampling)
         return weight.T
