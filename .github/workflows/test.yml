@@ -41,7 +41,7 @@ jobs:
 
       - name: Install main package [pip]
         run: |
-          pip install --upgrade pip setuptools wheel
+          pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
           pip install -e .[all]
       - name: Typecheck [mypy]
         run: |

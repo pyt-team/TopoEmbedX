@@ -1,14 +1,14 @@
 🌐 TopoEmbedX (TEX) 🍩
 =======================
 
-`TopoEmbedX` (TEX) is a Python package for representation Learning on Topological Domains. Topological domains are the natural mathematical structures representing relations between the components of a dataset.
+``TopoEmbedX`` (TEX) is a Python package for representation Learning on Topological Domains. Topological domains are the natural mathematical structures representing relations between the components of a dataset.
 
 .. figure:: https://user-images.githubusercontent.com/8267869/234074436-402ac931-2dc9-43da-a056-6c927f613242.png
    :alt: topoembedx
    :class: with-shadow
    :width: 1000px
 
-Many natural systems as diverse as social networks and proteins are characterized by *relational structure*. This is the structure of interactions between components in the system, such as social interactions between individuals or electrostatic interactions between atoms. How can we conveniently represent data defined on such relational systems? `TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
+Many natural systems as diverse as social networks and proteins are characterized by *relational structure*. This is the structure of interactions between components in the system, such as social interactions between individuals or electrostatic interactions between atoms. How can we conveniently represent data defined on such relational systems? ``TopoEmbedX`` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
 
 
 🛠️ Main Features
@@ -22,6 +22,19 @@ Support of higher order representation learning algorithms such as:
 - Higher Order Geometric Laplacian Eigenmaps,
 
 for the topological domains supported in `TopoNetX <https://github.com/pyt-team/TopoNetX>`__.
+
+🤖 Installing TopoEmbedX
+----------------------
+
+``TopoEmbedX`` is available on PyPI and can be installed using ``pip``:
+
+.. code-block:: bash
+
+   pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
+   pip install topoembedx
+
+The library depends on ``karateclub``, which did not receive updates on PyPI for a long time.
+You have to manually install the latest version from GitHub for up-to-date NetworkX compatibility.
 
 🔍 References
 -------------
