@@ -13,9 +13,8 @@
   <a href="#-references">References</a>
 </p>
 
-
 <div align="center">
-   
+
 [![Test](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/test.yml)
 [![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml)
 [![Codecov](https://codecov.io/gh/pyt-team/TopoEmbedX/branch/main/graph/badge.svg)](https://app.codecov.io/gh/pyt-team/TopoEmbedX)
@@ -28,8 +27,6 @@
 
 </div>
 
-
-
 ![topoembedx](https://user-images.githubusercontent.com/8267869/234074436-402ac931-2dc9-43da-a056-6c927f613242.png)
 
 Many natural systems as diverse as social networks and proteins are characterized by _relational structure_. This is the structure of interactions between components in the system, such as social interactions between individuals or electrostatic interactions between atoms.
@@ -38,10 +35,10 @@ How can we conveniently represent data defined on such relational systems?
 
 `TopoEmbedX` (TEX) is a package for representation learning on topological domains, the mathematical structures of relational systems.
 
-
 ## 🛠️ Main Features
 
 Support of higher order representation learning algorithms such as:
+
 - DeepCell,
 - Cell2Vec,
 - Higher Order Laplacian Eigenmaps, and
@@ -49,38 +46,17 @@ Support of higher order representation learning algorithms such as:
 
 for the topological domains supported in [TopoNetX](https://github.com/pyt-team/TopoNetX).
 
-
 ## 🤖 Installing TopoEmbedX
 
+`TopoEmbedX` is available on PyPI and can be installed using `pip`.
 
-We recommend using Python 3.11, which is a python version used to run the unit-tests.
-
-For example, create a conda environment:
-   ```bash
-   conda create -n tex python=3.11.3
-   conda activate tex
-   ```
-
-Then:
-
-1. Clone a copy of `TopoEmbedX` from source:
 ```bash
-git clone https://github.com/pyt-team/TopoEmbedX
-cd TopoEmbedX
-```
-2. If you have already cloned `TopoEmbedX` from source, update it:
-```bash
-git pull
-```
-3. Install `TopoEmbedX` in editable mode:
-```bash
-pip install -e '.[all]'
-```
-4. Install pre-commit hooks:
-```bash
-pre-commit install
+pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
+pip install topoembedx
 ```
 
+The library depends on `karateclub`, which did not receive updates on PyPI for a long time.
+You have to manually install the latest version from GitHub for up-to-date NetworkX compatibility.
 
 ## 🦾 Getting Started
 
@@ -107,11 +83,47 @@ model.fit(cc, neighborhood_type="adj", neighborhood_dim={"rank": 1, "via_rank": 
 embeddings = model.get_embedding()
 ```
 
-## 🔍 References ##
+## 🧑‍💻 Install from source
+
+To install the latest version from source, follow these steps:
+
+1. Clone a copy of `TopoEmbedX` from source:
+
+```bash
+git clone https://github.com/pyt-team/TopoEmbedX
+cd TopoEmbedX
+```
+
+2. If you have already cloned `TopoEmbedX` from source, update it:
+
+```bash
+git pull
+```
+
+3. Install a recent version of `karateclub`:
+
+```bash
+pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
+```
+
+4. Install `TopoEmbedX` in editable mode:
+
+```bash
+pip install -e '.[all]'
+```
+
+5. Install pre-commit hooks:
+
+```bash
+pre-commit install
+```
+
+## 🔍 References
 
 To learn more about topological representation learning.
 
 - Mustafa Hajij, Ghada Zamzmi, Theodore Papamarkou, Nina Miolane, Aldo Guzmán-Sáenz, Karthikeyan Natesan Ramamurthy, Tolga Birdal, Tamal K. Dey, Soham Mukherjee, Shreyas N. Samaga, Neal Livesay, Robin Walters, Paul Rosen, Michael T. Schaub. [Topological Deep Learning: Going Beyond Graph Data](https://arxiv.org/abs/2206.00606).
+
 ```
 @misc{hajij2023topological,
       title={Topological Deep Learning: Going Beyond Graph Data},
@@ -124,7 +136,9 @@ To learn more about topological representation learning.
 ```
 
 Figure from:
+
 - Mathilde Papillon, Sophia Sanborn, Mustafa Hajij, Nina Miolane. [Architectures of Topological Deep Learning: A Survey on Topological Neural Networks.](https://arxiv.org/pdf/2304.10031.pdf)
+
 ```
 @misc{papillon2023architectures,
       title={Architectures of Topological Deep Learning: A Survey on Topological Neural Networks},

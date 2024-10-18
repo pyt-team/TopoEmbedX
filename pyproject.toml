@@ -31,7 +31,9 @@ classifiers = [
 requires-python = ">= 3.10"
 dependencies=[
     "numpy",
-    "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de",
+    # karateclub did not receive updates on PyPI for a long time.
+    # We ask the user to manually install a recent version from GitHub.
+    "karateclub",
     "networkx",
     "pyrandwalk",
     "scipy",
