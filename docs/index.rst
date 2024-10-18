@@ -30,11 +30,13 @@ for the topological domains supported in `TopoNetX <https://github.com/pyt-team/
 
 .. code-block:: bash
 
+   pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@a3412ce7696c02c8a55439e89d0c9ab8ae863269"
    pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
    pip install topoembedx
 
-The library depends on ``karateclub``, which did not receive updates on PyPI for a long time.
-You have to manually install the latest version from GitHub for up-to-date NetworkX compatibility.
+The library depends on ``pygsp`` and ``karateclub``, which did not receive
+updates on PyPI for a long time. You have to manually install the latest
+versions from GitHub for up-to-date Python and NetworkX compatibility.
 
 🔍 References
 -------------

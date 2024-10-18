@@ -39,10 +39,10 @@ dependencies=[
     "scipy",
     "toponetx",
 
-    # We don't have a direct dependency on pygsp, but it is required by karateclub.
-    # The version on PyPI is severely outdated and does not work on Python 3.12.
-    # At least using the latest version from GitHub works for now.
-    "pygsp @ git+https://github.com/epfl-lts2/pygsp@a3412ce7696c02c8a55439e89d0c9ab8ae863269"
+    # These dependencies did not receive a new release on PyPI for a long time.
+    # We ask the user to manually install the latest version from GitHub separately.
+    "karateclub",
+    "pygsp"
 ]
 
 [project.optional-dependencies]
