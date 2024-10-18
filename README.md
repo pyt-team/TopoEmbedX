@@ -89,14 +89,12 @@ import topoembedx as tex
 import toponetx as tnx
 
 # create a cell complex object with a few cells
-cc = tnx.classes.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]],ranks=2)
+cc = tnx.CellComplex([[1, 2, 3, 4], [3, 4, 5, 6, 7, 8]], ranks=2)
 
 # create a model
-
 model = tex.Cell2Vec()
 
 # fit the model
-
 model.fit(cc, neighborhood_type="adj", neighborhood_dim={"rank": 1, "via_rank": -1})
 # here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
 # which the cell embeddings are going to be computed.
@@ -106,9 +104,7 @@ model.fit(cc, neighborhood_type="adj", neighborhood_dim={"rank": 1, "via_rank": 
 
 
 # get the embeddings:
-
 embeddings = model.get_embedding()
-
 ```
 
 ## 🔍 References ##
@@ -147,4 +143,3 @@ Figure from:
 Partially funded by the European Union (ERC, HIGH-HOPeS, 101039827). Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Council Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.
 
 Partially funded by the National Science Foundation (DMS-2134231, DMS-2134241).
-
