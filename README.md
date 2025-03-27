@@ -62,7 +62,7 @@ GitHub for up-to-date Python and NetworkX compatibility.
 
 ## 🦾 Getting Started
 
-```ruby
+```python
 import topoembedx as tex
 import toponetx as tnx
 
@@ -96,26 +96,20 @@ git clone https://github.com/pyt-team/TopoEmbedX
 cd TopoEmbedX
 ```
 
-2. If you have already cloned `TopoEmbedX` from source, update it:
-
-```bash
-git pull
-```
-
-3. Install a recent version of `pygsp` and `karateclub`:
+2. Install a recent version of `pygsp` and `karateclub` using a package manager of your choice, e.g., `pip`:
 
 ```bash
 pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@a3412ce7696c02c8a55439e89d0c9ab8ae863269"
 pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
 ```
 
-4. Install `TopoEmbedX` in editable mode:
+3. Install `TopoEmbedX` in editable mode with development dependencies:
 
 ```bash
-pip install -e '.[all]'
+pip install -e . --group dev
 ```
 
-5. Install pre-commit hooks:
+4. Install pre-commit hooks:
 
 ```bash
 pre-commit install
