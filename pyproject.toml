@@ -31,9 +31,6 @@ classifiers = [
 requires-python = ">= 3.10"
 dependencies=[
     "numpy",
-    # karateclub did not receive updates on PyPI for a long time.
-    # We ask the user to manually install a recent version from GitHub.
-    "karateclub",
     "networkx",
     "pyrandwalk",
     "scipy",
@@ -41,12 +38,26 @@ dependencies=[
 
     # These dependencies did not receive a new release on PyPI for a long time.
     # We ask the user to manually install the latest version from GitHub separately.
+    # For development, we instruct uv to install a fixed reference from GitHub below.
     "karateclub",
     "pygsp"
 ]
 
-[project.optional-dependencies]
-doc = [
+[project.urls]
+documentation="https://pyt-team.github.io/topoembedx/"
+source="https://github.com/pyt-team/TopoEmbedX/"
+
+[dependency-groups]
+dev = [
+    "jupyter",
+    "mypy > 1.6.0",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+
+docs = [
     "jupyter",
     "matplotlib",
     "nbsphinx",
@@ -57,27 +68,44 @@ doc = [
     "sphinx_gallery",
     "pydata-sphinx-theme"
 ]
-lint = [
-    "pre-commit",
-    "ruff"
-]
-test = [
-    "pytest",
-    "pytest-cov",
-    "coverage",
-    "jupyter",
-    "mypy"
-]
 
-dev = ["TopoEmbedX[test, lint]"]
-all = ["TopoEmbedX[dev, doc]"]
-
-[project.urls]
-documentation="https://pyt-team.github.io/topoembedx/"
-source="https://github.com/pyt-team/TopoEmbedX/"
+[tool.coverage.report]
+exclude_lines = ["pragma: not covered", "@overload"]
 
 [tool.ruff.format]
 docstring-code-format = true
+
+[tool.mypy]
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_ignores = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+disable_error_code = ["import-untyped"]
+plugins = "numpy.typing.mypy_plugin"
+
+[tool.numpydoc_validation]
+checks = [
+    "all",
+    "GL01",
+    "ES01",
+    "EX01",
+    "SA01"
+]
+exclude = [
+    '\.__init__$',
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = [
+    "error",
+    "ignore::FutureWarning",
+    "ignore::scipy.sparse._base.SparseEfficiencyWarning",
+]
+log_cli_level = "info"
+testpaths = ["test"]
 
 [tool.ruff.lint]
 select = [
@@ -110,37 +138,6 @@ include = ["topoembedx"]
 local_scheme = "no-local-version"
 version_file = "topoembedx/_version.py"
 
-[tool.mypy]
-warn_redundant_casts = true
-warn_unreachable = true
-warn_unused_ignores = true
-enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
-disable_error_code = ["import-untyped"]
-plugins = "numpy.typing.mypy_plugin"
-
-[tool.pytest.ini_options]
-minversion = "7.0"
-addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
-xfail_strict = true
-filterwarnings = [
-    "error",
-    "ignore::FutureWarning",
-    "ignore::scipy.sparse._base.SparseEfficiencyWarning",
-]
-log_cli_level = "info"
-testpaths = ["test"]
-
-[tool.coverage.report]
-exclude_lines = ["pragma: not covered", "@overload"]
-
-[tool.numpydoc_validation]
-checks = [
-    "all",
-    "GL01",
-    "ES01",
-    "EX01",
-    "SA01"
-]
-exclude = [
-    '\.__init__$',
-]
+[tool.uv.sources]
+karateclub = { git = "https://github.com/benedekrozemberczki/karateclub", rev = "cb46a91df8dcbeb2570debcf6a9d0c518107a2de" }
+pygsp = { git = "https://github.com/epfl-lts2/pygsp", rev = "a3412ce7696c02c8a55439e89d0c9ab8ae863269" }
