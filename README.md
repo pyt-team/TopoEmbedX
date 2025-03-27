@@ -51,7 +51,7 @@ for the topological domains supported in [TopoNetX](https://github.com/pyt-team/
 `TopoEmbedX` is available on PyPI and can be installed using `pip`.
 
 ```bash
-pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@a3412ce7696c02c8a55439e89d0c9ab8ae863269"
+pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@643b1c448559da8c7dbaed7537a9fd819183c569"
 pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
 pip install topoembedx
 ```
@@ -99,7 +99,7 @@ cd TopoEmbedX
 2. Install a recent version of `pygsp` and `karateclub` using a package manager of your choice, e.g., `pip`:
 
 ```bash
-pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@a3412ce7696c02c8a55439e89d0c9ab8ae863269"
+pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@643b1c448559da8c7dbaed7537a9fd819183c569"
 pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
 ```
 

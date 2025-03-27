@@ -140,4 +140,4 @@ version_file = "topoembedx/_version.py"
 
 [tool.uv.sources]
 karateclub = { git = "https://github.com/benedekrozemberczki/karateclub", rev = "cb46a91df8dcbeb2570debcf6a9d0c518107a2de" }
-pygsp = { git = "https://github.com/epfl-lts2/pygsp", rev = "a3412ce7696c02c8a55439e89d0c9ab8ae863269" }
+pygsp = { git = "https://github.com/epfl-lts2/pygsp", rev = "643b1c448559da8c7dbaed7537a9fd819183c569" }
