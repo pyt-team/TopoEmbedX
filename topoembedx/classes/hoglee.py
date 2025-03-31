@@ -30,7 +30,7 @@ class HOGLEE(GLEE):
 
     def fit(
         self,
-        complex: tnx.Complex,
+        domain: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim=None,
     ) -> None:
@@ -38,7 +38,7 @@ class HOGLEE(GLEE):
 
         Parameters
         ----------
-        complex : toponetx.classes.Complex
+        domain : toponetx.classes.Complex
             A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex
@@ -65,7 +65,7 @@ class HOGLEE(GLEE):
         colored hypergraph.
         """
         self.ind, self.A = neighborhood_from_complex(
-            complex, neighborhood_type, neighborhood_dim
+            domain, neighborhood_type, neighborhood_dim
         )
 
         self.A.setdiag(1)
