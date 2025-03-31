@@ -43,10 +43,10 @@ def transition_from_adjacency(
     This function generates a transition matrix from an adjacency matrix
     using the following steps:
 
-    1. Add self-loop to the adjaency matrix if self_loop is set to True
-    2. Compute the degree matrix
+    1. Add self-loop to the adjacency matrix if ``self_loop`` is set to ``True``.
+    2. Compute the degree matrix.
     3. Compute the transition matrix by taking the dot product of the inverse of
-       the degree matrix and the adjacency matrix
+       the degree matrix and the adjacency matrix.
 
     Parameters
     ----------
@@ -55,7 +55,7 @@ def transition_from_adjacency(
     sub_sampling : float, default=0.1
         The rate of subsampling.
     self_loop : bool, default=True
-        A flag indicating whether to add self-loop to the adjacency matrix.
+        Whether to add self-loops to the adjacency matrix.
 
     Returns
     -------
@@ -64,7 +64,6 @@ def transition_from_adjacency(
 
     Examples
     --------
-    >>> import numpy as np
     >>> A = np.array([[0, 1, 1, 0], [1, 0, 1, 0], [1, 1, 0, 1], [0, 0, 1, 0]])
     >>> transition_from_adjacency(A)
     array([[0.33333333, 0.33333333, 0.33333333, 0.        ],
@@ -165,7 +164,6 @@ def random_walk(
 
     Examples
     --------
-    >>> import numpy as np
     >>> transition_matrix = np.array(
     ...     [
     ...         [0.0, 1.0, 0.0, 0.0],
@@ -175,10 +173,9 @@ def random_walk(
     ...     ]
     ... )
     >>> states = ["A", "B", "C", "D"]
-    >>> walks = random_walk(
+    >>> random_walk(
     ...     length=3, num_walks=2, states=states, transition_matrix=transition_matrix
     ... )
-    >>> print(walks)
     [['B', 'C', 'D'], ['B', 'C', 'B']]
     """
     rw = RandomWalk(states, transition_matrix)

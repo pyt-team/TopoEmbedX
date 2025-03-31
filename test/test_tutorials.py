@@ -1,13 +1,20 @@
 """Unit tests for the tutorials."""
 
-import glob
 import subprocess
 import tempfile
+from pathlib import Path
 
 import pytest
 
 
 def _exec_tutorial(path):
+    """Execute the notebooks for testing in the given directory.
+
+    Parameters
+    ----------
+    path : str
+        Path to the tutorials directory.
+    """
     with tempfile.NamedTemporaryFile(suffix=".ipynb") as tmp_file:
         args = [
             "jupyter",
@@ -21,14 +28,20 @@ def _exec_tutorial(path):
             tmp_file.name,
             path,
         ]
-        subprocess.check_call(args)
+        subprocess.check_call(args)  # noqa: S603
 
 
 TUTORIALS_DIR = "tutorials"
-paths = sorted(glob.glob(f"{TUTORIALS_DIR}/*.ipynb"))
+paths = sorted(Path(TUTORIALS_DIR).glob("*.ipynb"))
 
 
 @pytest.mark.parametrize("path", paths)
 def test_tutorial(path):
-    """Test the tutorials."""
+    """Test the tutorials.
+
+    Parameters
+    ----------
+    path : str
+        Path to the tutorials directory.
+    """
     _exec_tutorial(path)

@@ -3,7 +3,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "TopoEmbedX"
-copyright = "2022-2023, PyT-Team, Inc."
+copyright = "2022-2023, PyT-Team, Inc."  # noqa: A001
 author = "PyT-Team Authors"
 language = "en"
 
