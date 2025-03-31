@@ -13,9 +13,8 @@ def neighborhood_from_complex(
 ) -> tuple[list, csr_matrix]:
     """Compute the neighborhood of a complex.
 
-    This function returns the indices and matrix for the neighborhood specified
-    by `neighborhood_type`
-    and `neighborhood_dim` for the input complex `domain`.
+    This function returns the indices and matrix for the neighborhood specified by
+    `neighborhood_type` and `neighborhood_dim` for the input complex `domain`.
 
     Parameters
     ----------
@@ -24,7 +23,7 @@ def neighborhood_from_complex(
     neighborhood_type : {"adj", "coadj"}, default="adj"
         The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
     neighborhood_dim : dict
-        The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
+        The integer parameters needed to specify the neighborhood of the cells to generate the embedding.
         In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
         - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
         neighborhood_dim["rank"].

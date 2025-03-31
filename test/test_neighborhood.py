@@ -29,21 +29,21 @@ class TestNeighborhood:
         cc2 = tnx.classes.CellComplex([[0, 1, 2], [1, 2, 3]])
 
         ind, A = tex.neighborhood.neighborhood_from_complex(cc1)
-        assert A.todense().shape == tuple([9, 9])
+        assert A.todense().shape == (9, 9)
         assert len(ind) == 9
 
         ind, A = tex.neighborhood.neighborhood_from_complex(cc2)
-        assert A.todense().shape == tuple([4, 4])
+        assert A.todense().shape == (4, 4)
         assert len(ind) == 4
 
         ind, A = tex.neighborhood.neighborhood_from_complex(
             cc1, neighborhood_type="coadj"
         )
-        assert A.todense().shape == tuple([9, 9])
+        assert A.todense().shape == (9, 9)
         assert len(ind) == 9
 
         ind, A = tex.neighborhood.neighborhood_from_complex(
             cc2, neighborhood_type="coadj"
         )
-        assert A.todense().shape == tuple([4, 4])
+        assert A.todense().shape == (4, 4)
         assert len(ind) == 4

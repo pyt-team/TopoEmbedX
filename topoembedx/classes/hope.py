@@ -146,9 +146,8 @@ class HOPE:
 
         Examples
         --------
-        >>> import toponetx as tnx
         >>> from topoembedx import HOPE
-        >>> ccc = tnx.classes.CombinatorialComplex()
+        >>> ccc = tnx.CombinatorialComplex()
         >>> ccc.add_cell([2, 5], rank=1)
         >>> ccc.add_cell([2, 4], rank=1)
         >>> ccc.add_cell([7, 8], rank=1)
