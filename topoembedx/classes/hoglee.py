@@ -30,7 +30,7 @@ class HOGLEE(GLEE):
 
     def fit(
         self,
-        complex: tnx.Complex,
+        domain: tnx.Complex,
         neighborhood_type: Literal["adj", "coadj"] = "adj",
         neighborhood_dim=None,
     ) -> None:
@@ -38,7 +38,7 @@ class HOGLEE(GLEE):
 
         Parameters
         ----------
-        complex : toponetx.classes.Complex
+        domain : toponetx.classes.Complex
             A complex object. The complex object can be one of the following:
             - CellComplex
             - CombinatorialComplex
@@ -48,7 +48,7 @@ class HOGLEE(GLEE):
         neighborhood_type : {"adj", "coadj"}, default="adj"
             The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
         neighborhood_dim : dict
-            The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
+            The integer parameters needed to specify the neighborhood of the cells to generate the embedding.
             In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
             - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
             neighborhood_dim["rank"].
@@ -65,7 +65,7 @@ class HOGLEE(GLEE):
         colored hypergraph.
         """
         self.ind, self.A = neighborhood_from_complex(
-            complex, neighborhood_type, neighborhood_dim
+            domain, neighborhood_type, neighborhood_dim
         )
 
         self.A.setdiag(1)

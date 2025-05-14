@@ -1,4 +1,6 @@
-"""Base classes for TopoEmbedX exceptions."""
+"""Base errors and exceptions for TopoEmbedX."""
+
+__all__ = ["TopoEmbedXError", "TopoEmbedXException", "TopoEmbedXNotImplementedError"]
 
 
 class TopoEmbedXException(Exception):
