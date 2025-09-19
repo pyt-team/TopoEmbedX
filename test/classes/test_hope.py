@@ -27,6 +27,6 @@ class TestHOPE:
 
         A = cx.adjacency_matrix(0)
 
-        eigvec, eigval = HOPE._laplacian_pe(A, n_eigvecs=4, return_eigenval=True)
+        _, eigval = HOPE._laplacian_pe(A, n_eigvecs=4, return_eigenval=True)
 
         assert len(eigval) != 0
