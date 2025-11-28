@@ -26,13 +26,9 @@ In the example above, `nodes` is a list of the nodes in your complex,
 is a dictionary that maps each node in your complex to its corresponding embedding.
 """
 
-from typing import TypeVar
-
 import numpy as np
 from pyrandwalk import RandomWalk
 from sklearn.preprocessing import normalize
-
-T = TypeVar("T")
 
 
 def transition_from_adjacency(
@@ -137,7 +133,7 @@ def transition_from_adjacency(
     return get_normalized_adjacency(A, sub_sampling)
 
 
-def random_walk(
+def random_walk[T](
     length: int, num_walks: int, states: list[T], transition_matrix: np.ndarray
 ) -> list[list[T]]:
     """Generate random walks on a graph or network.
