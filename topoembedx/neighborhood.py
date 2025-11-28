@@ -1,17 +1,23 @@
-"""Functions for computing neighborhoods of a complex."""
+import hashlib
+from typing import Any, Dict, List, Optional, Union, Literal
 
-from typing import Literal
-
+import networkx as nx
+import numpy as np
 import toponetx as tnx
 from scipy.sparse import csr_matrix, hstack, vstack
 
 
+# ============================================================
+# Neighborhood construction for complexes
+# ============================================================
+
 def neighborhood_from_complex(
     domain: tnx.Complex,
     neighborhood_type: Literal["adj", "coadj", "boundary", "coboundary"] = "adj",
-    neighborhood_dim=None,
+    neighborhood_dim: Optional[Dict] = None,
 ) -> tuple[list, csr_matrix]:
-    """Compute a neighborhood matrix for a TopoNetX complex.
+    """
+    Compute a neighborhood matrix for a TopoNetX complex.
 
     This function returns the indices and matrix for the neighborhood specified by
     ``neighborhood_type`` and ``neighborhood_dim`` for the input complex ``domain``.
@@ -29,8 +35,8 @@ def neighborhood_from_complex(
     3. ``"boundary"`` / ``"coboundary"`` (Hasse graph from incidence)
        - Here we use the complex's `incidence_matrix` to build an undirected
          **Hasse graph** between two consecutive ranks:
-           • lower rank: r-1
-           • upper rank: r
+             lower rank: r-1
+             upper rank: r
        - Nodes are the union of all (r-1)-cells and all r-cells.
        - Edges connect an (r-1)-cell to an r-cell whenever the incidence is nonzero.
 
@@ -123,34 +129,32 @@ def neighborhood_from_complex(
     # Case 1: adjacency / coadjacency on a fixed rank
     # ------------------------------------------------------------
     if neighborhood_type in ["adj", "coadj"]:
+        # Simplicial / Cell / Path
         if isinstance(
             domain, tnx.SimplicialComplex | tnx.CellComplex | tnx.PathComplex
         ):
+            r = neighborhood_dim["rank"]
             if neighborhood_type == "adj":
-                ind, A = domain.adjacency_matrix(neighborhood_dim["rank"], index=True)
+                ind, A = domain.adjacency_matrix(r, index=True)
             else:
-                ind, A = domain.coadjacency_matrix(neighborhood_dim["rank"], index=True)
+                ind, A = domain.coadjacency_matrix(r, index=True)
 
+        # Combinatorial / ColoredHyperGraph
         elif isinstance(domain, tnx.CombinatorialComplex | tnx.ColoredHyperGraph):
+            r = neighborhood_dim["rank"]
+            via = neighborhood_dim.get("via_rank", None)
             if neighborhood_type == "adj":
-                ind, A = domain.adjacency_matrix(
-                    neighborhood_dim["rank"],
-                    neighborhood_dim["via_rank"],
-                    index=True,
-                )
+                ind, A = domain.adjacency_matrix(r, via, index=True)
             else:
-                ind, A = domain.coadjacency_matrix(
-                    neighborhood_dim["rank"],
-                    neighborhood_dim["via_rank"],
-                    index=True,
-                )
+                ind, A = domain.coadjacency_matrix(r, via, index=True)
+
         else:
             raise TypeError(
                 "Input Complex can only be a SimplicialComplex, CellComplex, "
                 "PathComplex, ColoredHyperGraph or CombinatorialComplex."
             )
 
-        return ind, A.asformat("csr")
+        return list(ind), csr_matrix(A).asformat("csr")
 
     # ------------------------------------------------------------
     # Case 2: boundary / coboundary → Hasse graph from incidence_matrix
