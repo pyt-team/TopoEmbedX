@@ -23,37 +23,32 @@ concurrency:
 
 jobs:
   pytest:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip"
-          cache-dependency-path: "pyproject.toml"
+          enable-cache: true
 
-      - name: Install main package [pip]
-        run: |
-          pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
-          pip install -e .[all]
+      - name: Install Package
+        run: uv sync
 
       - name: Typecheck [mypy]
-        run: |
-          mypy -p topoembedx
+        run: uv run mypy -p topoembedx
 
       - name: Run tests [pytest]
-        run: |
-          pytest --cov --cov-report=xml:coverage.xml
+        run: uv run pytest --cov --cov-report=xml:coverage.xml
 
-      - name: Upload coverage
+      - name: Upload Coverage
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

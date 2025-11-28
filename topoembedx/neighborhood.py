@@ -7,24 +7,23 @@ from scipy.sparse import csr_matrix
 
 
 def neighborhood_from_complex(
-    complex: tnx.Complex,
+    domain: tnx.Complex,
     neighborhood_type: Literal["adj", "coadj"] = "adj",
     neighborhood_dim=None,
 ) -> tuple[list, csr_matrix]:
     """Compute the neighborhood of a complex.
 
-    This function returns the indices and matrix for the neighborhood specified
-    by `neighborhood_type`
-    and `neighborhood_dim` for the input complex `complex`.
+    This function returns the indices and matrix for the neighborhood specified by
+    `neighborhood_type` and `neighborhood_dim` for the input complex `domain`.
 
     Parameters
     ----------
-    complex : toponetx.classes.Complex
+    domain : toponetx.classes.Complex
         The complex to compute the neighborhood for.
     neighborhood_type : {"adj", "coadj"}, default="adj"
         The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
     neighborhood_dim : dict
-        The integer parmaters needed to specify the neighborhood of the cells to generate the embedding.
+        The integer parameters needed to specify the neighborhood of the cells to generate the embedding.
         In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
         - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
         neighborhood_dim["rank"].
@@ -50,7 +49,7 @@ def neighborhood_from_complex(
     Raises
     ------
     TypeError
-        If `complex` is not a SimplicialComplex, CellComplex, PathComplex ColoredHyperGraph or CombinatorialComplex.
+        If `domain` is not a SimplicialComplex, CellComplex, PathComplex ColoredHyperGraph or CombinatorialComplex.
     TypeError
         If `neighborhood_type` is invalid.
     """
@@ -62,18 +61,18 @@ def neighborhood_from_complex(
             f"Input neighborhood_type must be `adj` or `coadj`, got {neighborhood_type}."
         )
 
-    if isinstance(complex, tnx.SimplicialComplex | tnx.CellComplex | tnx.PathComplex):
+    if isinstance(domain, tnx.SimplicialComplex | tnx.CellComplex | tnx.PathComplex):
         if neighborhood_type == "adj":
-            ind, A = complex.adjacency_matrix(neighborhood_dim["rank"], index=True)
+            ind, A = domain.adjacency_matrix(neighborhood_dim["rank"], index=True)
         else:
-            ind, A = complex.coadjacency_matrix(neighborhood_dim["rank"], index=True)
-    elif isinstance(complex, tnx.CombinatorialComplex | tnx.ColoredHyperGraph):
+            ind, A = domain.coadjacency_matrix(neighborhood_dim["rank"], index=True)
+    elif isinstance(domain, tnx.CombinatorialComplex | tnx.ColoredHyperGraph):
         if neighborhood_type == "adj":
-            ind, A = complex.adjacency_matrix(
+            ind, A = domain.adjacency_matrix(
                 neighborhood_dim["rank"], neighborhood_dim["via_rank"], index=True
             )
         else:
-            ind, A = complex.coadjacency_matrix(
+            ind, A = domain.coadjacency_matrix(
                 neighborhood_dim["rank"], neighborhood_dim["via_rank"], index=True
             )
     else:
