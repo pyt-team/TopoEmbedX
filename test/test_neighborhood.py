@@ -105,7 +105,7 @@ class TestNeighborhood:
         We use a single 2-simplex [0,1,2]. For rank=1:
 
         - `incidence_matrix(rank=1)` relates vertices (rank 0) and edges (rank 1),
-        - the Hasse graph has nodes = vertices ∪ edges,
+        - the Hasse graph has nodes = vertices Union edges,
         - boundary and coboundary should return the same undirected adjacency.
         """
         sc = tnx.SimplicialComplex([[0, 1, 2]])
@@ -193,7 +193,9 @@ class TestNeighborhood:
         except TypeError:
             # If incidence_matrix is not implemented for CombinatorialComplex,
             # we skip the boundary check gracefully.
-            pytest.skip("CombinatorialComplex.incidence_matrix not available in this TopoNetX version.")
+            pytest.skip(
+                "CombinatorialComplex.incidence_matrix not available in this TopoNetX version."
+            )
         else:
             assert isinstance(A_b, csr_matrix)
             assert A_b.shape[0] == A_b.shape[1]
