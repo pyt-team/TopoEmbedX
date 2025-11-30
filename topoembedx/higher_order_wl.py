@@ -1,3 +1,4 @@
+
 import hashlib
 from typing import Any, Dict, List, Optional, Union, Literal
 
@@ -7,9 +8,6 @@ import toponetx as tnx
 from scipy.sparse import csr_matrix, hstack, vstack
 
 
-# ============================================================
-# Neighborhood construction for complexes
-# ============================================================
 
 def neighborhood_from_complex(
     domain: tnx.Complex,
@@ -203,3 +201,177 @@ def neighborhood_from_complex(
     ind = list(ind_low) + list(ind_high)
 
     return ind, A_hasse
+
+
+class HigherOrderWeisfeilerLehmanHashing:
+    """
+    General multi-neighborhood Weisfeiler–Lehman (WL) refinement.
+
+    Supports:
+      (1) Standard graph WL          (domain = networkx.Graph)
+      (2) Higher-order WL on complex (one neighborhood)
+      (3) SWL-style WL               (multiple neighborhoods A^(r,k))
+
+    Update rule (conceptually):
+
+        c^{t+1}_σ = HASH(
+            c^t_σ,
+            M^{(1)}_t(σ),
+            ...,
+            M^{(m)}_t(σ)
+        )
+
+    where M^{(i)}_t(σ) is the multiset of neighbor labels under the i-th
+    neighborhood matrix A^{(i)}.
+    """
+
+    def __init__(self, wl_iterations: int = 3, erase_base_features: bool = False):
+        self.wl_iterations = wl_iterations
+        self.erase_base_features = erase_base_features
+
+        self.domain = None
+        self.nodes: List[Any] = []             # external IDs: vertices / cells
+        self.adj_mats: List[csr_matrix] = []   # list of CSR matrices
+
+        self.extracted_features: Dict[Any, List[str]] = {}  # external node -> labels
+
+    # -------------------------------------------------------
+    def fit(
+        self,
+        domain: Union[nx.Graph, "tnx.Complex"],
+        neighborhood_types: Union[str, List[str]] = "adj",
+        neighborhood_dims: Optional[Union[Dict, List[Optional[Dict]]]] = None,
+    ) -> "HigherOrderWeisfeilerLehmanHashing":
+        """
+        Fit WL on a domain with one or more neighborhoods.
+
+        Parameters
+        ----------
+        domain : networkx.Graph or TopoNetX complex
+        neighborhood_types : str or list[str]
+            If domain is a graph:
+                - this argument is ignored; plain adjacency is used.
+            If domain is a complex:
+                - either a single neighborhood type (e.g. "adj")
+                - or a list of types (e.g. ["adj","coadj"]).
+        neighborhood_dims : dict or list[dict], optional
+            Rank specifications (e.g. {"rank": 2, "via_rank": 1}).
+        """
+        self.domain = domain
+
+        # ---------------------------------------------------
+        # CASE 1: Graph domain → standard 1-WL
+        # ---------------------------------------------------
+        if isinstance(domain, nx.Graph):
+            ind = list(domain.nodes())
+            self.nodes = list(ind)  # force Python list
+
+            A_arr = nx.to_scipy_sparse_array(domain, nodelist=ind)
+            A = csr_matrix(A_arr)   # ensure csr_matrix
+            self.adj_mats = [A]
+
+        # ---------------------------------------------------
+        # CASE 2: TopoNetX complex → use neighborhood_from_complex
+        # ---------------------------------------------------
+        else:
+            # Normalize types to list
+            if isinstance(neighborhood_types, str):
+                types_list = [neighborhood_types]
+            else:
+                types_list = list(neighborhood_types)
+
+            # Normalize dims to list
+            if neighborhood_dims is None or isinstance(neighborhood_dims, Dict):
+                dims_list = [neighborhood_dims] * len(types_list)
+            else:
+                dims_list = list(neighborhood_dims)
+
+            if len(types_list) != len(dims_list):
+                raise ValueError(
+                    "neighborhood_types and neighborhood_dims must have same length."
+                )
+
+            ind_lists = []
+            mats = []
+            for ntype, ndim in zip(types_list, dims_list):
+                ind, A_raw = neighborhood_from_complex(
+                    domain,
+                    neighborhood_type=ntype,
+                    neighborhood_dim=ndim,
+                )
+                # Ensure index is a plain list:
+                if not isinstance(ind, list):
+                    ind = list(ind)
+                # Ensure matrix is csr_matrix:
+                A = csr_matrix(A_raw).asformat("csr")
+
+                ind_lists.append(ind)
+                mats.append(A)
+
+            # Ensure all index lists are identical (same ordering of cells)
+            base = list(ind_lists[0])
+            for cur in ind_lists[1:]:
+                if list(cur) != base:
+                    raise ValueError(
+                        "All neighborhoods must use the same index list. "
+                        "Reorder externally before calling WL."
+                    )
+
+            self.nodes = base[:]     # external IDs (cells or vertices)
+            self.adj_mats = mats
+
+        # ---------------------------------------------------
+        # Initialize labels on index space {0,...,n-1}
+        # ---------------------------------------------------
+        self._pos_to_node = {i: node for i, node in enumerate(self.nodes)}
+
+        labels = {i: "0" for i in range(len(self.nodes))}
+        self.extracted_features = {node: ["0"] for node in self.nodes}
+
+        # ---------------------------------------------------
+        # Run WL iterations
+        # ---------------------------------------------------
+        for _ in range(self.wl_iterations):
+            labels = self._wl_step(labels)
+
+        # Optionally remove base label
+        if self.erase_base_features:
+            for node in self.extracted_features:
+                if self.extracted_features[node]:
+                    del self.extracted_features[node][0]
+
+        return self
+
+    # -------------------------------------------------------
+    def _wl_step(self, labels: Dict[int, str]) -> Dict[int, str]:
+        """One WL refinement step in index space."""
+        new_labels: Dict[int, str] = {}
+        n = len(self.nodes)
+
+        for pos in range(n):
+            parts = [labels[pos]]  # own current label
+
+            # Aggregate multiset of neighbor labels for each neighborhood
+            for A in self.adj_mats:
+                row = A.getrow(pos)
+                neigh_idx = row.indices.tolist()
+                neigh_labels = sorted(labels[j] for j in neigh_idx)
+                parts.append("_".join(neigh_labels))
+
+            concat = "|".join(parts)
+            hashed = hashlib.md5(concat.encode()).hexdigest()
+            new_labels[pos] = hashed
+
+            ext_node = self._pos_to_node[pos]
+            self.extracted_features[ext_node].append(hashed)
+
+        return new_labels
+
+    # -------------------------------------------------------
+    def get_cell_features(self) -> Dict[Any, List[str]]:
+        """Return dict: external cell/node → list of WL labels over iterations."""
+        return self.extracted_features
+
+    def get_domain_features(self) -> List[str]:
+        """Return flattened multiset of labels across all cells and iterations."""
+        return [f for feats in self.extracted_features.values() for f in feats]
