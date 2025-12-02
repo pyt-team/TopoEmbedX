@@ -20,14 +20,12 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Mathematics",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-requires-python = ">= 3.10"
+requires-python = ">= 3.12"
 dependencies=[
     "numpy",
     "networkx",
@@ -60,9 +58,8 @@ docs = [
     "jupyter",
     "matplotlib",
     "nbsphinx",
-    "nbsphinx_link",
-    "numpydoc >= 1.8.0",
-    "sphinx",
+    "numpydoc",
+    "sphinx < 9.0.0",
     "sphinx-copybutton",
     "sphinx_gallery",
     "pydata-sphinx-theme"
