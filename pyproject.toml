@@ -59,7 +59,7 @@ docs = [
     "matplotlib",
     "nbsphinx",
     "numpydoc",
-    "sphinx < 9.0.0",
+    "sphinx",
     "sphinx-copybutton",
     "sphinx_gallery",
     "pydata-sphinx-theme"
