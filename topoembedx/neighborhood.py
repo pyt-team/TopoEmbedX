@@ -16,8 +16,8 @@ def neighborhood_from_complex(
     This function returns the indices and matrix for the neighborhood specified by
     ``neighborhood_type`` and ``neighborhood_dim`` for the input complex ``domain``.
 
-    Supported neighborhood types
-    ----------------------------
+    Supported neighborhood types:
+
     1. ``"adj"`` (adjacency on a single rank)
        - Nodes are cells of a fixed rank r.
        - Two r-cells are adjacent if they share suitable (co)faces, as defined
@@ -54,7 +54,7 @@ def neighborhood_from_complex(
         Integer parameters specifying which rank(s) to use.
 
         For "adj"/"coadj":
-        ------------------
+
         - For Simplicial/Cell/Path:
               neighborhood_dim["rank"]
           selects the rank r whose cells will be the nodes.
@@ -65,7 +65,7 @@ def neighborhood_from_complex(
           via which adjacency/coadjacency is computed.
 
         For "boundary"/"coboundary":
-        ----------------------------
+
         We use the **incidence** between rank r and rank r-1 via
         `domain.incidence_matrix`:
 
@@ -152,27 +152,18 @@ def neighborhood_from_complex(
 
         return ind, A.asformat("csr")
 
-    # ------------------------------------------------------------
-    # Case 2: boundary / coboundary → Hasse graph from incidence_matrix
-    # ------------------------------------------------------------
-    if not hasattr(domain, "incidence_matrix"):
-        raise TypeError(
-            "The given complex does not provide an 'incidence_matrix' method, "
-            "so 'boundary'/'coboundary' neighborhoods are not supported."
-        )
-
     r = neighborhood_dim["rank"]
 
     # Two cases: (SC / Cell / Path) vs (CC / ColoredHyperGraph)
     if isinstance(domain, tnx.SimplicialComplex | tnx.CellComplex | tnx.PathComplex):
         # Expected signature:
         #   ind_low, ind_high, B = domain.incidence_matrix(rank=r, index=True)
-        ind_low, ind_high, B = domain.incidence_matrix(r, index=True)  # type: ignore[arg-type]
+        ind_low, ind_high, B = domain.incidence_matrix(r, index=True)
     elif isinstance(domain, tnx.CombinatorialComplex | tnx.ColoredHyperGraph):
         # Expected signature:
         #   ind_low, ind_high, B = domain.incidence_matrix(rank=r, via_rank=r-1, index=True)
         via = neighborhood_dim.get("via_rank", r - 1)
-        ind_low, ind_high, B = domain.incidence_matrix(  # type: ignore[arg-type]
+        ind_low, ind_high, B = domain.incidence_matrix(
             rank=r, via_rank=via, index=True
         )
     else:

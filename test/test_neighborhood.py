@@ -10,9 +10,6 @@ import topoembedx as tex
 class TestNeighborhood:
     """Test the neighborhood module of TopoEmbedX."""
 
-    # ------------------------------------------------------------------
-    # Original tests (unchanged)
-    # ------------------------------------------------------------------
     def test_neighborhood_from_complex_raise_error(self):
         """Testing if right assertion is raised for incorrect type."""
         with pytest.raises(TypeError) as e:
@@ -62,9 +59,6 @@ class TestNeighborhood:
         assert A.todense().shape == (4, 4)
         assert len(ind) == 4
 
-    # ------------------------------------------------------------------
-    # New tests: SimplicialComplex adjacency / coadjacency
-    # ------------------------------------------------------------------
     def test_neighborhood_from_complex_simplicial_adj_coadj(self):
         """Adjacency and coadjacency matrices on a simplicial complex.
 
@@ -96,9 +90,6 @@ class TestNeighborhood:
         assert A_coadj.shape[0] == A_coadj.shape[1]
         assert len(ind_coadj) == A_coadj.shape[0]
 
-    # ------------------------------------------------------------------
-    # New tests: boundary / coboundary via incidence_matrix (Hasse graph)
-    # ------------------------------------------------------------------
     def test_neighborhood_from_complex_boundary_coboundary_simplicial(self):
         """Boundary and coboundary neighborhoods on a simplicial complex.
 
@@ -134,22 +125,19 @@ class TestNeighborhood:
         # Matrices should be identical
         assert (A_cb != A_b).nnz == 0
 
-    # ------------------------------------------------------------------
-    # New tests: CombinatorialComplex adjacency / coadjacency / boundary
-    # ------------------------------------------------------------------
     def test_neighborhood_from_complex_combinatorial_complex(self):
         """Adjacency, coadjacency, and boundary neighborhoods on a combinatorial complex.
 
         We build a small combinatorial complex with:
-        - rank 0: vertices {0,1,2,3}
+        - rank 0: vertices {0, 1, 2, 3}
         - rank 1: edges of a 4-cycle
-        - rank 2: two faces [0,1,2] and [0,2,3]
+        - rank 2: two faces [0, 1, 2] and [0, 2, 3]
 
         We verify:
         - adjacency on rank=1 via rank=2 is square,
         - coadjacency on rank=1 via rank=0 is square,
-        - boundary neighborhood at rank=2 (if incidence_matrix is implemented)
-          produces a square Hasse adjacency over ranks 1 and 2.
+        - boundary neighborhood at rank=2 (if incidence_matrix is implemented) produces
+          a square Hasse adjacency over ranks 1 and 2.
         """
         cc = tnx.CombinatorialComplex()
         # vertices
@@ -183,21 +171,13 @@ class TestNeighborhood:
         assert len(ind_coadj) == A_coadj.shape[0]
 
         # Boundary neighborhood at rank=2: incidence between rank 2 and rank 1
-        # Not all TopoNetX versions may have incidence_matrix for CC, so we guard it.
-        try:
-            ind_b, A_b = tex.neighborhood.neighborhood_from_complex(
-                cc,
-                neighborhood_type="boundary",
-                neighborhood_dim={"rank": 2},
-            )
-        except TypeError:
-            # If incidence_matrix is not implemented for CombinatorialComplex,
-            # we skip the boundary check gracefully.
-            pytest.skip(
-                "CombinatorialComplex.incidence_matrix not available in this TopoNetX version."
-            )
-        else:
-            assert isinstance(A_b, csr_matrix)
-            assert A_b.shape[0] == A_b.shape[1]
-            assert len(ind_b) == A_b.shape[0]
-            assert A_b.nnz > 0
+        ind_b, A_b = tex.neighborhood.neighborhood_from_complex(
+            cc,
+            neighborhood_type="boundary",
+            neighborhood_dim={"rank": 2},
+        )
+
+        assert isinstance(A_b, csr_matrix)
+        assert A_b.shape[0] == A_b.shape[1]
+        assert len(ind_b) == A_b.shape[0]
+        assert A_b.nnz > 0

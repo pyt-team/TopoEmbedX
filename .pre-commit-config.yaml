@@ -38,7 +38,6 @@ repos:
     rev: v3.7.1
     hooks:
       - id: prettier
-        language_version: "18.19.1"
 
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
