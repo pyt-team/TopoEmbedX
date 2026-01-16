@@ -15,7 +15,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.6
+    rev: v0.14.13
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter]
@@ -30,12 +30,12 @@ repos:
         additional_dependencies: [black==24.*]
 
   - repo: https://github.com/numpy/numpydoc
-    rev: v1.9.0
+    rev: v1.10.0
     hooks:
       - id: numpydoc-validation
 
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: v3.6.2
+    rev: v3.8.0
     hooks:
       - id: prettier
 
