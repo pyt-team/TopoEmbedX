@@ -164,5 +164,5 @@ local_scheme = "no-local-version"
 version_file = "topoembedx/_version.py"
 
 [tool.uv.sources]
-karateclub = { git = "https://github.com/benedekrozemberczki/karateclub", rev = "cb46a91df8dcbeb2570debcf6a9d0c518107a2de" }
+karateclub = { git = "https://github.com/pyt-team/karateclub", rev = "master" }
 pygsp = { git = "https://github.com/epfl-lts2/pygsp", rev = "643b1c448559da8c7dbaed7537a9fd819183c569" }
