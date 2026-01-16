@@ -19,7 +19,7 @@
 [![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml)
 [![Codecov](https://codecov.io/gh/pyt-team/TopoEmbedX/branch/main/graph/badge.svg)](https://app.codecov.io/gh/pyt-team/TopoEmbedX)
 [![Docs](https://img.shields.io/badge/docs-website-brightgreen)](https://pyt-team.github.io/topoembedx/index.html)
-[![Python](https://img.shields.io/badge/python-3.10+-blue?logo=python)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.12+-blue?logo=python)](https://www.python.org/)
 [![license](https://badgen.net/github/license/pyt-team/TopoNetX?color=green)](https://github.com/pyt-team/TopoNetX/blob/main/LICENSE)
 [![slack](https://img.shields.io/badge/chat-on%20slack-purple?logo=slack)](https://join.slack.com/t/pyt-teamworkspace/shared_invite/zt-2k63sv99s-jbFMLtwzUCc8nt3sIRWjEw)
 
@@ -52,7 +52,7 @@ for the topological domains supported in [TopoNetX](https://github.com/pyt-team/
 
 ```bash
 pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@643b1c448559da8c7dbaed7537a9fd819183c569"
-pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
+pip install "karateclub @ git+https://github.com/pyt-team/karateclub@master"
 pip install topoembedx
 ```
 
@@ -100,7 +100,7 @@ cd TopoEmbedX
 
 ```bash
 pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@643b1c448559da8c7dbaed7537a9fd819183c569"
-pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
+pip install "karateclub @ git+https://github.com/pyt-team/karateclub@master"
 ```
 
 3. Install `TopoEmbedX` in editable mode with development dependencies:

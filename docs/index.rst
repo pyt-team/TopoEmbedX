@@ -31,7 +31,7 @@ for the topological domains supported in `TopoNetX <https://github.com/pyt-team/
 .. code-block:: bash
 
    pip install "pygsp @ git+https://github.com/epfl-lts2/pygsp@643b1c448559da8c7dbaed7537a9fd819183c569"
-   pip install "karateclub @ git+https://github.com/benedekrozemberczki/karateclub@cb46a91df8dcbeb2570debcf6a9d0c518107a2de"
+   pip install "karateclub @ git+https://github.com/pyt-team/karateclub@master"
    pip install topoembedx
 
 The library depends on ``pygsp`` and ``karateclub``, which did not receive
