@@ -8,4 +8,5 @@ from .hoglee import *
 from .hope import *
 from .random_walks import *
 from .toponetmf import *
+from .toporandne import *
 from .toporep import *
