@@ -12,7 +12,9 @@ from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
-    """Class for Higher Order Laplacian Eigenmaps.
+    """Higher-Order Laplacian Eigenmaps embedding algorithm.
+
+    This algorithm is based on the Laplacian Eigenmaps algorithm [1] for graphs.
 
     Parameters
     ----------
@@ -22,6 +24,13 @@ class HigherOrderLaplacianEigenmaps(LaplacianEigenmaps):
         Maximum number of iterations.
     seed : int, default=42
         Random seed value.
+
+    References
+    ----------
+    .. [1] Belkin, Mikhail, and Partha Niyogi. "Laplacian Eigenmaps and Spectral
+           Techniques for Embedding and Clustering". Advances in Neural Information
+           Processing Systems, vol. 14, 2001. Neural Information Processing Systems,
+           https://papers.nips.cc/paper_files/paper/2001/hash/f106b7f99d2cb30c3db1c3cc0fde9ccb-Abstract.html.
     """
 
     A: csr_matrix

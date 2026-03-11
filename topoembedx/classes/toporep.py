@@ -13,7 +13,7 @@ from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class TopoRep(GraRep):
-    """Topological version of the GraRep embedding algorithm.
+    """Topological version of the GraRep [1] embedding algorithm.
 
     Parameters
     ----------
@@ -25,6 +25,13 @@ class TopoRep(GraRep):
         Number of PMI matrix powers.
     seed : int, default=42
         Seed for randomized singular value decomposition.
+
+    References
+    ----------
+    .. [1] Cao, Shaosheng, et al. "GraRep: Learning Graph Representations with Global
+           Structural Information". Proceedings of the 24th ACM International on
+           Conference on Information and Knowledge Management [Melbourne Australia],
+           2015, pp. 891-900. https://doi.org/10.1145/2806416.2806512.
     """
 
     A: sp.csr_matrix

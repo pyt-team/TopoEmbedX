@@ -12,7 +12,7 @@ from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class Cell2Vec(Node2Vec):
-    """Class Cell2Vec.
+    """Topological version of the Node2Vec [1] embedding algorithm.
 
     Cell2Vec is a class that extends the Node2Vec class.
     It provides additional functionality for generating node embeddings for simplicial,
@@ -54,6 +54,13 @@ class Cell2Vec(Node2Vec):
         Minimal count of node occurrences.
     seed : int, default=42
         Random seed value.
+
+    References
+    ----------
+    .. [1] Grover, Aditya, and Jure Leskovec. "Node2vec: Scalable Feature Learning for
+           Networks". Proceedings of the 22nd ACM SIGKDD International Conference on
+           Knowledge Discovery and Data Mining [San Francisco California USA], 2016,
+           pp. 855-64. https://doi.org/10.1145/2939672.2939754.
     """
 
     A: csr_matrix

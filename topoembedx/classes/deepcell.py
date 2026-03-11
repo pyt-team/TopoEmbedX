@@ -12,7 +12,7 @@ from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class DeepCell(DeepWalk):
-    """Class for DeepCell.
+    """Topological version of the DeepWalk [1] embedding algorithm.
 
     Parameters
     ----------
@@ -38,6 +38,13 @@ class DeepCell(DeepWalk):
         Minimum count of words to consider when training the model.
     seed : int, default=42
         Random seed to use for reproducibility.
+
+    References
+    ----------
+    .. [1] Perozzi, Bryan, et al. "DeepWalk: Online Learning of Social
+           Representations". Proceedings of the 20th ACM SIGKDD International
+           Conference on Knowledge Discovery and Data Mining [New York New York USA],
+           2014, pp. 701-10. https://doi.org/10.1145/2623330.2623732.
     """
 
     A: csr_matrix

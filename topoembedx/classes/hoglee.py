@@ -14,12 +14,20 @@ from topoembedx.neighborhood import neighborhood_from_complex
 class HOGLEE(GLEE):
     """Class for Higher Order Geometric Laplacian EigenMaps (HOGLEE).
 
+    This algorithm is based on the GLEE algorithm [1] for graphs.
+
     Parameters
     ----------
     dimensions : int, default=128
         Dimensionality of embedding.
     seed : int, default=42
         Random seed value.
+
+    References
+    ----------
+    .. [1] Torres, Leo, et al. "GLEE: Geometric Laplacian Eigenmap Embedding". Journal
+           of Complex Networks, edited by Ernesto Estrada, vol. 8, no. 2, Apr. 2020,
+           p. cnaa007. https://doi.org/10.1093/comnet/cnaa007.
     """
 
     A: csr_matrix
