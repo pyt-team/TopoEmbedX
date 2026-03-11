@@ -12,7 +12,7 @@ from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class CellDiff2Vec(Diff2Vec):
-    """Class for CellDiff2Vec.
+    """Topological version of the Diff2Vec [1] embedding algorithm.
 
     Parameters
     ----------
@@ -38,6 +38,13 @@ class CellDiff2Vec(Diff2Vec):
         Minimal count of node occurrences.
     seed : int, default=42
         Random seed value.
+
+    References
+    ----------
+    .. [1] Rozemberczki, Benedek, and Rik Sarkar. "Fast Sequence-Based Embedding with
+           Diffusion Graphs". Complex Networks IX, edited by Sean Cornelius et al.,
+           Springer International Publishing, 2018, pp. 99-107.
+           https://doi.org/10.1007/978-3-319-73198-8_9.
     """
 
     A: csr_matrix

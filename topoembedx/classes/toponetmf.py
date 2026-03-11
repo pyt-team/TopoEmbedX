@@ -13,8 +13,7 @@ from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class TopoNetMF(NetMF):
-    """
-    Topological NetMF embedding algorithm.
+    """Topological version of the NetMF [1] embedding algorithm.
 
     Parameters
     ----------
@@ -28,6 +27,13 @@ class TopoNetMF(NetMF):
         Number of negative samples.
     seed : int, default=42
         Seed for randomized singular value decomposition.
+
+    References
+    ----------
+    .. [1] Qiu, Jiezhong, et al. "Network Embedding as Matrix Factorization: Unifying
+           DeepWalk, LINE, PTE, and Node2vec". Proceedings of the Eleventh ACM
+           International Conference on Web Search and Data Mining [Marina Del Rey CA
+           USA], 2018, pp. 459-67. https://doi.org/10.1145/3159652.3159706.
     """
 
     A: sp.csr_matrix

@@ -13,7 +13,7 @@ from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class TopoRandNE(RandNE):
-    """Topological version of the RandNE embedding algorithm.
+    """Topological version of the RandNE [1] embedding algorithm.
 
     Parameters
     ----------
@@ -23,6 +23,12 @@ class TopoRandNE(RandNE):
         Smoothing weights for adjacency matrix powers.
     seed : int, default=42
         Random seed.
+
+    References
+    ----------
+    .. [1] Zhang, Ziwei, et al. "Billion-Scale Network Embedding with Iterative Random
+           Projection". 2018 IEEE International Conference on Data Mining (ICDM)
+           [Singapore], 2018, pp. 787-96. https://doi.org/10.1109/ICDM.2018.00094.
     """
 
     A: sp.csr_matrix
