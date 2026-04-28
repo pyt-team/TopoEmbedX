@@ -1,114 +1,12 @@
-"""Topological NetMF embedding algorithm."""
+"""Deprecated compatibility layer for ComplexNetMF."""
 
-from collections.abc import Hashable
-from typing import Literal
+from ._deprecation import deprecated_alias
+from .complexnetmf import ComplexNetMF
 
-import networkx as nx
-import numpy as np
-import scipy.sparse as sp
-import toponetx as tnx
-from karateclub import NetMF
+__all__ = ["TopoNetMF"]
 
-from topoembedx.neighborhood import neighborhood_from_complex
-
-
-class TopoNetMF(NetMF):
-    """Topological version of the NetMF [1] embedding algorithm.
-
-    Parameters
-    ----------
-    dimensions : int, default=32
-        Number of embedding dimension.
-    iteration : int, default=10
-        Number of SVD iterations.
-    order : int, default=2
-        Number of PMI matrix powers.
-    negative_samples : int, default=1
-        Number of negative samples.
-    seed : int, default=42
-        Seed for randomized singular value decomposition.
-
-    References
-    ----------
-    .. [1] Qiu, Jiezhong, et al. "Network Embedding as Matrix Factorization: Unifying
-           DeepWalk, LINE, PTE, and Node2vec". Proceedings of the Eleventh ACM
-           International Conference on Web Search and Data Mining [Marina Del Rey CA
-           USA], 2018, pp. 459-67. https://doi.org/10.1145/3159652.3159706.
-    """
-
-    A: sp.csr_matrix
-    ind: list[Hashable]
-    _embedding: np.ndarray
-
-    def __init__(
-        self,
-        dimensions: int = 32,
-        iteration: int = 10,
-        order: int = 2,
-        negative_samples: int = 1,
-        seed: int = 42,
-    ):
-        super().__init__(
-            dimensions=dimensions,
-            iteration=iteration,
-            order=order,
-            negative_samples=negative_samples,
-            seed=seed,
-        )
-
-    def fit(
-        self,
-        domain: tnx.Complex,
-        neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim=None,
-    ) -> None:
-        """Fit the model.
-
-        Parameters
-        ----------
-        domain : toponetx.Complex
-            The topological domain to be embedded.
-        neighborhood_type : {"adj", "coadj"}, default="adj"
-            The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
-        neighborhood_dim : dict
-            The integer parameters needed to specify the neighborhood of the cells to generate the embedding.
-            In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
-            - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
-            neighborhood_dim["rank"].
-            - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by two parameters, this is precisely
-            neighborhood_dim["rank"] and neighborhood_dim["via_rank"].
-
-        Notes
-        -----
-        Here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
-        which the cell embeddings are going to be computed.
-        "rank": 1 means that the embeddings will be computed for the first dimension.
-        The integer "via_rank": -1 is ignored when the input is cell/simplicial complex
-        and  must be specified when the input complex is a combinatorial complex or
-        colored hypergraph.
-        """
-        self.ind, self.A = neighborhood_from_complex(
-            domain, neighborhood_type, neighborhood_dim
-        )
-        self.A.setdiag(1)
-
-        g = nx.from_scipy_sparse_array(self.A)
-        super().fit(g)
-
-    def get_embedding(self, get_dict: bool = False) -> np.ndarray | dict:
-        """Get embedding.
-
-        Parameters
-        ----------
-        get_dict : bool, optional
-            Whether to return a dictionary. Defaults to False.
-
-        Returns
-        -------
-        dict or numpy.ndarray
-            Embedding.
-        """
-        emb = super().get_embedding()
-        if get_dict:
-            return dict(zip(self.ind, emb, strict=True))
-        return emb
+TopoNetMF = deprecated_alias(
+    ComplexNetMF,
+    "topoembedx.classes.toponetmf.TopoNetMF",
+    "topoembedx.classes.complexnetmf.ComplexNetMF",
+)

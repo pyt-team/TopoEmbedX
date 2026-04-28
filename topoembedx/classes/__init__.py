@@ -2,6 +2,9 @@
 
 from .cell2vec import *
 from .cell_diff2vec import *
+from .complexnetmf import *
+from .complexrandne import *
+from .complexrep import *
 from .deepcell import *
 from .higher_order_laplacian_eigenmaps import *
 from .hoglee import *
