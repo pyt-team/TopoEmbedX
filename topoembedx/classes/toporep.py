@@ -1,104 +1,12 @@
-"""Topological GraRep embedding algorithm."""
+"""Deprecated compatibility layer for ComplexRep."""
 
-from collections.abc import Hashable
-from typing import Literal
+from ._deprecation import deprecated_alias
+from .complexrep import ComplexRep
 
-import networkx as nx
-import numpy as np
-import scipy.sparse as sp
-import toponetx as tnx
-from karateclub import GraRep
+__all__ = ["TopoRep"]
 
-from topoembedx.neighborhood import neighborhood_from_complex
-
-
-class TopoRep(GraRep):
-    """Topological version of the GraRep [1] embedding algorithm.
-
-    Parameters
-    ----------
-    dimensions : int, default=32
-        Number of individual embedding dimensions.
-    iteration : int, default=10
-        Number of SVD iterations.
-    order : int, default=5
-        Number of PMI matrix powers.
-    seed : int, default=42
-        Seed for randomized singular value decomposition.
-
-    References
-    ----------
-    .. [1] Cao, Shaosheng, et al. "GraRep: Learning Graph Representations with Global
-           Structural Information". Proceedings of the 24th ACM International on
-           Conference on Information and Knowledge Management [Melbourne Australia],
-           2015, pp. 891-900. https://doi.org/10.1145/2806416.2806512.
-    """
-
-    A: sp.csr_matrix
-    ind: list[Hashable]
-    _embedding: np.ndarray
-
-    def __init__(
-        self, dimensions: int = 32, iteration: int = 10, order: int = 5, seed: int = 42
-    ) -> None:
-        super().__init__(
-            dimensions=dimensions, iteration=iteration, order=order, seed=seed
-        )
-
-    def fit(
-        self,
-        domain: tnx.Complex,
-        neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim=None,
-    ) -> None:
-        """Fit the model.
-
-        Parameters
-        ----------
-        domain : toponetx.Complex
-            The topological domain to be embedded.
-        neighborhood_type : {"adj", "coadj"}, default="adj"
-            The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
-        neighborhood_dim : dict
-            The integer parameters needed to specify the neighborhood of the cells to generate the embedding.
-            In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
-            - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
-            neighborhood_dim["rank"].
-            - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by two parameters, this is precisely
-            neighborhood_dim["rank"] and neighborhood_dim["via_rank"].
-
-        Notes
-        -----
-        Here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
-        which the cell embeddings are going to be computed.
-        "rank": 1 means that the embeddings will be computed for the first dimension.
-        The integer "via_rank": -1 is ignored when the input is cell/simplicial complex
-        and  must be specified when the input complex is a combinatorial complex or
-        colored hypergraph.
-        """
-        self.ind, self.A = neighborhood_from_complex(
-            domain, neighborhood_type, neighborhood_dim
-        )
-        self.A.setdiag(1)
-
-        g = nx.from_scipy_sparse_array(self.A)
-
-        super().fit(g)
-
-    def get_embedding(self, get_dict: bool = False) -> np.ndarray | dict:
-        """Get embedding.
-
-        Parameters
-        ----------
-        get_dict : bool, optional
-            Whether to return a dictionary. Defaults to False.
-
-        Returns
-        -------
-        dict or numpy.ndarray
-            Embedding.
-        """
-        emb = super().get_embedding()
-        if get_dict:
-            return dict(zip(self.ind, emb, strict=True))
-        return emb
+TopoRep = deprecated_alias(
+    ComplexRep,
+    "topoembedx.classes.toporep.TopoRep",
+    "topoembedx.classes.complexrep.ComplexRep",
+)

@@ -38,22 +38,22 @@ Hope
 .. automodule:: topoembedx.classes.hope
     :members:
 
-TopoNetMF
----------
+ComplexNetMF
+------------
 
-.. automodule:: topoembedx.classes.toponetmf
+.. automodule:: topoembedx.classes.complexnetmf
     :members:
 
-TopoRandNE
+ComplexRandNE
+-------------
+
+.. automodule:: topoembedx.classes.complexrandne
+    :members:
+
+ComplexRep
 ----------
 
-.. automodule:: topoembedx.classes.toporandne
-    :members:
-
-TopoRep
--------
-
-.. automodule:: topoembedx.classes.toporep
+.. automodule:: topoembedx.classes.complexrep
     :members:
 
 Random Walks
