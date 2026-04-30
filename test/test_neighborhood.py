@@ -3,7 +3,7 @@
 import pytest
 import toponetx as tnx
 
-import topoembedx as tex
+from topoembedx.neighborhood import neighborhood_from_complex
 
 
 class TestNeighborhood:
@@ -12,7 +12,7 @@ class TestNeighborhood:
     def test_neighborhood_from_complex_raise_error(self):
         """Testing if right assertion is raised for incorrect type."""
         with pytest.raises(TypeError) as e:
-            tex.neighborhood.neighborhood_from_complex(1)
+            neighborhood_from_complex(1)
 
         assert (
             str(e.value)
@@ -28,22 +28,18 @@ class TestNeighborhood:
 
         cc2 = tnx.classes.CellComplex([[0, 1, 2], [1, 2, 3]])
 
-        ind, A = tex.neighborhood.neighborhood_from_complex(cc1)
+        ind, A = neighborhood_from_complex(cc1)
         assert A.todense().shape == (9, 9)
         assert len(ind) == 9
 
-        ind, A = tex.neighborhood.neighborhood_from_complex(cc2)
+        ind, A = neighborhood_from_complex(cc2)
         assert A.todense().shape == (4, 4)
         assert len(ind) == 4
 
-        ind, A = tex.neighborhood.neighborhood_from_complex(
-            cc1, neighborhood_type="coadj"
-        )
+        ind, A = neighborhood_from_complex(cc1, neighborhood_type="coadj")
         assert A.todense().shape == (9, 9)
         assert len(ind) == 9
 
-        ind, A = tex.neighborhood.neighborhood_from_complex(
-            cc2, neighborhood_type="coadj"
-        )
+        ind, A = neighborhood_from_complex(cc2, neighborhood_type="coadj")
         assert A.todense().shape == (4, 4)
         assert len(ind) == 4
