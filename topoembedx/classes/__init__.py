@@ -6,6 +6,7 @@ from .complexheat import *
 from .complexnetmf import *
 from .complexrandne import *
 from .complexrep import *
+from .complexwalklets import *
 from .deepcell import *
 from .higher_order_laplacian_eigenmaps import *
 from .hoglee import *
