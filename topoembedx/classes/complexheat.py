@@ -5,7 +5,7 @@ from typing import Literal
 
 import numpy as np
 import toponetx as tnx
-from scipy.sparse import csr_matrix, diags, eye
+from scipy.sparse import csr_matrix, diags
 from scipy.sparse.linalg import eigsh
 from sklearn.decomposition import TruncatedSVD
 
@@ -83,7 +83,9 @@ class ComplexHeat:
 
         degree_scaling = diags(inv_sqrt_degree)
         normalized_adjacency = degree_scaling @ adjacency @ degree_scaling
-        laplacian = eye(adjacency.shape[0], format="csr", dtype=np.float64)
+        diagonal = np.ones(adjacency.shape[0], dtype=np.float64)
+        diagonal[~nonzero] = 0.0
+        laplacian = diags(diagonal, format="csr", dtype=np.float64)
         laplacian = laplacian - normalized_adjacency
 
         return ((laplacian + laplacian.T) * 0.5).tocsr()
@@ -114,9 +116,7 @@ class ComplexHeat:
         numpy.ndarray
             Diffusion signatures for the single-node case.
         """
-        return np.array(
-            [[np.exp(-time) for time in self.diffusion_times]], dtype=np.float64
-        )
+        return np.ones((1, len(self.diffusion_times)), dtype=np.float64)
 
     def _approximate_heat_signatures(self, laplacian: csr_matrix) -> np.ndarray:
         """Compute compact heat signatures from a truncated spectral basis.
