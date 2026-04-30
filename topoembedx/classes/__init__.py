@@ -2,6 +2,7 @@
 
 from .cell2vec import *
 from .cell_diff2vec import *
+from .complexheat import *
 from .complexnetmf import *
 from .complexrandne import *
 from .complexrep import *
