@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
-from collections.abc import Hashable, Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import networkx as nx
 import numpy as np
-import toponetx as tnx
 from karateclub import Node2Vec
-from scipy.sparse import csr_matrix
 
-from topoembedx.neighborhood import NeighborhoodType, neighborhood_from_complex
+from topoembedx.neighborhood import neighborhood_from_complex
+
+if TYPE_CHECKING:
+    from collections.abc import Hashable, Mapping
+
+    import toponetx as tnx
+    from scipy.sparse import csr_matrix
+
+    from topoembedx.neighborhood import NeighborhoodType
 
 
 class Cell2Vec(Node2Vec):
@@ -100,9 +105,10 @@ class Cell2Vec(Node2Vec):
             A complex object.
         neighborhood_type : str, default="adj"
             The neighborhood type used to construct the graph. Supported values
-            are those accepted by :func:`topoembedx.neighborhood.neighborhood_from_complex`,
-            including ``"adj"``, ``"coadj"``, ``"connection"``, ``"hasse"``,
-            and ``"augmented_hasse"``.
+            are those accepted by
+            :func:`topoembedx.neighborhood.neighborhood_from_complex`, including
+            ``"adj"``, ``"coadj"``, ``"connection"``, ``"hasse"``, and
+            ``"augmented_hasse"``.
         neighborhood_dim : mapping, optional
             Parameters specifying the neighborhood matrix.
         """
@@ -118,6 +124,19 @@ class Cell2Vec(Node2Vec):
     def _graph_from_adjacency(matrix: csr_matrix) -> nx.Graph:
         """Create an unweighted NetworkX graph from an adjacency matrix.
 
+        Parameters
+        ----------
+        matrix : scipy.sparse.csr_matrix
+            Sparse adjacency matrix used to construct the graph.
+
+        Returns
+        -------
+        networkx.Graph
+            Unweighted graph induced by the nonzero entries of ``matrix``, with
+            self-loops added to all nodes.
+
+        Notes
+        -----
         KarateClub's biased random walker expects unweighted graphs to expose
         edges as ``(u, v)`` pairs. NetworkX creates weighted edges by default
         when ``edge_attr`` is not ``None``. Using ``edge_attr=None`` preserves
@@ -133,7 +152,10 @@ class Cell2Vec(Node2Vec):
         )
         return graph
 
-    def get_embedding(self, get_dict: bool = False) -> dict[Hashable, np.ndarray] | np.ndarray:
+    def get_embedding(
+        self,
+        get_dict: bool = False,
+    ) -> dict[Hashable, np.ndarray] | np.ndarray:
         """Get embedding.
 
         Parameters
