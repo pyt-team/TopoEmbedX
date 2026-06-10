@@ -1,4 +1,16 @@
-"""Functions for computing neighborhoods of a complex."""
+"""Functions for computing neighborhoods of a complex.
+
+This module provides a single public helper, :func:`neighborhood_from_complex`,
+for converting local relationships in a TopoNetX complex into sparse matrices.
+The returned matrix can represent a same-rank neighborhood, an incidence-based
+connection graph, a Hasse graph, or an augmented Hasse graph.
+
+The function is intentionally used as a thin compatibility layer between
+TopoNetX complexes and embedding methods in TopoEmbedX. In the original use
+case, ``"adj"`` and ``"coadj"`` return the usual same-rank adjacency and
+coadjacency matrices. The extended use cases return square sparse graph
+matrices whose rows and columns index the cells represented in the graph.
+"""
 
 from __future__ import annotations
 
@@ -37,30 +49,115 @@ def neighborhood_from_complex(
 ) -> tuple[list[Hashable], csr_matrix]:
     """Compute the neighborhood of a complex.
 
-    This function returns the indices and sparse matrix for the neighborhood
-    specified by ``neighborhood_type`` and ``neighborhood_dim``. The original
-    ``"adj"`` and ``"coadj"`` cases are preserved. Additional cases construct
-    connection, Hasse, or augmented Hasse graphs by assembling sparse incidence
-    and neighborhood matrices.
+    This function converts a TopoNetX complex into a sparse neighborhood matrix.
+    The returned matrix can be used directly as the graph on which a topological
+    embedding method operates.
+
+    The function supports three main kinds of neighborhoods.
+
+    First, ``"adj"`` and ``"coadj"`` return same-rank neighborhoods. These are
+    the original TopoEmbedX behaviors. For simplicial, cell, and path complexes,
+    only ``"rank"`` is used. For combinatorial complexes and colored
+    hypergraphs, both ``"rank"`` and ``"via_rank"`` are used.
+
+    Second, ``"inc"``, ``"incidence"``, and ``"connection"`` return square
+    connection graphs induced by one or more incidence matrices. A single
+    connection graph is specified by ``"rank"`` and ``"to_rank"``. Multiple
+    connection graphs can be specified by ``"rank_pairs"`` or ``"pairs"``.
+    For example, ``{"rank_pairs": [(0, 1), (1, 2), (0, 2)]}`` builds one
+    graph from several cross-rank incidence relations.
+
+    Third, ``"hasse"`` and ``"augmented_hasse"`` return graphs whose nodes are
+    cells. The Hasse graph uses incidence relations between selected ranks.
+    The augmented Hasse graph starts from the Hasse graph and then adds any
+    extra neighborhoods listed under ``"neighborhoods"``.
 
     Parameters
     ----------
     domain : toponetx.classes.Complex
-        The complex to compute the neighborhood for.
+        The complex to compute the neighborhood for. Supported inputs are
+        ``SimplicialComplex``, ``CellComplex``, ``PathComplex``,
+        ``CombinatorialComplex``, and ``ColoredHyperGraph``.
     neighborhood_type : {"adj", "coadj", "inc", "incidence", "connection", "hasse", "augmented_hasse"}, default="adj"
         The type of neighborhood to compute.
+
+        ``"adj"``
+            Same-rank adjacency. Two rank-``r`` cells are adjacent when they
+            share an upper incident cell, according to the TopoNetX adjacency
+            convention.
+
+        ``"coadj"``
+            Same-rank coadjacency. Two rank-``r`` cells are coadjacent when
+            they share a lower incident cell, according to the TopoNetX
+            coadjacency convention.
+
+        ``"inc"``, ``"incidence"``, ``"connection"``
+            A square graph induced by one or more incidence matrices
+            :math:`B_{ij}`. This is useful for cross-rank neighborhoods, such
+            as vertices connected to edges or vertices connected directly to
+            2-cells in a combinatorial complex.
+
+        ``"hasse"``
+            A graph induced by incidence relations between consecutive or
+            explicitly selected ranks. This represents the Hasse-style
+            cell-incidence structure.
+
+        ``"augmented_hasse"``
+            A Hasse graph augmented with additional user-specified
+            neighborhoods, such as same-rank adjacency, coadjacency, or
+            arbitrary connection graphs.
     neighborhood_dim : mapping, optional
-        Parameters specifying the neighborhood. For same-rank neighborhoods,
-        use ``{"rank": r, "via_rank": s}``. For connection, Hasse, or
-        augmented Hasse graphs, use ``"rank"``, ``"to_rank"``,
-        ``"rank_pairs"``, ``"ranks"``, or ``"neighborhoods"``.
+        Parameters specifying the neighborhood. If omitted, the default is
+        ``{"rank": 0, "via_rank": -1}``.
+
+        Common keys are:
+
+        ``"rank"`` : int
+            Source or target rank used by the requested neighborhood.
+
+        ``"via_rank"`` : int
+            Intermediate rank used by TopoNetX adjacency or coadjacency for
+            combinatorial complexes and colored hypergraphs. In connection
+            graphs, a nonnegative ``"via_rank"`` is treated as an alias for
+            ``"to_rank"``.
+
+        ``"to_rank"`` or ``"target_rank"`` : int
+            Target rank for a connection graph.
+
+        ``"rank_pairs"`` or ``"pairs"`` : sequence of tuple[int, int]
+            Rank pairs used to build several connection graphs at once.
+
+        ``"ranks"`` : sequence of int
+            Rank sequence used to build consecutive rank pairs. For example,
+            ``{"ranks": [0, 1, 2]}`` is interpreted as rank pairs
+            ``(0, 1)`` and ``(1, 2)``.
+
+        ``"neighborhoods"`` : sequence of mapping
+            Extra neighborhoods added to an ``"augmented_hasse"`` graph. Each
+            entry must contain a ``"type"`` key whose value is one of the
+            supported neighborhood types.
+
+        ``"symmetric"`` : bool, default=True
+            Whether to add reverse edges when constructing connection, Hasse,
+            or augmented Hasse graphs. The default gives an undirected graph
+            represented by a symmetric matrix.
+
+        ``"ranked_labels"`` : bool, default=True
+            Whether cross-rank graph nodes are labeled as ``(rank, cell)``.
+            Keeping this enabled avoids collisions when cells from different
+            ranks have similar representations.
 
     Returns
     -------
     ind : list
-        Cell identifiers represented by the rows and columns of ``A``.
+        Cell identifiers represented by the rows and columns of ``A``. For
+        same-rank neighborhoods, these are the cells of the selected rank. For
+        connection, Hasse, and augmented Hasse graphs, these are the cells
+        included in the constructed graph. By default, cross-rank labels are
+        rank-aware labels of the form ``(rank, cell)``.
     A : scipy.sparse.csr_matrix
-        Sparse matrix representing the selected neighborhood graph.
+        Sparse matrix representing the selected neighborhood graph. The matrix
+        is binary and stored in CSR format.
 
     Raises
     ------
@@ -68,6 +165,144 @@ def neighborhood_from_complex(
         If ``domain`` is unsupported or ``neighborhood_type`` is invalid.
     ValueError
         If the requested rank parameters are inconsistent.
+
+    Examples
+    --------
+    Same-rank adjacency on vertices of a cell complex:
+
+    >>> import toponetx as tnx
+    >>> from topoembedx.neighborhood import neighborhood_from_complex
+    >>> domain = tnx.CellComplex([[0, 1, 2]])
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="adj",
+    ...     neighborhood_dim={"rank": 0},
+    ... )
+    >>> matrix.shape == (len(ind), len(ind))
+    True
+
+    Same-rank coadjacency on edges of a cell complex:
+
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="coadj",
+    ...     neighborhood_dim={"rank": 1},
+    ... )
+    >>> matrix.shape == (len(ind), len(ind))
+    True
+
+    A connection graph between vertices and edges. The result is square because
+    both ranks are represented as nodes in one graph:
+
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={"rank": 0, "to_rank": 1},
+    ... )
+    >>> matrix.shape == (len(ind), len(ind))
+    True
+
+    The aliases ``"inc"`` and ``"incidence"`` are equivalent to
+    ``"connection"``:
+
+    >>> ind_inc, matrix_inc = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="inc",
+    ...     neighborhood_dim={"rank": 0, "to_rank": 1},
+    ... )
+    >>> ind_connection, matrix_connection = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={"rank": 0, "to_rank": 1},
+    ... )
+    >>> ind_inc == ind_connection
+    True
+    >>> (matrix_inc != matrix_connection).nnz == 0
+    True
+
+    A Hasse graph over ranks 0, 1, and 2:
+
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="hasse",
+    ...     neighborhood_dim={"ranks": [0, 1, 2]},
+    ... )
+    >>> matrix.shape == (len(ind), len(ind))
+    True
+
+    An augmented Hasse graph with extra same-rank neighborhoods:
+
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="augmented_hasse",
+    ...     neighborhood_dim={
+    ...         "ranks": [0, 1, 2],
+    ...         "neighborhoods": [
+    ...             {"type": "adj", "rank": 0},
+    ...             {"type": "coadj", "rank": 1},
+    ...         ],
+    ...     },
+    ... )
+    >>> matrix.shape == (len(ind), len(ind))
+    True
+
+    A combinatorial complex can use arbitrary cross-rank connection graphs,
+    such as a direct :math:`B_{02}` connection between rank-0 and rank-2 cells:
+
+    >>> domain = tnx.CombinatorialComplex()
+    >>> domain.add_cell([0], rank=0)
+    >>> domain.add_cell([1], rank=0)
+    >>> domain.add_cell([2], rank=0)
+    >>> domain.add_cell([0, 1], rank=1)
+    >>> domain.add_cell([1, 2], rank=1)
+    >>> domain.add_cell([0, 2], rank=1)
+    >>> domain.add_cell([0, 1, 2], rank=2)
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={"rank": 0, "to_rank": 2},
+    ... )
+    >>> matrix.shape == (len(ind), len(ind))
+    True
+
+    Several connection graphs can be combined at once:
+
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={"rank_pairs": [(0, 1), (1, 2), (0, 2)]},
+    ... )
+    >>> matrix.shape == (len(ind), len(ind))
+    True
+
+    By default, cross-rank labels include the rank. Set ``"ranked_labels"`` to
+    ``False`` to return unranked cell labels:
+
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={
+    ...         "rank": 0,
+    ...         "to_rank": 2,
+    ...         "ranked_labels": False,
+    ...     },
+    ... )
+    >>> all(not isinstance(cell, tuple) for cell in ind)
+    True
+
+    Directed graphs can be requested by disabling symmetrization:
+
+    >>> ind, matrix = neighborhood_from_complex(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={
+    ...         "rank": 0,
+    ...         "to_rank": 2,
+    ...         "symmetric": False,
+    ...     },
+    ... )
+    >>> (matrix != matrix.T).nnz > 0
+    True
     """
     neighborhood_dim = _normalize_neighborhood_dim(neighborhood_dim)
 
