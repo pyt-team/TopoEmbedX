@@ -10,7 +10,7 @@ from karateclub import Node2Vec
 
 from topoembedx.neighborhood import neighborhood_from_complex
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Hashable, Mapping
 
     import toponetx as tnx
@@ -25,6 +25,11 @@ class Cell2Vec(Node2Vec):
     Cell2Vec extends Node2Vec to topological domains by first computing a
     neighborhood matrix from a complex and then applying Node2Vec to the graph
     induced by that matrix.
+
+    The model can use any square neighborhood graph returned by
+    :func:`topoembedx.neighborhood.neighborhood_from_complex`, including
+    same-rank adjacency, coadjacency, incidence-based connection graphs,
+    Hasse graphs, and augmented Hasse graphs.
 
     Parameters
     ----------
@@ -54,6 +59,62 @@ class Cell2Vec(Node2Vec):
         Minimal count of node occurrences.
     seed : int, default=42
         Random seed.
+
+    Examples
+    --------
+    Fit Cell2Vec on the vertex adjacency graph of a cell complex:
+
+    >>> import toponetx as tnx
+    >>> from topoembedx.classes.cell2vec import Cell2Vec
+    >>> domain = tnx.CellComplex([[0, 1, 2]])
+    >>> model = Cell2Vec(
+    ...     dimensions=2,
+    ...     walk_number=2,
+    ...     walk_length=4,
+    ...     window_size=2,
+    ...     workers=1,
+    ... )
+    >>> model.fit(
+    ...     domain,
+    ...     neighborhood_type="adj",
+    ...     neighborhood_dim={"rank": 0},
+    ... )
+    >>> model.get_embedding().shape
+    (3, 2)
+
+    Fit Cell2Vec on a cross-rank connection graph between vertices and edges:
+
+    >>> model = Cell2Vec(
+    ...     dimensions=2,
+    ...     walk_number=2,
+    ...     walk_length=4,
+    ...     window_size=2,
+    ...     workers=1,
+    ... )
+    >>> model.fit(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={"rank": 0, "to_rank": 1},
+    ... )
+    >>> model.get_embedding().shape
+    (6, 2)
+
+    Fit Cell2Vec on a Hasse graph over ranks 0, 1, and 2:
+
+    >>> model = Cell2Vec(
+    ...     dimensions=2,
+    ...     walk_number=2,
+    ...     walk_length=4,
+    ...     window_size=2,
+    ...     workers=1,
+    ... )
+    >>> model.fit(
+    ...     domain,
+    ...     neighborhood_type="hasse",
+    ...     neighborhood_dim={"ranks": [0, 1, 2]},
+    ... )
+    >>> model.get_embedding().shape
+    (7, 2)
     """
 
     A: csr_matrix
@@ -103,14 +164,94 @@ class Cell2Vec(Node2Vec):
         ----------
         domain : toponetx.classes.Complex
             A complex object.
-        neighborhood_type : str, default="adj"
-            The neighborhood type used to construct the graph. Supported values
-            are those accepted by
-            :func:`topoembedx.neighborhood.neighborhood_from_complex`, including
-            ``"adj"``, ``"coadj"``, ``"connection"``, ``"hasse"``, and
-            ``"augmented_hasse"``.
+        neighborhood_type : {"adj", "coadj", "inc", "incidence", "connection", "hasse", "augmented_hasse"}, default="adj"
+            The neighborhood type used to construct the graph. The values are
+            passed directly to
+            :func:`topoembedx.neighborhood.neighborhood_from_complex`.
+
+            ``"adj"``
+                Fits Cell2Vec on a same-rank adjacency graph.
+
+            ``"coadj"``
+                Fits Cell2Vec on a same-rank coadjacency graph.
+
+            ``"inc"``, ``"incidence"``, ``"connection"``
+                Fits Cell2Vec on a square graph induced by one or more
+                cross-rank incidence matrices.
+
+            ``"hasse"``
+                Fits Cell2Vec on a Hasse graph over selected ranks.
+
+            ``"augmented_hasse"``
+                Fits Cell2Vec on a Hasse graph augmented with additional
+                same-rank or cross-rank neighborhoods.
         neighborhood_dim : mapping, optional
-            Parameters specifying the neighborhood matrix.
+            Parameters specifying the neighborhood matrix. Typical keys include
+            ``"rank"``, ``"via_rank"``, ``"to_rank"``, ``"target_rank"``,
+            ``"rank_pairs"``, ``"pairs"``, ``"ranks"``,
+            ``"neighborhoods"``, ``"symmetric"``, and ``"ranked_labels"``.
+
+        Examples
+        --------
+        Fit on a same-rank adjacency neighborhood:
+
+        >>> import toponetx as tnx
+        >>> from topoembedx.classes.cell2vec import Cell2Vec
+        >>> domain = tnx.CellComplex([[0, 1, 2]])
+        >>> model = Cell2Vec(
+        ...     dimensions=2,
+        ...     walk_number=2,
+        ...     walk_length=4,
+        ...     window_size=2,
+        ...     workers=1,
+        ... )
+        >>> model.fit(
+        ...     domain,
+        ...     neighborhood_type="adj",
+        ...     neighborhood_dim={"rank": 0},
+        ... )
+        >>> model.get_embedding().shape
+        (3, 2)
+
+        Fit on an incidence-based connection graph:
+
+        >>> model = Cell2Vec(
+        ...     dimensions=2,
+        ...     walk_number=2,
+        ...     walk_length=4,
+        ...     window_size=2,
+        ...     workers=1,
+        ... )
+        >>> model.fit(
+        ...     domain,
+        ...     neighborhood_type="connection",
+        ...     neighborhood_dim={"rank": 0, "to_rank": 1},
+        ... )
+        >>> model.get_embedding().shape
+        (6, 2)
+
+        Fit on an augmented Hasse graph:
+
+        >>> model = Cell2Vec(
+        ...     dimensions=2,
+        ...     walk_number=2,
+        ...     walk_length=4,
+        ...     window_size=2,
+        ...     workers=1,
+        ... )
+        >>> model.fit(
+        ...     domain,
+        ...     neighborhood_type="augmented_hasse",
+        ...     neighborhood_dim={
+        ...         "ranks": [0, 1, 2],
+        ...         "neighborhoods": [
+        ...             {"type": "adj", "rank": 0},
+        ...             {"type": "coadj", "rank": 1},
+        ...         ],
+        ...     },
+        ... )
+        >>> model.get_embedding().shape
+        (7, 2)
         """
         self.ind, self.A = neighborhood_from_complex(
             domain,
@@ -166,7 +307,38 @@ class Cell2Vec(Node2Vec):
         Returns
         -------
         dict or numpy.ndarray
-            The learned cell embeddings.
+            The learned cell embeddings. If ``get_dict`` is ``True``, the
+            result is a dictionary keyed by the cells stored in ``self.ind``.
+            Otherwise, the result is a NumPy array with one row per embedded
+            cell and one column per embedding dimension.
+
+        Examples
+        --------
+        Return embeddings as an array:
+
+        >>> import toponetx as tnx
+        >>> from topoembedx.classes.cell2vec import Cell2Vec
+        >>> domain = tnx.CellComplex([[0, 1, 2]])
+        >>> model = Cell2Vec(
+        ...     dimensions=2,
+        ...     walk_number=2,
+        ...     walk_length=4,
+        ...     window_size=2,
+        ...     workers=1,
+        ... )
+        >>> model.fit(
+        ...     domain,
+        ...     neighborhood_type="connection",
+        ...     neighborhood_dim={"rank": 0, "to_rank": 1},
+        ... )
+        >>> model.get_embedding().shape
+        (6, 2)
+
+        Return embeddings as a dictionary indexed by cell labels:
+
+        >>> embedding = model.get_embedding(get_dict=True)
+        >>> len(embedding) == len(model.ind)
+        True
         """
         emb = super().get_embedding()
         if get_dict:
