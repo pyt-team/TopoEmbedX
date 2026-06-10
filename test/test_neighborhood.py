@@ -15,7 +15,11 @@ class TestNeighborhood:
         with pytest.raises(TypeError) as e:
             neighborhood_from_complex(1)
 
-        assert "Input Complex can only be" in str(e.value)
+        assert (
+            str(e.value)
+            == "Input Complex can only be a SimplicialComplex, CellComplex, "
+            "PathComplex ColoredHyperGraph or CombinatorialComplex."
+        )
 
     def test_neighborhood_from_complex_invalid_neighborhood_type(self):
         """Testing if right assertion is raised for incorrect neighborhood type."""
@@ -28,7 +32,6 @@ class TestNeighborhood:
 
     def test_neighborhood_from_complex_matrix_dimension_cell_complex(self):
         """Testing matrix dimensions for adjacency and coadjacency matrices."""
-        # Testing for the case of Cell Complex
         cc1 = tnx.classes.CellComplex(
             [[0, 1, 2, 3], [1, 2, 3, 4], [1, 3, 4, 5, 6, 7, 8]]
         )
