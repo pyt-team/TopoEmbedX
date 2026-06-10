@@ -18,10 +18,12 @@ NeighborhoodType = Literal[
     "hasse",
     "augmented_hasse",
 ]
+RankPair = tuple[int, int]
+IncidenceCandidate = tuple[tuple[Any, ...], dict[str, Any]]
 
-_SAME_RANK_NEIGHBORHOODS = {"adj", "coadj"}
-_CONNECTION_NEIGHBORHOODS = {"inc", "incidence", "connection"}
-_VALID_NEIGHBORHOODS = (
+_SAME_RANK_NEIGHBORHOODS: set[str] = {"adj", "coadj"}
+_CONNECTION_NEIGHBORHOODS: set[str] = {"inc", "incidence", "connection"}
+_VALID_NEIGHBORHOODS: set[str] = (
     _SAME_RANK_NEIGHBORHOODS
     | _CONNECTION_NEIGHBORHOODS
     | {"hasse", "augmented_hasse"}
@@ -33,13 +35,13 @@ def neighborhood_from_complex(
     neighborhood_type: NeighborhoodType = "adj",
     neighborhood_dim: Mapping[str, Any] | None = None,
 ) -> tuple[list[Hashable], csr_matrix]:
-    """Compute a neighborhood matrix from a complex.
+    """Compute the neighborhood of a complex.
 
     This function returns the indices and sparse matrix for the neighborhood
     specified by ``neighborhood_type`` and ``neighborhood_dim``. The original
     ``"adj"`` and ``"coadj"`` cases are preserved. Additional cases construct
-    connection, Hasse, or augmented Hasse graphs by assembling sparse
-    incidence and neighborhood matrices.
+    connection, Hasse, or augmented Hasse graphs by assembling sparse incidence
+    and neighborhood matrices.
 
     Parameters
     ----------
@@ -47,40 +49,16 @@ def neighborhood_from_complex(
         The complex to compute the neighborhood for.
     neighborhood_type : {"adj", "coadj", "inc", "incidence", "connection", "hasse", "augmented_hasse"}, default="adj"
         The type of neighborhood to compute.
-
-        - ``"adj"`` returns a same-rank adjacency matrix.
-        - ``"coadj"`` returns a same-rank coadjacency matrix.
-        - ``"inc"``, ``"incidence"``, or ``"connection"`` returns a square
-          connection graph induced by one or more incidence matrices
-          :math:`B_{ij}`.
-        - ``"hasse"`` returns the graph induced by cover/incidence relations
-          between selected ranks.
-        - ``"augmented_hasse"`` returns the union of the Hasse graph and any
-          extra neighborhoods listed in ``neighborhood_dim["neighborhoods"]``.
     neighborhood_dim : mapping, optional
-        Integer parameters specifying the neighborhood. For the original
-        same-rank cases, use ``{"rank": r, "via_rank": s}``, where
-        ``"via_rank"`` is used only for combinatorial complexes and colored
-        hypergraphs.
-
-        For connection, Hasse, or augmented Hasse graphs, the following keys
-        are supported:
-
-        - ``"rank"`` and ``"to_rank"``: construct one :math:`B_{ij}` graph.
-        - ``"rank_pairs"``: construct multiple :math:`B_{ij}` graphs, for
-          example ``[(0, 1), (1, 2), (0, 2)]``.
-        - ``"ranks"``: construct consecutive pairs from the listed ranks.
-        - ``"neighborhoods"``: for ``"augmented_hasse"``, add extra
-          neighborhoods. Each entry is a mapping with a ``"type"`` key and the
-          corresponding rank parameters, for example
-          ``{"type": "coadj", "rank": 1}``.
+        Parameters specifying the neighborhood. For same-rank neighborhoods,
+        use ``{"rank": r, "via_rank": s}``. For connection, Hasse, or
+        augmented Hasse graphs, use ``"rank"``, ``"to_rank"``,
+        ``"rank_pairs"``, ``"ranks"``, or ``"neighborhoods"``.
 
     Returns
     -------
     ind : list
-        Cell identifiers represented by the rows and columns of ``A``. For
-        cross-rank graphs, entries are rank-labeled pairs ``(rank, cell)`` when
-        ``neighborhood_dim["ranked_labels"]`` is true.
+        Cell identifiers represented by the rows and columns of ``A``.
     A : scipy.sparse.csr_matrix
         Sparse matrix representing the selected neighborhood graph.
 
@@ -101,7 +79,7 @@ def neighborhood_from_complex(
 
     _validate_complex(domain)
 
-    if neighborhood_type in _SAME_RANK_NEIGHBORHOODS:
+    if neighborhood_type == "adj" or neighborhood_type == "coadj":
         return _same_rank_neighborhood(domain, neighborhood_type, neighborhood_dim)
 
     if neighborhood_type in _CONNECTION_NEIGHBORHOODS:
@@ -141,7 +119,7 @@ def _normalize_neighborhood_dim(
     return dict(neighborhood_dim)
 
 
-def _validate_complex(domain: tnx.Complex) -> None:
+def _validate_complex(domain: Any) -> None:
     """Validate the input complex type."""
     valid_complexes = (
         tnx.SimplicialComplex,
@@ -154,7 +132,7 @@ def _validate_complex(domain: tnx.Complex) -> None:
     if not isinstance(domain, valid_complexes):
         raise TypeError(
             "Input Complex can only be a SimplicialComplex, CellComplex, "
-            "PathComplex, ColoredHyperGraph, or CombinatorialComplex."
+            "PathComplex ColoredHyperGraph or CombinatorialComplex."
         )
 
 
@@ -215,6 +193,11 @@ def _augmented_hasse_graph(
         col_cells: Sequence[Hashable],
         matrix: csr_matrix,
     ) -> None:
+        for cell in row_cells:
+            add_node(row_rank, cell)
+        for cell in col_cells:
+            add_node(col_rank, cell)
+
         block = _binary_csr(matrix).tocoo()
         for row, col in zip(block.row, block.col, strict=True):
             source = add_node(row_rank, row_cells[int(row)])
@@ -245,7 +228,7 @@ def _augmented_hasse_graph(
                 f"{local_type}."
             )
 
-        if local_type in _SAME_RANK_NEIGHBORHOODS:
+        if local_type == "adj" or local_type == "coadj":
             rank = int(local_dim["rank"])
             local_ind, local_matrix = _same_rank_neighborhood(
                 domain,
@@ -276,7 +259,7 @@ def _augmented_hasse_graph(
 
 def _connection_graph_from_rank_pairs(
     domain: tnx.Complex,
-    rank_pairs: Sequence[tuple[int, int]],
+    rank_pairs: Sequence[RankPair],
     neighborhood_dim: Mapping[str, Any],
 ) -> tuple[list[Hashable], csr_matrix]:
     """Construct a square graph from one or more incidence matrices."""
@@ -301,8 +284,13 @@ def _connection_graph_from_rank_pairs(
             low_rank,
             high_rank,
         )
-        block = _binary_csr(matrix).tocoo()
 
+        for cell in low_cells:
+            add_node(low_rank, cell)
+        for cell in high_cells:
+            add_node(high_rank, cell)
+
+        block = _binary_csr(matrix).tocoo()
         for row, col in zip(block.row, block.col, strict=True):
             source = add_node(low_rank, low_cells[int(row)])
             target = add_node(high_rank, high_cells[int(col)])
@@ -323,21 +311,22 @@ def _incidence_between_ranks(
     low_rank: int,
     high_rank: int,
 ) -> tuple[list[Hashable], list[Hashable], csr_matrix]:
-    """Return the incidence matrix from ``low_rank`` cells to ``high_rank`` cells."""
+    """Return the incidence matrix from low-rank cells to high-rank cells."""
     if low_rank == high_rank:
         raise ValueError("Incidence rank pairs must contain two distinct ranks.")
 
     if high_rank < low_rank:
         low_rank, high_rank = high_rank, low_rank
 
+    candidates: list[IncidenceCandidate]
     if isinstance(domain, (tnx.CombinatorialComplex, tnx.ColoredHyperGraph)):
-        candidates = (
+        candidates = [
             ((low_rank, high_rank), {"index": True}),
             ((), {"rank": low_rank, "to_rank": high_rank, "index": True}),
             ((), {"rank": low_rank, "via_rank": high_rank, "index": True}),
             ((), {"from_rank": low_rank, "to_rank": high_rank, "index": True}),
             ((high_rank,), {"index": True}),
-        )
+        ]
     else:
         if high_rank != low_rank + 1:
             raise ValueError(
@@ -346,12 +335,12 @@ def _incidence_between_ranks(
                 "ColoredHyperGraph for arbitrary B_ij connections."
             )
 
-        candidates = (
+        candidates = [
             ((high_rank,), {"index": True}),
             ((high_rank,), {"signed": False, "index": True}),
             ((), {"rank": high_rank, "index": True}),
             ((), {"rank": high_rank, "signed": False, "index": True}),
-        )
+        ]
 
     method = domain.incidence_matrix
     last_error: TypeError | None = None
@@ -440,7 +429,7 @@ def _rank_pairs_from_neighborhood_dim(
     neighborhood_dim: Mapping[str, Any],
     *,
     default_all_consecutive: bool,
-) -> list[tuple[int, int]]:
+) -> list[RankPair]:
     """Extract rank pairs from neighborhood parameters."""
     if "rank_pairs" in neighborhood_dim:
         return _normalize_rank_pairs(neighborhood_dim["rank_pairs"])
@@ -474,7 +463,7 @@ def _rank_pairs_from_neighborhood_dim(
     return [_normalize_rank_pair((rank, rank + 1))]
 
 
-def _normalize_rank_pairs(rank_pairs: Any) -> list[tuple[int, int]]:
+def _normalize_rank_pairs(rank_pairs: Any) -> list[RankPair]:
     """Normalize a sequence of rank-pair specifications."""
     pairs = [_normalize_rank_pair(pair) for pair in rank_pairs]
     if not pairs:
@@ -482,7 +471,7 @@ def _normalize_rank_pairs(rank_pairs: Any) -> list[tuple[int, int]]:
     return pairs
 
 
-def _normalize_rank_pair(rank_pair: Any) -> tuple[int, int]:
+def _normalize_rank_pair(rank_pair: Any) -> RankPair:
     """Normalize one rank-pair specification."""
     if not isinstance(rank_pair, Sequence) or len(rank_pair) != 2:
         raise ValueError("Each rank pair must be a two-entry sequence.")
@@ -491,7 +480,7 @@ def _normalize_rank_pair(rank_pair: Any) -> tuple[int, int]:
     if source_rank == target_rank:
         raise ValueError("A rank pair must contain two distinct ranks.")
 
-    return (source_rank, target_rank)
+    return source_rank, target_rank
 
 
 def _domain_dimension(domain: tnx.Complex) -> int | None:
@@ -539,7 +528,7 @@ def _node_label(rank: int, cell: Hashable, ranked_labels: bool) -> Hashable:
     """Return the node label used in cross-rank graphs."""
     cell = _hashable_cell(cell)
     if ranked_labels:
-        return (rank, cell)
+        return rank, cell
 
     return cell
 
