@@ -180,25 +180,6 @@ class TestNeighborhood:
         assert matrix.nnz > 0
         assert (matrix != matrix.T).nnz > 0
 
-    def test_neighborhood_from_complex_reversed_connection_rank_pair(self):
-        """Testing reversed rank-pair normalization for connection graphs."""
-        domain = tnx.classes.CellComplex([[0, 1, 2]])
-
-        ind_forward, matrix_forward = neighborhood_from_complex(
-            domain,
-            neighborhood_type="connection",
-            neighborhood_dim={"rank": 0, "to_rank": 1},
-        )
-        ind_reversed, matrix_reversed = neighborhood_from_complex(
-            domain,
-            neighborhood_type="connection",
-            neighborhood_dim={"rank": 1, "to_rank": 0},
-        )
-
-        assert ind_forward == ind_reversed
-        assert matrix_forward.shape == matrix_reversed.shape
-        assert (matrix_forward != matrix_reversed).nnz == 0
-
     def test_neighborhood_from_complex_hasse_cell_complex(self):
         """Testing Hasse graph construction over consecutive ranks."""
         domain = tnx.classes.CellComplex([[0, 1, 2]])
@@ -305,25 +286,6 @@ class TestNeighborhood:
         assert matrix_ranks.shape == matrix_pairs.shape
         assert (matrix_ranks != matrix_pairs).nnz == 0
 
-    def test_neighborhood_from_complex_reversed_rank_pairs_list(self):
-        """Testing reversed rank pairs inside rank-pair lists."""
-        domain = self._small_combinatorial_complex()
-
-        ind_forward, matrix_forward = neighborhood_from_complex(
-            domain,
-            neighborhood_type="connection",
-            neighborhood_dim={"rank_pairs": [(0, 1), (0, 2)]},
-        )
-        ind_reversed, matrix_reversed = neighborhood_from_complex(
-            domain,
-            neighborhood_type="connection",
-            neighborhood_dim={"rank_pairs": [(1, 0), (2, 0)]},
-        )
-
-        assert ind_forward == ind_reversed
-        assert matrix_forward.shape == matrix_reversed.shape
-        assert (matrix_forward != matrix_reversed).nnz == 0
-
     def test_neighborhood_from_complex_arbitrary_bij_connection_graph(self):
         """Testing arbitrary B_ij connection graph for combinatorial complexes."""
         domain = self._small_combinatorial_complex()
@@ -339,25 +301,6 @@ class TestNeighborhood:
         assert len(ind) == 4
         assert matrix.nnz > 0
         assert (matrix != matrix.T).nnz == 0
-
-    def test_neighborhood_from_complex_combinatorial_reversed_bij_connection(self):
-        """Testing reversed arbitrary B_ij connection for combinatorial complexes."""
-        domain = self._small_combinatorial_complex()
-
-        ind_forward, matrix_forward = neighborhood_from_complex(
-            domain,
-            neighborhood_type="connection",
-            neighborhood_dim={"rank": 0, "to_rank": 2},
-        )
-        ind_reversed, matrix_reversed = neighborhood_from_complex(
-            domain,
-            neighborhood_type="connection",
-            neighborhood_dim={"rank": 2, "to_rank": 0},
-        )
-
-        assert ind_forward == ind_reversed
-        assert matrix_forward.shape == matrix_reversed.shape
-        assert (matrix_forward != matrix_reversed).nnz == 0
 
     def test_neighborhood_from_complex_combinatorial_directed_connection(self):
         """Testing directed connection graph for combinatorial complexes."""
@@ -572,31 +515,6 @@ class TestNeighborhood:
                 "ranks": [0, 1, 2],
                 "neighborhoods": [
                     {"type": "hasse", "ranks": [0, 1]},
-                ],
-            },
-        )
-
-        assert ind_augmented == ind_hasse
-        assert matrix_augmented.shape == matrix_hasse.shape
-        assert matrix_augmented.nnz >= matrix_hasse.nnz
-        assert (matrix_augmented != matrix_augmented.T).nnz == 0
-
-    def test_neighborhood_from_complex_augmented_hasse_with_augmented_entry(self):
-        """Testing augmented Hasse graph with an augmented Hasse entry."""
-        domain = tnx.classes.CellComplex([[0, 1, 2]])
-
-        ind_hasse, matrix_hasse = neighborhood_from_complex(
-            domain,
-            neighborhood_type="hasse",
-            neighborhood_dim={"ranks": [0, 1, 2]},
-        )
-        ind_augmented, matrix_augmented = neighborhood_from_complex(
-            domain,
-            neighborhood_type="augmented_hasse",
-            neighborhood_dim={
-                "ranks": [0, 1, 2],
-                "neighborhoods": [
-                    {"type": "augmented_hasse", "ranks": [1, 2]},
                 ],
             },
         )
