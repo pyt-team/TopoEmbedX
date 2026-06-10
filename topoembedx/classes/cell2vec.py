@@ -1,6 +1,9 @@
 """Cell2Vec: a class that extends the Node2Vec class."""
 
-from typing import Literal
+from __future__ import annotations
+
+from collections.abc import Hashable, Mapping
+from typing import Any
 
 import networkx as nx
 import numpy as np
@@ -8,23 +11,15 @@ import toponetx as tnx
 from karateclub import Node2Vec
 from scipy.sparse import csr_matrix
 
-from topoembedx.neighborhood import neighborhood_from_complex
+from topoembedx.neighborhood import NeighborhoodType, neighborhood_from_complex
 
 
 class Cell2Vec(Node2Vec):
-    """Topological version of the Node2Vec [1] embedding algorithm.
+    """Topological version of the Node2Vec embedding algorithm.
 
-    Cell2Vec is a class that extends the Node2Vec class.
-    It provides additional functionality for generating node embeddings for simplicial,
-    cell, combinatorial, or dynamic combinatorial complexes. The Cell2Vec class takes
-    as input a simplicial, cell, combinatorial, or dynamic combinatorial complex, and
-    uses the adjacency matrix or coadjacency matrix of the complex to create a graph
-    object using the networkx library. The Cell2Vec class then uses this graph object
-    to generate node embeddings using the Node2Vec algorithm. The Cell2Vec class allows
-    users to specify the type of adjacency or coadjacency matrix to use for the graph
-    (e.g. "adj" for adjacency matrix or "coadj" for coadjacency matrix), as well as the
-    dimensions of the neighborhood to use for the matrix (e.g. the "adj" and "coadj"
-    values for the matrix).
+    Cell2Vec extends Node2Vec to topological domains by first computing a
+    neighborhood matrix from a complex and then applying Node2Vec to the graph
+    induced by that matrix.
 
     Parameters
     ----------
@@ -33,38 +28,31 @@ class Cell2Vec(Node2Vec):
     walk_length : int, default=80
         Length of random walks.
     p : float, default=1.0
-        Return parameter (1/p transition probability) to move towards from previous node.
+        Return parameter.
     q : float, default=1.0
-        In-out parameter (1/q transition probability) to move away from previous node.
+        In-out parameter.
     dimensions : int, default=128
         Dimensionality of embedding.
     workers : int, default=4
-        Number of cores.
+        Number of workers.
     window_size : int, default=5
-        Matrix power order.
+        Window size.
     epochs : int, default=1
         Number of epochs.
     use_hierarchical_softmax : bool, default=True
-        Whether to use hierarchical softmax or negative sampling to train the model.
+        Whether to use hierarchical softmax.
     number_of_negative_samples : int, default=5
-        Number of negative nodes to sample (usually between 5-20). If set to 0, no negative sampling is used.
+        Number of negative samples.
     learning_rate : float, default=0.05
-        HogWild! learning rate.
-    min_count : int, optional
+        Learning rate.
+    min_count : int, default=1
         Minimal count of node occurrences.
     seed : int, default=42
-        Random seed value.
-
-    References
-    ----------
-    .. [1] Grover, Aditya, and Jure Leskovec. "Node2vec: Scalable Feature Learning for
-           Networks". Proceedings of the 22nd ACM SIGKDD International Conference on
-           Knowledge Discovery and Data Mining [San Francisco California USA], 2016,
-           pp. 855-64. https://doi.org/10.1145/2939672.2939754.
+        Random seed.
     """
 
     A: csr_matrix
-    ind: list
+    ind: list[Hashable]
 
     def __init__(
         self,
@@ -101,60 +89,62 @@ class Cell2Vec(Node2Vec):
     def fit(
         self,
         domain: tnx.Complex,
-        neighborhood_type: Literal["adj", "coadj"] = "adj",
-        neighborhood_dim=None,
+        neighborhood_type: NeighborhoodType = "adj",
+        neighborhood_dim: Mapping[str, Any] | None = None,
     ) -> None:
         """Fit a Cell2Vec model.
 
         Parameters
         ----------
         domain : toponetx.classes.Complex
-            A complex object. The complex object can be one of the following:
-            - CellComplex
-            - CombinatorialComplex
-            - PathComplex
-            - SimplicialComplex
-            - ColoredHyperGraph
-        neighborhood_type : {"adj", "coadj"}, default="adj"
-            The type of neighborhood to compute. "adj" for adjacency matrix, "coadj" for coadjacency matrix.
-        neighborhood_dim : dict
-            The integer parameters needed to specify the neighborhood of the cells to generate the embedding.
-            In TopoNetX  (co)adjacency neighborhood matrices are specified via one or two parameters.
-            - For Cell/Simplicial/Path complexes (co)adjacency matrix is specified by a single parameter, this is precisely
-            neighborhood_dim["rank"].
-            - For Combinatorial/ColoredHyperGraph the (co)adjacency matrix is specified by two parameters, this is precisely
-            neighborhood_dim["rank"] and neighborhood_dim["via_rank"].
-
-        Notes
-        -----
-        Here neighborhood_dim={"rank": 1, "via_rank": -1} specifies the dimension for
-        which the cell embeddings are going to be computed.
-        "rank": 1 means that the embeddings will be computed for the first dimension.
-        The integer "via_rank": -1 is ignored when the input is cell/simplicial complex
-        and  must be specified when the input complex is a combinatorial complex or
-        colored hypergraph.
+            A complex object.
+        neighborhood_type : str, default="adj"
+            The neighborhood type used to construct the graph. Supported values
+            are those accepted by :func:`topoembedx.neighborhood.neighborhood_from_complex`,
+            including ``"adj"``, ``"coadj"``, ``"connection"``, ``"hasse"``,
+            and ``"augmented_hasse"``.
+        neighborhood_dim : mapping, optional
+            Parameters specifying the neighborhood matrix.
         """
         self.ind, self.A = neighborhood_from_complex(
-            domain, neighborhood_type, neighborhood_dim
+            domain,
+            neighborhood_type,
+            neighborhood_dim,
         )
+        graph = self._graph_from_adjacency(self.A)
+        super().fit(graph)
 
-        g = nx.from_numpy_array(self.A)
-        g.add_edges_from((index, index) for index in range(g.number_of_nodes()))
+    @staticmethod
+    def _graph_from_adjacency(matrix: csr_matrix) -> nx.Graph:
+        """Create an unweighted NetworkX graph from an adjacency matrix.
 
-        super().fit(g)
+        KarateClub's biased random walker expects unweighted graphs to expose
+        edges as ``(u, v)`` pairs. NetworkX creates weighted edges by default
+        when ``edge_attr`` is not ``None``. Using ``edge_attr=None`` preserves
+        the previous unweighted Cell2Vec behavior and avoids weighted-walker
+        errors.
+        """
+        graph = nx.from_numpy_array(
+            np.asarray(matrix.toarray()),
+            edge_attr=None,
+        )
+        graph.add_edges_from(
+            (index, index) for index in range(graph.number_of_nodes())
+        )
+        return graph
 
-    def get_embedding(self, get_dict: bool = False) -> dict | np.ndarray:
+    def get_embedding(self, get_dict: bool = False) -> dict[Hashable, np.ndarray] | np.ndarray:
         """Get embedding.
 
         Parameters
         ----------
-        get_dict : bool, optional
-            Whether to return a dictionary. Defaults to False.
+        get_dict : bool, default=False
+            Whether to return a dictionary indexed by cell identifiers.
 
         Returns
         -------
         dict or numpy.ndarray
-            Embedding.
+            The learned cell embeddings.
         """
         emb = super().get_embedding()
         if get_dict:
