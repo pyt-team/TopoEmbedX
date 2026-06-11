@@ -11,12 +11,12 @@ from karateclub import Node2Vec
 from topoembedx.neighborhood import neighborhood_from_complex
 
 if TYPE_CHECKING:  # pragma: no cover
-    from collections.abc import Hashable, Mapping
+    from collections.abc import Hashable, Mapping  # pragma: no cover
 
-    import toponetx as tnx
-    from scipy.sparse import csr_matrix
+    import toponetx as tnx  # pragma: no cover
+    from scipy.sparse import csr_matrix  # pragma: no cover
 
-    from topoembedx.neighborhood import NeighborhoodType
+    from topoembedx.neighborhood import NeighborhoodType  # pragma: no cover
 
 
 class Cell2Vec(Node2Vec):

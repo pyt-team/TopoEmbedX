@@ -3,6 +3,7 @@
 import numpy as np
 import pytest
 import toponetx as tnx
+from scipy.sparse import csr_matrix
 
 from topoembedx.classes.cell2vec import Cell2Vec
 
@@ -348,6 +349,25 @@ class TestCell2Vec:
         graph = Cell2Vec._graph_from_adjacency(model.A)
 
         assert all(graph.has_edge(index, index) for index in graph.nodes)
+
+    def test_graph_from_adjacency_handles_empty_rows(self):
+        """Test graph construction preserves isolated nodes."""
+        matrix = csr_matrix(
+            [
+                [0, 1, 0],
+                [1, 0, 0],
+                [0, 0, 0],
+            ]
+        )
+
+        graph = Cell2Vec._graph_from_adjacency(matrix)
+
+        assert graph.number_of_nodes() == 3
+        assert graph.has_edge(0, 1)
+        assert graph.has_edge(0, 0)
+        assert graph.has_edge(1, 1)
+        assert graph.has_edge(2, 2)
+        assert all(data == {} for _, _, data in graph.edges(data=True))
 
     def test_fit_with_invalid_neighborhood_type_raises_error(self):
         """Test Cell2Vec rejects invalid neighborhood types."""
