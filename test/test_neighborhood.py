@@ -1,9 +1,13 @@
 """Testing the neighborhood module."""
 
+from types import SimpleNamespace
+from unittest.mock import Mock
+
 import pytest
 import toponetx as tnx
 from scipy.sparse import csr_matrix
 
+import topoembedx.neighborhood as neighborhood_module
 from topoembedx.neighborhood import neighborhood_from_complex
 
 
@@ -658,6 +662,184 @@ class TestNeighborhood:
 
         assert "Non-combinatorial complexes support Hasse incidence only" in str(e.value)
 
+    def test_incidence_between_ranks_rejects_equal_ranks(self):
+        """Testing direct incidence rejection for equal ranks."""
+        incidence_between_ranks = getattr(
+            neighborhood_module,
+            "_incidence_between_ranks",
+        )
+        domain = tnx.classes.CellComplex([[0, 1, 2]])
+
+        with pytest.raises(ValueError) as e:
+            incidence_between_ranks(domain, 0, 0)
+
+        assert "Incidence rank pairs must contain two distinct ranks." in str(e.value)
+
+    def test_incidence_between_ranks_handles_reversed_ranks(self):
+        """Testing direct incidence handling for reversed ranks."""
+        incidence_between_ranks = getattr(
+            neighborhood_module,
+            "_incidence_between_ranks",
+        )
+        domain = tnx.classes.CellComplex([[0, 1, 2]])
+
+        row_cells, col_cells, matrix = incidence_between_ranks(domain, 1, 0)
+
+        assert len(row_cells) == 3
+        assert len(col_cells) == 3
+        assert matrix.shape == (3, 3)
+        assert matrix.nnz > 0
+
+    def test_incidence_between_ranks_uses_fallback_candidate(self):
+        """Testing incidence fallback after an unsupported API signature."""
+        incidence_between_ranks = getattr(
+            neighborhood_module,
+            "_incidence_between_ranks",
+        )
+        matrix = csr_matrix([[1]])
+        incidence_matrix = Mock(
+            side_effect=[
+                TypeError("unsupported signature"),
+                ({"low": 0}, {"high": 0}, matrix),
+            ]
+        )
+        domain = SimpleNamespace(incidence_matrix=incidence_matrix)
+
+        row_cells, col_cells, incidence = incidence_between_ranks(domain, 0, 1)
+
+        assert incidence_matrix.call_count == 2
+        assert row_cells == ["low"]
+        assert col_cells == ["high"]
+        assert incidence.shape == (1, 1)
+        assert incidence.nnz == 1
+
+    def test_incidence_between_ranks_raises_when_all_candidates_fail(self):
+        """Testing incidence failure when all API signatures fail."""
+        incidence_between_ranks = getattr(
+            neighborhood_module,
+            "_incidence_between_ranks",
+        )
+        incidence_matrix = Mock(side_effect=TypeError("unsupported signature"))
+        domain = SimpleNamespace(incidence_matrix=incidence_matrix)
+
+        with pytest.raises(TypeError) as e:
+            incidence_between_ranks(domain, 0, 1)
+
+        assert "Unable to compute an incidence matrix" in str(e.value)
+        assert incidence_matrix.call_count == 4
+
+    def test_unpack_incidence_result_rejects_non_tuple(self):
+        """Testing incidence unpacking rejects non-tuple results."""
+        unpack_incidence_result = getattr(
+            neighborhood_module,
+            "_unpack_incidence_result",
+        )
+
+        with pytest.raises(TypeError) as e:
+            unpack_incidence_result(csr_matrix([[1]]))
+
+        assert "Expected TopoNetX to return a tuple." in str(e.value)
+
+    def test_unpack_incidence_result_accepts_nested_index_pair(self):
+        """Testing incidence unpacking accepts nested index pairs."""
+        unpack_incidence_result = getattr(
+            neighborhood_module,
+            "_unpack_incidence_result",
+        )
+        matrix = csr_matrix([[2, 0], [0, 3]])
+
+        row_cells, col_cells, unpacked = unpack_incidence_result(
+            (({"row0": 0, "row1": 1}, {"col0": 0, "col1": 1}), matrix)
+        )
+
+        assert row_cells == ["row0", "row1"]
+        assert col_cells == ["col0", "col1"]
+        assert unpacked.shape == (2, 2)
+        assert set(unpacked.data) <= {1}
+
+    def test_unpack_incidence_result_rejects_malformed_tuple(self):
+        """Testing incidence unpacking rejects malformed tuple results."""
+        unpack_incidence_result = getattr(
+            neighborhood_module,
+            "_unpack_incidence_result",
+        )
+
+        with pytest.raises(TypeError) as e:
+            unpack_incidence_result(({"row": 0}, csr_matrix([[1]])))
+
+        assert "Expected incidence_matrix" in str(e.value)
+
+    def test_same_rank_neighborhood_rejects_unsupported_complex(self):
+        """Testing same-rank helper rejects unsupported complex types."""
+        same_rank_neighborhood = getattr(
+            neighborhood_module,
+            "_same_rank_neighborhood",
+        )
+
+        with pytest.raises(TypeError) as e:
+            same_rank_neighborhood(
+                SimpleNamespace(),
+                "adj",
+                {"rank": 0},
+            )
+
+        assert "Unsupported complex type." in str(e.value)
+
+    def test_domain_dimension_handles_missing_dimension(self):
+        """Testing dimension helper returns None when no dimension exists."""
+        domain_dimension = getattr(neighborhood_module, "_domain_dimension")
+        domain = SimpleNamespace()
+
+        assert domain_dimension(domain) is None
+
+    def test_domain_dimension_handles_callable_dimension(self):
+        """Testing dimension helper handles callable dimensions."""
+        domain_dimension = getattr(neighborhood_module, "_domain_dimension")
+        domain = SimpleNamespace(dim=Mock(return_value="3"))
+
+        assert domain_dimension(domain) == 3
+
+    def test_domain_dimension_falls_back_after_type_error(self):
+        """Testing dimension helper falls back after callable TypeError."""
+        domain_dimension = getattr(neighborhood_module, "_domain_dimension")
+        domain = SimpleNamespace(
+            dim=Mock(side_effect=TypeError("unsupported")),
+            dimension=2,
+        )
+
+        assert domain_dimension(domain) == 2
+
+    def test_cells_of_rank_returns_empty_without_skeleton(self):
+        """Testing cell-rank helper without a skeleton method."""
+        cells_of_rank = getattr(neighborhood_module, "_cells_of_rank")
+        domain = SimpleNamespace()
+
+        assert cells_of_rank(domain, 0) == []
+
+    def test_cells_of_rank_uses_keyword_skeleton_fallback(self):
+        """Testing cell-rank helper falls back to keyword skeleton calls."""
+        cells_of_rank = getattr(neighborhood_module, "_cells_of_rank")
+        skeleton = Mock(
+            side_effect=[
+                TypeError("use keyword"),
+                [{0, 1}],
+            ]
+        )
+        domain = SimpleNamespace(skeleton=skeleton)
+
+        cells = cells_of_rank(domain, 1)
+
+        assert cells == [frozenset({0, 1})]
+        assert skeleton.call_count == 2
+
+    def test_ordered_cells_handles_iterable_unhashable_cells(self):
+        """Testing ordered-cell helper converts unhashable cells."""
+        ordered_cells = getattr(neighborhood_module, "_ordered_cells")
+
+        cells = ordered_cells([{0, 1}, [2, 3], SimpleNamespace()])
+
+        assert cells == [frozenset({0, 1}), (2, 3), "namespace()"]
+
     @staticmethod
     def _small_combinatorial_complex():
         """Create a small combinatorial complex with ranks 0, 1, and 2.
@@ -676,3 +858,4 @@ class TestNeighborhood:
         domain.add_cell([0, 2], rank=1)
         domain.add_cell([0, 1, 2], rank=2)
         return domain
+
