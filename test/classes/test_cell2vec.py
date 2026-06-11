@@ -1,8 +1,11 @@
 """Test Cell2Vec class."""
 
+from unittest.mock import patch
+
 import numpy as np
 import pytest
 import toponetx as tnx
+from karateclub import Node2Vec
 from scipy.sparse import csr_matrix
 
 from topoembedx.classes.cell2vec import Cell2Vec
@@ -180,6 +183,63 @@ class TestCell2Vec:
         )
 
         self._assert_embedding(model, expected_rows=7, expected_columns=2)
+
+    def test_fit_uses_undirected_graph_by_default(self):
+        """Test Cell2Vec uses an undirected graph by default."""
+        captured_graph = {}
+        cx = tnx.CellComplex([[0, 1, 2]])
+
+        def fake_fit(base_model, graph):
+            captured_graph["graph"] = graph
+
+        model = self._small_model()
+        with patch.object(Node2Vec, "fit", fake_fit):
+            model.fit(
+                cx,
+                neighborhood_type="connection",
+                neighborhood_dim={"rank": 0, "to_rank": 1},
+            )
+
+        graph = captured_graph["graph"]
+
+        assert not graph.is_directed()
+        assert graph.number_of_nodes() == model.A.shape[0]
+
+    def test_fit_uses_directed_graph_when_symmetric_false(self):
+        """Test Cell2Vec preserves directed neighborhoods in fit."""
+        captured_graph = {}
+        cx = tnx.CellComplex([[0, 1, 2]])
+
+        def fake_fit(base_model, graph):
+            captured_graph["graph"] = graph
+
+        model = self._small_model()
+        with patch.object(Node2Vec, "fit", fake_fit):
+            model.fit(
+                cx,
+                neighborhood_type="connection",
+                neighborhood_dim={
+                    "rank": 0,
+                    "to_rank": 1,
+                    "symmetric": False,
+                },
+            )
+
+        graph = captured_graph["graph"]
+        rows, cols = model.A.nonzero()
+        non_loop_edges = [
+            (int(row), int(col))
+            for row, col in zip(rows, cols, strict=True)
+            if row != col
+        ]
+
+        assert graph.is_directed()
+        assert non_loop_edges
+        assert any(
+            graph.has_edge(source, target)
+            and not graph.has_edge(target, source)
+            for source, target in non_loop_edges
+        )
 
     def test_fit_with_ranked_labels_false_connection(self):
         """Test Cell2Vec with unranked labels in a connection graph."""
@@ -368,6 +428,43 @@ class TestCell2Vec:
         assert graph.has_edge(1, 1)
         assert graph.has_edge(2, 2)
         assert all(data == {} for _, _, data in graph.edges(data=True))
+
+    def test_graph_from_adjacency_can_build_directed_graph(self):
+        """Test graph construction preserves directed matrix orientation."""
+        matrix = csr_matrix(
+            [
+                [0, 1, 0],
+                [0, 0, 1],
+                [0, 0, 0],
+            ]
+        )
+
+        graph = Cell2Vec._graph_from_adjacency(matrix, directed=True)
+
+        assert graph.is_directed()
+        assert graph.has_edge(0, 1)
+        assert graph.has_edge(1, 2)
+        assert not graph.has_edge(1, 0)
+        assert not graph.has_edge(2, 1)
+        assert all(graph.has_edge(index, index) for index in graph.nodes)
+        assert all(data == {} for _, _, data in graph.edges(data=True))
+
+    def test_graph_from_adjacency_undirected_by_default(self):
+        """Test graph construction remains undirected by default."""
+        matrix = csr_matrix(
+            [
+                [0, 1],
+                [0, 0],
+            ]
+        )
+
+        graph = Cell2Vec._graph_from_adjacency(matrix)
+
+        assert not graph.is_directed()
+        assert graph.has_edge(0, 1)
+        assert graph.has_edge(1, 0)
+        assert graph.has_edge(0, 0)
+        assert graph.has_edge(1, 1)
 
     def test_fit_with_invalid_neighborhood_type_raises_error(self):
         """Test Cell2Vec rejects invalid neighborhood types."""

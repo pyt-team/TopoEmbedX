@@ -31,6 +31,10 @@ class Cell2Vec(Node2Vec):
     same-rank adjacency, coadjacency, incidence-based connection graphs,
     Hasse graphs, and augmented Hasse graphs.
 
+    By default, Cell2Vec builds an undirected NetworkX graph. If
+    ``neighborhood_dim`` contains ``{"symmetric": False}``, Cell2Vec preserves
+    the directed neighborhood matrix by building a directed NetworkX graph.
+
     Parameters
     ----------
     walk_number : int, default=10
@@ -95,6 +99,27 @@ class Cell2Vec(Node2Vec):
     ...     domain,
     ...     neighborhood_type="connection",
     ...     neighborhood_dim={"rank": 0, "to_rank": 1},
+    ... )
+    >>> model.get_embedding().shape
+    (6, 2)
+
+    Fit Cell2Vec on a directed connection graph:
+
+    >>> model = Cell2Vec(
+    ...     dimensions=2,
+    ...     walk_number=2,
+    ...     walk_length=4,
+    ...     window_size=2,
+    ...     workers=1,
+    ... )
+    >>> model.fit(
+    ...     domain,
+    ...     neighborhood_type="connection",
+    ...     neighborhood_dim={
+    ...         "rank": 0,
+    ...         "to_rank": 1,
+    ...         "symmetric": False,
+    ...     },
     ... )
     >>> model.get_embedding().shape
     (6, 2)
@@ -191,6 +216,9 @@ class Cell2Vec(Node2Vec):
             ``"rank_pairs"``, ``"pairs"``, ``"ranks"``,
             ``"neighborhoods"``, ``"symmetric"``, and ``"ranked_labels"``.
 
+            If ``"symmetric"`` is ``False``, Cell2Vec constructs a directed
+            NetworkX graph and Node2Vec walks follow directed outgoing edges.
+
         Examples
         --------
         Fit on a same-rank adjacency neighborhood:
@@ -230,6 +258,27 @@ class Cell2Vec(Node2Vec):
         >>> model.get_embedding().shape
         (6, 2)
 
+        Fit on a directed incidence-based connection graph:
+
+        >>> model = Cell2Vec(
+        ...     dimensions=2,
+        ...     walk_number=2,
+        ...     walk_length=4,
+        ...     window_size=2,
+        ...     workers=1,
+        ... )
+        >>> model.fit(
+        ...     domain,
+        ...     neighborhood_type="connection",
+        ...     neighborhood_dim={
+        ...         "rank": 0,
+        ...         "to_rank": 1,
+        ...         "symmetric": False,
+        ...     },
+        ... )
+        >>> model.get_embedding().shape
+        (6, 2)
+
         Fit on an augmented Hasse graph:
 
         >>> model = Cell2Vec(
@@ -253,26 +302,39 @@ class Cell2Vec(Node2Vec):
         >>> model.get_embedding().shape
         (7, 2)
         """
+        directed = False
+        if neighborhood_dim is not None:
+            directed = not bool(neighborhood_dim.get("symmetric", True))
+
         self.ind, self.A = neighborhood_from_complex(
             domain,
             neighborhood_type,
             neighborhood_dim,
         )
-        graph = self._graph_from_adjacency(self.A)
+        graph = self._graph_from_adjacency(self.A, directed=directed)
         super().fit(graph)
 
     @staticmethod
-    def _graph_from_adjacency(matrix: csr_matrix) -> nx.Graph:
+    def _graph_from_adjacency(
+        matrix: csr_matrix,
+        *,
+        directed: bool = False,
+    ) -> nx.Graph | nx.DiGraph:
         """Create an unweighted NetworkX graph from an adjacency matrix.
 
         Parameters
         ----------
         matrix : scipy.sparse.csr_matrix
             Sparse adjacency matrix used to construct the graph.
+        directed : bool, default=False
+            Whether to construct a directed graph. If ``False``, an undirected
+            ``networkx.Graph`` is returned. If ``True``, a directed
+            ``networkx.DiGraph`` is returned and the orientation of nonzero
+            matrix entries is preserved.
 
         Returns
         -------
-        networkx.Graph
+        networkx.Graph or networkx.DiGraph
             Unweighted graph induced by the nonzero entries of ``matrix``, with
             self-loops added to all nodes.
 
@@ -283,9 +345,15 @@ class Cell2Vec(Node2Vec):
         when ``edge_attr`` is not ``None``. Using ``edge_attr=None`` preserves
         the previous unweighted Cell2Vec behavior and avoids weighted-walker
         errors.
+
+        If ``directed`` is ``True``, the graph is constructed as a
+        ``networkx.DiGraph``. This preserves directed neighborhoods such as
+        incidence matrices built with ``{"symmetric": False}``.
         """
+        create_using = nx.DiGraph() if directed else nx.Graph()
         graph = nx.from_numpy_array(
             np.asarray(matrix.toarray()),
+            create_using=create_using,
             edge_attr=None,
         )
         graph.add_edges_from(
