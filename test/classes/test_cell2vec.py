@@ -190,6 +190,15 @@ class TestCell2Vec:
         cx = tnx.CellComplex([[0, 1, 2]])
 
         def fake_fit(base_model, graph):
+            """Capture the graph passed to the patched Node2Vec fit method.
+
+            Parameters
+            ----------
+            base_model : karateclub.Node2Vec
+                Model instance passed by the patched method.
+            graph : networkx.Graph or networkx.DiGraph
+                Graph passed to the patched method.
+            """
             captured_graph["graph"] = graph
 
         model = self._small_model()
@@ -211,6 +220,15 @@ class TestCell2Vec:
         cx = tnx.CellComplex([[0, 1, 2]])
 
         def fake_fit(base_model, graph):
+            """Capture the graph passed to the patched Node2Vec fit method.
+
+            Parameters
+            ----------
+            base_model : karateclub.Node2Vec
+                Model instance passed by the patched method.
+            graph : networkx.Graph or networkx.DiGraph
+                Graph passed to the patched method.
+            """
             captured_graph["graph"] = graph
 
         model = self._small_model()
