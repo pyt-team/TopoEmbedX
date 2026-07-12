@@ -85,7 +85,7 @@ class HOPE:
         L = np.eye(A.shape[0]) - D @ A @ D
 
         # Compute the eigenvectors of L
-        eigval, eigvec = np.linalg.eig(L)
+        eigval, eigvec = np.linalg.eigh(L)
 
         # Select the k smallest non-trivial eigenvectors
         max_freqs = min(n_nodes - 1, n_eigvecs)
