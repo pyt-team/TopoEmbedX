@@ -19,7 +19,7 @@
 [![Lint](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml/badge.svg)](https://github.com/pyt-team/TopoEmbedX/actions/workflows/lint.yml)
 [![Codecov](https://codecov.io/gh/pyt-team/TopoEmbedX/branch/main/graph/badge.svg)](https://app.codecov.io/gh/pyt-team/TopoEmbedX)
 [![Docs](https://img.shields.io/badge/docs-website-brightgreen)](https://pyt-team.github.io/topoembedx/index.html)
-[![Python](https://img.shields.io/badge/python-3.12+-blue?logo=python)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue?logo=python)](https://www.python.org/)
 [![license](https://badgen.net/github/license/pyt-team/TopoNetX?color=green)](https://github.com/pyt-team/TopoNetX/blob/main/LICENSE)
 [![slack](https://img.shields.io/badge/chat-on%20slack-purple?logo=slack)](https://join.slack.com/t/pyt-teamworkspace/shared_invite/zt-2k63sv99s-jbFMLtwzUCc8nt3sIRWjEw)
 
