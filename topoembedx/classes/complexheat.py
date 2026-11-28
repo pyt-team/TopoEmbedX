@@ -162,8 +162,9 @@ class ComplexHeat:
             Embedding matrix resized to the requested output dimension.
         """
         if features.shape[1] > self.dimensions:
-            reducer = TruncatedSVD(n_components=self.dimensions, random_state=self.seed)
-            return reducer.fit_transform(features)
+            n_components = min(self.dimensions, features.shape[0])
+            reducer = TruncatedSVD(n_components=n_components, random_state=self.seed)
+            features = reducer.fit_transform(features)
 
         if features.shape[1] < self.dimensions:
             padding = np.zeros(

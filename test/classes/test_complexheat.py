@@ -87,6 +87,24 @@ class TestComplexHeat:
 
         assert complexheat.get_embedding().shape == (len(SC.nodes), 3)
 
+    def test_reduction_pads_when_nodes_fewer_than_dimensions(self):
+        """Test that SVD reduction pads to requested dimensions when n_nodes < dimensions < n_features."""
+        SC = tnx.SimplicialComplex([[0, 1, 2], [2, 3, 4]])
+
+        complexheat = ComplexHeat(
+            dimensions=6,
+            diffusion_times=[0.1, 1.0, 10.0],
+            approximation_rank=3,
+            seed=42,
+        )
+        complexheat.fit(
+            SC, neighborhood_type="adj", neighborhood_dim={"rank": 0, "via_rank": 1}
+        )
+
+        embedding = complexheat.get_embedding()
+        assert embedding.shape == (len(SC.nodes), 6)
+        assert np.allclose(embedding[:, len(SC.nodes) :], 0.0)
+
     def test_sparse_normalized_laplacian(self):
         """Test that the normalized Laplacian stays sparse."""
         SC = tnx.SimplicialComplex([[0, 1], [1, 2, 3]])
